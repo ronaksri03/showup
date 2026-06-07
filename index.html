@@ -3251,7 +3251,7 @@ async function loadMyDashboard() {
         +'<div class="dash-proj-meta">'
           +'<span class="dash-vis-badge '+(visBadge[p.visibility]||'public')+'">'+(visLabel[p.visibility]||'🌐 Public')+'</span>'
           +(p.timeline ? '<span>⏱ '+p.timeline+'</span>' : '')
-          +(p.assigned_to ? '<span>→ @'+p.assigned_to+'</span>' : '')
+          +(p.assigned_to ? '<span>→ Assigned</span>' : '')
           +'<span>'+_statusLabel(p.status)+'</span>'
         +'</div>'
       +'</div>'
@@ -3488,7 +3488,7 @@ async function loadLabCommunity() {
   grid.innerHTML = projects.map(function(p) {
     var skills = (p.skills_required||[]).map(function(s){ return '<span class="spill">'+s+'</span>'; }).join('');
     var by = p.managers ? (p.managers.name + (p.managers.company ? ' · '+p.managers.company : '')) : '';
-    var pay = p.pay_type === 'paid' ? '💰 Paid' : p.pay_type === 'equity' ? '📈 Equity' : '🤝 Unpaid';
+    var pay = p.pay_type === 'paid' ? '💰 Paid' : p.pay_type === 'bounty' ? '🏆 Bounty' : '🤝 Unpaid';
     return '<div class="pcard">'
       +'<div class="pcard-top"><div class="pcard-emoji">🚀</div><span class="diff d-med">'+pay+'</span></div>'
       +'<h3>'+p.title+'</h3>'
@@ -3517,7 +3517,7 @@ async function loadLabManager() {
   var badgeClass = {open:'open', assigned:'assigned', closed:'closed', 'in-progress':'open'};
   grid.innerHTML = projects.map(function(p) {
     var skills = (p.skills_required||[]).map(function(s){ return '<span class="spill">'+s+'</span>'; }).join('');
-    var pay = p.pay_type === 'paid' ? '💰 Paid' : p.pay_type === 'equity' ? '📈 Equity' : '🤝 Unpaid';
+    var pay = p.pay_type === 'paid' ? '💰 Paid' : p.pay_type === 'bounty' ? '🏆 Bounty' : '🤝 Unpaid';
     var bc = badgeClass[p.status] || 'open';
     return '<div class="lab-mgr-card">'
       +'<div class="lab-mgr-top"><div><div class="lab-mgr-title">'+p.title+'</div>'
@@ -3533,7 +3533,7 @@ async function loadLabManager() {
 
 function applyToProject(projectId) {
   if (!window._currentUser) { showPage('individual'); return; }
-  alert('Application feature coming soon!');
+  showToast('Application feature coming soon! 🚀');
 }
 
 async function deleteManagerProject(projectId) {
@@ -3629,6 +3629,17 @@ function openEditProfile() {
   document.getElementById('ep-bio').value       = p.bio        || '';
   document.getElementById('ep-location').value  = p.location   || meta.location   || '';
   document.getElementById('ep-open').checked    = p.open_to_work !== false;
+  // new profile fields
+  document.getElementById('ep-role').value       = p.job_title     || '';
+  document.getElementById('ep-exp').value        = p.years_exp     || '';
+  document.getElementById('ep-workpref').value   = p.work_pref     || 'flexible';
+  document.getElementById('ep-github').value     = p.github_url    || '';
+  document.getElementById('ep-portfolio').value  = p.portfolio_url || '';
+  document.getElementById('ep-linkedin').value   = p.linkedin_url  || '';
+  // set availability radio
+  var avail = p.availability || 'full-time';
+  var availRadio = document.querySelector('input[name="ep-avail"][value="' + avail + '"]');
+  if (availRadio) availRadio.checked = true;
   // load existing skills into tag system
   window._epSelectedSkills = (p.skills || (meta.skills_arr) || []).slice();
   _renderEpSkills();
