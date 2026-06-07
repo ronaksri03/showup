@@ -2505,6 +2505,17 @@
         </div>
         <div style="color:#555;font-size:11px;margin-top:6px">Click a suggestion or press Enter to add a custom skill.</div>
       </div>
+      <div>
+        <label style="display:block;color:#888;font-size:12px;margin-bottom:6px">REEL / RESUME LINK</label>
+        <input id="ep-reel-url" type="url" placeholder="YouTube, Google Drive, Loom, Instagram…"
+          style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box" />
+        <div style="color:#555;font-size:11px;margin-top:4px">This appears on your profile as your primary reel. Must be a public link.</div>
+      </div>
+      <div>
+        <label style="display:block;color:#888;font-size:12px;margin-bottom:6px">REEL TITLE</label>
+        <input id="ep-reel-title" type="text" placeholder="e.g. Building an AI app in 2 weekends"
+          style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box" />
+      </div>
       <div style="display:flex;align-items:center;gap:10px">
         <input type="checkbox" id="ep-open" style="accent-color:#c8ff00;width:16px;height:16px">
         <label for="ep-open" style="color:#f0ece4;font-size:14px;cursor:pointer">Open to work / collaborations</label>
@@ -2997,6 +3008,7 @@ async function loadMyProfile() {
   // fetch reels
   var { data: reels } = await _sb.from('reels').select('*').eq('user_id', user.id).order('created_at', {ascending:false});
   reels = reels || [];
+  window._myPrimaryReel = reels[0] || null; // store for edit profile modal
   document.getElementById('mp-reel-count').textContent = reels.length;
   var totalViews = reels.reduce(function(a,r){return a+(r.view_count||0);},0);
   document.getElementById('mp-view-count').textContent = totalViews > 999 ? (totalViews/1000).toFixed(1)+'k' : totalViews;
@@ -3398,6 +3410,10 @@ function openEditProfile() {
   if (inp) inp.value = '';
   var dd = document.getElementById('ep-skill-dd');
   if (dd) dd.style.display = 'none';
+  // load primary reel
+  var reel = window._myPrimaryReel || {};
+  document.getElementById('ep-reel-url').value   = reel.url   || '';
+  document.getElementById('ep-reel-title').value = reel.title || '';
   document.getElementById('ep-err').style.display = 'none';
   document.getElementById('edit-profile-modal').style.display = 'block';
   document.body.style.overflow = 'hidden';
@@ -3435,6 +3451,28 @@ async function doSaveProfile() {
   });
   btn.textContent = 'Save Profile \u2756'; btn.disabled = false;
   if (res.error) { errEl.textContent = res.error.message; errEl.style.display = 'block'; return; }
+
+  // save primary reel if URL provided
+  var reelUrl   = document.getElementById('ep-reel-url').value.trim();
+  var reelTitle = document.getElementById('ep-reel-title').value.trim();
+  if (reelUrl) {
+    var existingReel = window._myPrimaryReel;
+    if (existingReel) {
+      // update existing primary reel
+      await _sb.from('reels').update({
+        url: reelUrl, title: reelTitle || existingReel.title || 'My reel',
+        source: detectSource(reelUrl), skills: skills
+      }).eq('id', existingReel.id);
+    } else {
+      // insert first reel
+      await _sb.from('reels').insert({
+        user_id: window._currentUser.id,
+        url: reelUrl, title: reelTitle || 'My reel',
+        source: detectSource(reelUrl), skills: skills, visibility: 'public'
+      });
+    }
+  }
+
   closeEditProfile();
   loadMyProfile();
 }
