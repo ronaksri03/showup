@@ -2756,7 +2756,7 @@ function showPage(id) {
   document.body.style.overflow = '';
   var page = document.getElementById('page-' + id);
   if (page) { page.classList.add('active'); window.scrollTo(0, 0); }
-  if (id === 'discover') { var si=document.getElementById('disc-search'); if(si) si.value=''; var oi=document.getElementById('disc-open'); if(oi) oi.checked=false; loadDiscover(); }
+  if (id === 'discover') { var si=document.getElementById('disc-search'); if(si) si.value=''; var oi=document.getElementById('disc-open'); if(oi) oi.checked=false; var cl=document.getElementById('disc-community-label'); if(cl){cl.innerHTML='';cl.style.display='none';} loadDiscover(); }
   if (id === 'lab') { loadLabIndividual(); loadLabCommunity(); loadLabManager(); }
   if (id === 'mgr-auth') mgrGoTo(1);
 }
@@ -3900,4 +3900,4 @@ async function doSaveProfile() {
 }
 
 /* skill tag input helpers */
-var SKILL_SUGGESTIONS = ['React', 'Vue', 'Angular', 'Next.js', 'TypeScript', 'JavaScript', 'Python', 'Go', 'Rust', 'Java', 'Swift', 'Kotlin', 'Flutter', 'React Native', 'Node.js', 'Django', 'FastAPI', 'PostgreSQL', 'MongoDB', 'Redis', 'Docker', 'Kubernetes', 'AWS', 'Figma', 'Tailwind CSS', 
+var SKILL_SUGGESTIONS = ['React', 'Vue', 'Angular', 'Next.js', 'TypeScript', 'JavaScript', 'Python', 'Go', 'Rust', 'Java', 'Swift', 'Kotlin', 'Flutter', 'React Native', 'Node.js', 'Djang
