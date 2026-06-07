@@ -1890,13 +1890,16 @@
     <div class="sec-eyebrow">Discover</div>
     <h2 class="SH">Real people.<br><span class="g">Real work.</span></h2>
     <p class="sec-sub">Scroll reels from builders, designers, and creators. No buzzwords — just skills you can actually see.</p>
-    <div class="feed-grid">
-      <div class="vcard"><div class="vcard-art" style="background:linear-gradient(150deg,#0a0a00,#111100)">🤖</div><div class="vcard-overlay"></div><div class="vcard-views">👁 12.4k</div><div class="vcard-play">▶</div><div class="vcard-info"><div class="vcard-av">🧑</div><div class="vcard-name">Arjun Mehra</div><div class="vcard-role">ML Engineer · Delhi</div><div class="vcard-tags"><span class="vtag">PyTorch</span><span class="vtag">LLMs</span></div></div></div>
-      <div class="vcard"><div class="vcard-art" style="background:linear-gradient(150deg,#0a0a00,#141400)">🎨</div><div class="vcard-overlay"></div><div class="vcard-views">👁 8.7k</div><div class="vcard-play">▶</div><div class="vcard-info"><div class="vcard-av">👩</div><div class="vcard-name">Sahil Verma</div><div class="vcard-role">Motion Designer · Mumbai</div><div class="vcard-tags"><span class="vtag">Figma</span><span class="vtag">AE</span></div></div></div>
-      <div class="vcard"><div class="vcard-art" style="background:linear-gradient(150deg,#090900,#121200)">🚀</div><div class="vcard-overlay"></div><div class="vcard-views">👁 5.2k</div><div class="vcard-play">▶</div><div class="vcard-info"><div class="vcard-av">🧑</div><div class="vcard-name">Priya Nair</div><div class="vcard-role">Full-Stack · Bangalore</div><div class="vcard-tags"><span class="vtag">React</span><span class="vtag">Go</span></div></div></div>
-      <div class="vcard"><div class="vcard-art" style="background:linear-gradient(150deg,#070700,#0e0e00)">📱</div><div class="vcard-overlay"></div><div class="vcard-views">👁 21k</div><div class="vcard-play">▶</div><div class="vcard-info"><div class="vcard-av">👩</div><div class="vcard-name">Meera Joshi</div><div class="vcard-role">iOS Dev · Pune</div><div class="vcard-tags"><span class="vtag">Swift</span><span class="vtag">SwiftUI</span></div></div></div>
-      <div class="vcard"><div class="vcard-art" style="background:linear-gradient(150deg,#080800,#101000)">⛓️</div><div class="vcard-overlay"></div><div class="vcard-views">👁 9.1k</div><div class="vcard-play">▶</div><div class="vcard-info"><div class="vcard-av">🧑</div><div class="vcard-name">Rohan Das</div><div class="vcard-role">Web3 Dev · Hyderabad</div><div class="vcard-tags"><span class="vtag">Solidity</span><span class="vtag">Rust</span></div></div></div>
-      <div class="vcard"><div class="vcard-art" style="background:linear-gradient(150deg,#060600,#0c0c00)">🎮</div><div class="vcard-overlay"></div><div class="vcard-views">👁 33k</div><div class="vcard-play">▶</div><div class="vcard-info"><div class="vcard-av">👩</div><div class="vcard-name">Ananya Kapoor</div><div class="vcard-role">Game Dev · Chennai</div><div class="vcard-tags"><span class="vtag">Unity</span><span class="vtag">C#</span></div></div></div>
+    <div style="display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap">
+      <input id="disc-search" type="text" placeholder="Search by skill (e.g. React, Figma, Python)…"
+        style="flex:1;min-width:200px;background:#111;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 16px;border-radius:8px;font-size:14px;outline:none;"
+        oninput="loadDiscover()" />
+      <label style="display:flex;align-items:center;gap:8px;color:#888;font-size:13px;cursor:pointer">
+        <input type="checkbox" id="disc-open" onchange="loadDiscover()" style="accent-color:#c8ff00"> Open to work only
+      </label>
+    </div>
+    <div id="discover-feed" class="feed-grid">
+      <div class="empty-state" style="grid-column:1/-1">Loading profiles…</div>
     </div>
   </div>
 </div>
@@ -1942,56 +1945,14 @@
       <button class="lab-new-btn" onclick="openIndProjectModal()">+ New Project</button>
     </div>
 
-    <div class="lab-my-grid">
-
-      <div class="lab-my-card">
-        <div class="lab-my-top">
-          <div class="lab-my-emoji">🤖</div>
-          <span class="lab-vis-pill" data-vis="private" onclick="cycleVis(this)" title="Click to change visibility">🔒 Private</span>
-        </div>
-        <div class="lab-my-title">AI Resume Scanner</div>
-        <div class="lab-my-desc">Parses job descriptions and highlights skill gaps. Built with Python + GPT-4o.</div>
-        <div class="lab-my-foot">
-          <span class="lab-my-status in-progress">In Progress</span>
-          <div class="stack"><span class="spill">Python</span><span class="spill">OpenAI</span></div>
-        </div>
-      </div>
-
-      <div class="lab-my-card">
-        <div class="lab-my-top">
-          <div class="lab-my-emoji">🎨</div>
-          <span class="lab-vis-pill" data-vis="public" onclick="cycleVis(this)" title="Click to change visibility">🌐 Public</span>
-        </div>
-        <div class="lab-my-title">Design System Starter Kit</div>
-        <div class="lab-my-desc">A Figma + CSS tokens setup for rapid product prototyping. Open sourced.</div>
-        <div class="lab-my-foot">
-          <span class="lab-my-status completed">Completed</span>
-          <div class="stack"><span class="spill">Figma</span><span class="spill">CSS</span></div>
-        </div>
-      </div>
-
-      <div class="lab-my-card">
-        <div class="lab-my-top">
-          <div class="lab-my-emoji">📱</div>
-          <span class="lab-vis-pill" data-vis="managers" onclick="cycleVis(this)" title="Click to change visibility">👔 Managers Only</span>
-        </div>
-        <div class="lab-my-title">Habit Tracker App</div>
-        <div class="lab-my-desc">Minimal daily habit tracker with streak visualization. Still in draft.</div>
-        <div class="lab-my-foot">
-          <span class="lab-my-status draft">Draft</span>
-          <div class="stack"><span class="spill">Flutter</span></div>
-        </div>
-      </div>
-
+    <div id="lab-my-grid" class="lab-my-grid">
+      <div class="empty-state" style="grid-column:1/-1">Loading your projects…</div>
     </div>
 
     <div class="lab-divider">Open Community Projects — pick one up</div>
 
-    <div class="proj-grid" style="margin-top:0">
-      <div class="pcard"><div class="pcard-top"><div class="pcard-emoji">🌱</div><span class="diff d-easy">Beginner</span></div><h3>AI Plant Care Companion</h3><div class="pmeta"><span>⏱ ~2 weekends</span><span>👀 142 watching</span></div><p>Snap a photo, get AI-powered plant care advice. Camera + GPT-4o vision.</p><div class="pcard-foot"><div class="stack"><span class="spill">React Native</span><span class="spill">OpenAI</span></div><button class="btn-claim">Claim →</button></div></div>
-      <div class="pcard"><div class="pcard-top"><div class="pcard-emoji">🎵</div><span class="diff d-med">Intermediate</span></div><h3>Vibe-Matched Playlist Gen</h3><div class="pmeta"><span>⏱ ~3 weekends</span><span>👀 89 watching</span></div><p>Type your mood → Spotify playlist that actually matches. Bonus: shareable card.</p><div class="pcard-foot"><div class="stack"><span class="spill">Next.js</span><span class="spill">Spotify API</span></div><button class="btn-claim">Claim →</button></div></div>
-      <div class="pcard"><div class="pcard-top"><div class="pcard-emoji">⚡</div><span class="diff d-hard">Advanced</span></div><h3>Live Collab Code Reviewer</h3><div class="pmeta"><span>⏱ ~1 month</span><span>👀 213 watching</span></div><p>VS Code extension: two devs review the same PR live with inline voice comments.</p><div class="pcard-foot"><div class="stack"><span class="spill">WebRTC</span><span class="spill">Go</span></div><button class="btn-claim">Claim →</button></div></div>
-      <div class="pcard"><div class="pcard-top"><div class="pcard-emoji">🧠</div><span class="diff d-med">Intermediate</span></div><h3>Second Brain CLI</h3><div class="pmeta"><span>⏱ ~3 weekends</span><span>👀 177 watching</span></div><p>Capture notes in your terminal, auto-tag with local AI, resurface when starting new tasks.</p><div class="pcard-foot"><div class="stack"><span class="spill">Go</span><span class="spill">Ollama</span></div><button class="btn-claim">Claim →</button></div></div>
+    <div id="lab-community-grid" class="proj-grid" style="margin-top:0">
+      <div class="empty-state" style="grid-column:1/-1">Loading open projects…</div>
     </div>
   </div>
 
@@ -2005,56 +1966,8 @@
       <button class="lab-new-btn" onclick="openProjectModal()">+ Post Project</button>
     </div>
 
-    <div class="lab-mgr-grid">
-
-      <div class="lab-mgr-card">
-        <div class="lab-mgr-top">
-          <div>
-            <div class="lab-mgr-title">Build a Customer Dashboard</div>
-            <div class="lab-mgr-meta"><span>⏱ 3–4 weeks</span><span>💰 Paid</span><span>👀 38 applicants</span></div>
-          </div>
-          <span class="lab-mgr-badge open">Open</span>
-        </div>
-        <div class="lab-mgr-desc">React + Recharts dashboard pulling from our REST API. Designs in Figma. Looking for a frontend dev who can ship fast.</div>
-        <div class="stack" style="margin-bottom:16px"><span class="spill">React</span><span class="spill">TypeScript</span><span class="spill">Recharts</span></div>
-        <div class="lab-mgr-foot">
-          <div class="lab-submissions">38 submitted reels</div>
-          <button class="lab-assign-btn">Review Reels →</button>
-        </div>
-      </div>
-
-      <div class="lab-mgr-card">
-        <div class="lab-mgr-top">
-          <div>
-            <div class="lab-mgr-title">Write API Docs — v2</div>
-            <div class="lab-mgr-meta"><span>⏱ 1–2 weeks</span><span>💰 Paid</span><span>👤 Assigned</span></div>
-          </div>
-          <span class="lab-mgr-badge assigned">Assigned</span>
-        </div>
-        <div class="lab-mgr-desc">Full API documentation for v2 endpoints. Assigned to @priya_writes. She starts Monday.</div>
-        <div class="stack" style="margin-bottom:16px"><span class="spill">Technical Writing</span><span class="spill">OpenAPI</span></div>
-        <div class="lab-mgr-foot">
-          <div class="lab-submissions" style="color:var(--peach2)">@priya_writes · starts Mon</div>
-          <button class="lab-assign-btn">Reassign</button>
-        </div>
-      </div>
-
-      <div class="lab-mgr-card">
-        <div class="lab-mgr-top">
-          <div>
-            <div class="lab-mgr-title">Mobile Push Notifications</div>
-            <div class="lab-mgr-meta"><span>⏱ 2 weeks</span><span>💰 Paid</span><span>👀 12 applicants</span></div>
-          </div>
-          <span class="lab-mgr-badge open">Open</span>
-        </div>
-        <div class="lab-mgr-desc">Integrate Firebase push notifications into our existing React Native app. iOS + Android. Must handle background & foreground states.</div>
-        <div class="stack" style="margin-bottom:16px"><span class="spill">React Native</span><span class="spill">Firebase</span></div>
-        <div class="lab-mgr-foot">
-          <div class="lab-submissions">12 submitted reels</div>
-          <button class="lab-assign-btn">Review Reels →</button>
-        </div>
-      </div>
-
+    <div id="lab-mgr-grid" class="lab-mgr-grid">
+      <div class="empty-state" style="grid-column:1/-1">Loading your projects…</div>
     </div>
   </div>
 
@@ -2576,6 +2489,8 @@ function showPage(id) {
   document.body.style.overflow = '';
   var page = document.getElementById('page-' + id);
   if (page) { page.classList.add('active'); window.scrollTo(0, 0); }
+  if (id === 'discover') loadDiscover();
+  if (id === 'lab') { loadLabIndividual(); loadLabCommunity(); loadLabManager(); }
 }
 function goHome() {
   document.querySelectorAll('.page-view').forEach(function(p) { p.classList.remove('active'); });
@@ -2634,6 +2549,8 @@ function labTab(role, btn) {
   btn.classList.add('active');
   var panel = document.getElementById('lab-' + role);
   if (panel) panel.classList.add('active');
+  if (role === 'individual') { loadLabIndividual(); loadLabCommunity(); }
+  if (role === 'manager') loadLabManager();
 }
 
 /* ── 3-STATE VISIBILITY CYCLE ── */
@@ -2998,4 +2915,140 @@ document.querySelectorAll('.btn-fire, .nav-pill').forEach(function(btn) {
     btn.style.transition = 'transform 0.1s ease, box-shadow .18s, background .18s';
   });
 });
-</
+
+/* ══════════════════════════════════════════════
+   DISCOVER — load real profiles from Supabase
+══════════════════════════════════════════════ */
+var _discTimer = null;
+function loadDiscover() {
+  clearTimeout(_discTimer);
+  _discTimer = setTimeout(_doLoadDiscover, 350); // debounce typing
+}
+async function _doLoadDiscover() {
+  var container = document.getElementById('discover-feed');
+  if (!container) return;
+  if (!_sb) { container.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Connect to Supabase to see real profiles.</div>'; return; }
+
+  var searchVal = (document.getElementById('disc-search') || {}).value || '';
+  var openOnly  = (document.getElementById('disc-open') || {}).checked || false;
+  var skills    = searchVal.split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+
+  container.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Loading…</div>';
+
+  var query = _sb.from('profiles').select('id, username, first_name, last_name, location, skills, open_to_work').limit(24);
+  if (openOnly) query = query.eq('open_to_work', true);
+  if (skills.length > 0) query = query.contains('skills', skills);
+
+  var res = await query;
+  var data = res.data || [];
+
+  if (data.length === 0) {
+    container.innerHTML = '<div class="empty-state" style="grid-column:1/-1">No profiles found' + (skills.length ? ' for those skills' : '') + '. Be the first to drop your reel ✦</div>';
+    return;
+  }
+
+  var emojis = ['🤖','🎨','🚀','📱','⛓️','🎮','💡','🔥','⚡','🧠','🦄','🌊'];
+  var grads  = ['#110800','#001108','#080011','#110011','#001111','#0a0a00'];
+  container.innerHTML = data.map(function(p, i) {
+    var name   = ((p.first_name||'') + ' ' + (p.last_name||'')).trim() || p.username || 'Anonymous';
+    var tags   = (p.skills||[]).slice(0,3).map(function(s){ return '<span class="vtag">'+s+'</span>'; }).join('');
+    var emoji  = emojis[i % emojis.length];
+    var grad   = 'linear-gradient(150deg,#0a0a00,' + grads[i % grads.length] + ')';
+    var initials = _initials(name);
+    return '<div class="vcard" style="cursor:pointer"><div class="vcard-art" style="background:'+grad+'">'+emoji+'</div><div class="vcard-overlay"></div><div class="vcard-play">▶</div><div class="vcard-info"><div class="vcard-av">'+initials+'</div><div class="vcard-name">'+name+'</div><div class="vcard-role">'+(p.location||'Remote')+(p.open_to_work ? ' · <span style="color:#c8ff00">Open</span>' : '')+'</div><div class="vcard-tags">'+tags+'</div></div></div>';
+  }).join('');
+}
+
+/* ══════════════════════════════════════════════
+   PROJECT LAB — individual's own projects
+══════════════════════════════════════════════ */
+async function loadLabIndividual() {
+  var grid = document.getElementById('lab-my-grid');
+  if (!grid) return;
+  if (!_sb || !window._currentUser) {
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Sign in to see your projects.</div>';
+    return;
+  }
+  grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Loading…</div>';
+
+  var res = await _sb.from('individual_projects').select('*').eq('user_id', window._currentUser.id).order('created_at', {ascending:false});
+  var projects = res.data || [];
+
+  if (projects.length === 0) {
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">No projects yet. Add your first one ✦</div>';
+    return;
+  }
+
+  var visLabels = {public:'🌐 Public', private:'🔒 Private', managers:'👔 Managers Only'};
+  grid.innerHTML = projects.map(function(p) {
+    var skills = (p.skills||[]).map(function(s){ return '<span class="spill">'+s+'</span>'; }).join('');
+    var vis = p.visibility || 'private';
+    var link = p.demo_link ? '<a href="'+p.demo_link+'" target="_blank" style="color:#c8ff00;font-size:12px;text-decoration:none">🔗 View</a>' : '';
+    return '<div class="lab-my-card">'
+      +'<div class="lab-my-top"><div class="lab-my-emoji">🗂️</div>'
+      +'<span class="lab-vis-pill" data-id="'+p.id+'" data-vis="'+vis+'" onclick="cycleVis(this)" title="Click to change visibility">'+visLabels[vis]+'</span></div>'
+      +'<div class="lab-my-title">'+p.title+'</div>'
+      +'<div class="lab-my-desc">'+(p.description||'')+'</div>'
+      +'<div class="lab-my-foot"><span class="lab-my-status '+(p.status||'draft')+'">'+_capitalize(p.status||'draft')+'</span>'
+      +'<div class="stack">'+skills+'</div>'+link+'</div>'
+      +'</div>';
+  }).join('');
+}
+
+/* ══════════════════════════════════════════════
+   PROJECT LAB — community (public manager projects)
+══════════════════════════════════════════════ */
+async function loadLabCommunity() {
+  var grid = document.getElementById('lab-community-grid');
+  if (!grid || !_sb) return;
+  grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Loading open projects…</div>';
+
+  var res = await _sb.from('manager_projects').select('*, managers(name, company)').eq('visibility','public').eq('status','open').order('created_at',{ascending:false}).limit(12);
+  var projects = res.data || [];
+
+  if (projects.length === 0) {
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">No open community projects yet.</div>';
+    return;
+  }
+
+  grid.innerHTML = projects.map(function(p) {
+    var skills = (p.skills_required||[]).map(function(s){ return '<span class="spill">'+s+'</span>'; }).join('');
+    var by = p.managers ? (p.managers.name + (p.managers.company ? ' · '+p.managers.company : '')) : '';
+    var pay = p.pay_type === 'paid' ? '💰 Paid' : p.pay_type === 'equity' ? '📈 Equity' : '🤝 Unpaid';
+    return '<div class="pcard">'
+      +'<div class="pcard-top"><div class="pcard-emoji">🚀</div><span class="diff d-med">'+pay+'</span></div>'
+      +'<h3>'+p.title+'</h3>'
+      +'<div class="pmeta"><span>⏱ '+(p.timeline||'Flexible')+'</span>'+(by?'<span>👤 '+by+'</span>':'')+'</div>'
+      +'<p>'+(p.description||'')+'</p>'
+      +'<div class="pcard-foot"><div class="stack">'+skills+'</div>'
+      +'<button class="btn-claim" onclick="applyToProject(\''+p.id+'\')">Apply →</button></div>'
+      +'</div>';
+  }).join('');
+}
+
+/* ══════════════════════════════════════════════
+   PROJECT LAB — manager's own posted projects
+══════════════════════════════════════════════ */
+async function loadLabManager() {
+  var grid = document.getElementById('lab-mgr-grid');
+  if (!grid) return;
+  if (!_sb || !window._currentUser) {
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Sign in as a manager to see your projects.</div>';
+    return;
+  }
+  grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Loading…</div>';
+
+  var res = await _sb.from('manager_projects').select('*').eq('manager_id', window._currentUser.id).order('created_at',{ascending:false});
+  var projects = res.data || [];
+
+  if (projects.length === 0) {
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">No projects posted yet. Post your first one ✦</div>';
+    return;
+  }
+
+  var badgeClass = {open:'open', assigned:'assigned', closed:'closed', 'in-progress':'open'};
+  grid.innerHTML = projects.map(function(p) {
+    var skills = (p.skills_required||[]).map(function(s){ return '<span class="spill">'+s+'</span>'; }).join('');
+    var pay = p.pay_type === 'paid' ? '💰 Paid' : p.pay_type === 'equity' ? '📈 Equity' : '🤝 Unpaid';
+    var bc = badgeClass[p.status] || 'open';
+    return '<div cl
