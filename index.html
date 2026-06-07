@@ -1046,10 +1046,10 @@
 
     /* ── HERO: headline left + video stack right ── */
     .zine-hero {
-      flex: 1; min-height: 0;
+      flex: 1; min-height: 0; overflow: hidden;
       display: grid;
       grid-template-columns: 52% 48%;
-      padding: 20px 48px 16px;
+      padding: 16px 48px 12px;
       gap: 0;
       align-items: center;
     }
@@ -1062,7 +1062,7 @@
     .zh-eyebrow {
       display: inline-flex; align-items: center; gap: 8px;
       font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em;
-      text-transform: uppercase; color: var(--peach2); margin-bottom: 18px;
+      text-transform: uppercase; color: var(--peach2); margin-bottom: 10px;
     }
     .zh-eyebrow .live-dot { flex-shrink: 0; }
     .zh-pill {
@@ -1071,15 +1071,15 @@
       letter-spacing: 0.1em; text-transform: uppercase;
       color: var(--peach); border: 1.5px solid rgba(200,255,0,0.45);
       background: rgba(200,255,0,0.07);
-      padding: 6px 16px; border-radius: 999px;
-      margin-bottom: 20px;
+      padding: 5px 14px; border-radius: 999px;
+      margin-bottom: 12px;
     }
     .zh-h1 {
       font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800;
-      font-size: clamp(3.8rem, 7.2vw, 7.6rem);
+      font-size: clamp(3rem, 5.8vw, 6.2rem);
       line-height: 0.93; letter-spacing: -0.04em;
-      display: flex; flex-direction: column; gap: 4px;
-      margin-bottom: 22px;
+      display: flex; flex-direction: column; gap: 2px;
+      margin-bottom: 12px;
     }
     .zh-h1 .zl1 { color: var(--muted); font-size: 0.45em; letter-spacing: 0.08em; font-weight: 700; margin-bottom: 4px; }
     .zh-h1 .zl2 { color: var(--text); }
@@ -1096,17 +1096,17 @@
     .zh-rule {
       width: 56px; height: 3px; border-radius: 2px;
       background: linear-gradient(90deg, var(--peach), transparent);
-      margin-bottom: 18px;
+      margin-bottom: 10px;
     }
     .zh-sub {
-      font-size: 0.9rem; color: var(--muted); line-height: 1.66;
-      max-width: 380px; margin-bottom: 24px;
+      font-size: 0.86rem; color: var(--muted); line-height: 1.55;
+      max-width: 380px; margin-bottom: 14px;
     }
     .zh-sub strong { color: var(--text); }
-    .zh-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 28px; }
+    .zh-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
     .zh-stats {
       display: flex; gap: 20px; flex-wrap: wrap;
-      padding-top: 20px; border-top: 1px solid rgba(200,255,0,0.18);
+      padding-top: 12px; border-top: 1px solid rgba(200,255,0,0.18);
     }
     .zh-stat-n {
       font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.35rem; font-weight: 800;
