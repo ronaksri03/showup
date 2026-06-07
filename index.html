@@ -6,6 +6,7 @@
   <title>pitchNpivot — CV's & Resume DON'T GO VIRAL. YOU DO.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <style>
     :root {
       --bg:       #0a0a0a;
@@ -1824,14 +1825,15 @@
         <div class="ind-step-sub">Good to have you back.</div>
         <div class="ind-field">
           <label class="ind-label">Username or Email</label>
-          <input class="ind-input" type="text" placeholder="@yourhandle or email">
+          <input class="ind-input" id="signin-email" type="email" placeholder="you@email.com">
         </div>
         <div class="ind-field">
           <label class="ind-label">Password</label>
-          <input class="ind-input" type="password" placeholder="••••••••••••">
+          <input class="ind-input" id="signin-password" type="password" placeholder="••••••••••••">
           <div class="ind-hint"><a href="#" style="color:var(--peach2);text-decoration:none;font-weight:600">Forgot password?</a></div>
         </div>
-        <button class="ind-btn-primary" onclick="indGoTo(6)" style="margin-top:10px">Sign in →</button>
+        <div id="signin-error" style="color:#ff6b6b;font-size:0.78rem;margin-bottom:8px;display:none"></div>
+        <button class="ind-btn-primary" id="signin-btn" onclick="doSignIn()" style="margin-top:10px">Sign in →</button>
         <div class="ind-foot">No account? <a onclick="indGoTo(3)">Create one free →</a></div>
       </div>
 
@@ -1846,37 +1848,38 @@
         <div class="ind-row">
           <div class="ind-field" style="margin-bottom:0">
             <label class="ind-label">First Name</label>
-            <input class="ind-input" type="text" placeholder="Arjun">
+            <input class="ind-input" id="signup-firstname" type="text" placeholder="Arjun">
           </div>
           <div class="ind-field" style="margin-bottom:0">
             <label class="ind-label">Last Name</label>
-            <input class="ind-input" type="text" placeholder="Mehra">
+            <input class="ind-input" id="signup-lastname" type="text" placeholder="Mehra">
           </div>
         </div>
         <div class="ind-field">
           <label class="ind-label">Username</label>
-          <input class="ind-input" type="text" placeholder="@yourhandle">
+          <input class="ind-input" id="signup-username" type="text" placeholder="@yourhandle">
           <div class="ind-hint">Your public pitchNpivot link: pitchNpivot.com/@yourhandle</div>
         </div>
         <div class="ind-field">
           <label class="ind-label">Email</label>
-          <input class="ind-input" type="email" placeholder="you@email.com">
+          <input class="ind-input" id="signup-email" type="email" placeholder="you@email.com">
           <div class="ind-hint">Used only for login and notifications. Never shown publicly.</div>
         </div>
         <div class="ind-field">
           <label class="ind-label">Password</label>
-          <input class="ind-input" type="password" placeholder="Min 8 characters">
+          <input class="ind-input" id="signup-password" type="password" placeholder="Min 8 characters">
         </div>
         <div class="ind-row" style="margin-top:2px">
           <div class="ind-field" style="margin-bottom:0">
             <label class="ind-label">What do you do?</label>
-            <input class="ind-input" type="text" placeholder="ML Engineer">
+            <input class="ind-input" id="signup-role" type="text" placeholder="ML Engineer">
           </div>
           <div class="ind-field" style="margin-bottom:0">
             <label class="ind-label">City / Country</label>
-            <input class="ind-input" type="text" placeholder="Delhi, India">
+            <input class="ind-input" id="signup-location" type="text" placeholder="Delhi, India">
           </div>
         </div>
+        <div id="signup-error" style="color:#ff6b6b;font-size:0.78rem;margin-bottom:8px;display:none"></div>
         <button class="ind-btn-primary" onclick="indGoTo(4)" style="margin-top:16px">Continue →</button>
       </div>
 
@@ -1954,16 +1957,4 @@
             <span>Other creators and builders in the community can see your profile, follow you, and collaborate.</span>
           </div>
           <div class="toggle-sw on" onclick="this.classList.toggle('on')"></div>
-        </div>
-        <div class="ind-toggle-row">
-          <div class="ind-toggle-label">
-            <strong>🌐 Public Profile</strong>
-            <span>Anyone with your link can view your profile — even without a pitchNpivot account.</span>
-          </div>
-          <div class="toggle-sw" onclick="this.classList.toggle('on')"></div>
-        </div>
-        <button class="ind-btn-primary" onclick="indGoTo(6)" style="margin-top:4px">Create my profile ✦</button>
-      </div>
-
-      <!-- STEP 6: Success -->
- 
+        </
