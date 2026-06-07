@@ -2368,8 +2368,13 @@
   <div class="mypage-header">
     <div class="mypage-av" id="mp-avatar">?</div>
     <div class="mypage-info">
-      <div class="mypage-info-name" id="mp-name">—</div>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <div class="mypage-info-name" id="mp-name">—</div>
+        <button class="lab-new-btn" onclick="openEditProfile()" style="margin:0;padding:6px 14px;font-size:12px">✏️ Edit Profile</button>
+      </div>
       <div class="mypage-info-sub" id="mp-sub">—</div>
+      <div id="mp-bio" style="color:#888;font-size:13px;margin-top:4px;display:none"></div>
+      <div id="mp-skills-row" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px"></div>
       <div class="mypage-stats">
         <div class="mypage-stat"><div class="mypage-stat-n" id="mp-reel-count">0</div><div class="mypage-stat-l">Reels</div></div>
         <div class="mypage-stat"><div class="mypage-stat-n" id="mp-view-count">0</div><div class="mypage-stat-l">Total Views</div></div>
@@ -2386,6 +2391,56 @@
   <div class="mypage-section">
     <div class="mypage-section-title">👔 Managers who visited your profile</div>
     <div id="mp-visits-list"><div class="empty-state">No manager visits yet. Once a manager views your profile, they'll appear here.</div></div>
+  </div>
+</div>
+
+<!-- EDIT PROFILE MODAL -->
+<div id="edit-profile-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;overflow-y:auto;padding:24px 16px">
+  <div style="max-width:520px;margin:0 auto;background:#111;border:1px solid #2a2a2a;border-radius:16px;padding:32px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+      <div style="font-size:18px;font-weight:700;color:#f0ece4">Edit Profile</div>
+      <button onclick="closeEditProfile()" style="background:none;border:none;color:#666;font-size:20px;cursor:pointer">✕</button>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div>
+        <label style="display:block;color:#888;font-size:12px;margin-bottom:6px">FIRST NAME</label>
+        <input id="ep-firstname" type="text" placeholder="Your first name"
+          style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box" />
+      </div>
+      <div>
+        <label style="display:block;color:#888;font-size:12px;margin-bottom:6px">LAST NAME</label>
+        <input id="ep-lastname" type="text" placeholder="Your last name"
+          style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box" />
+      </div>
+      <div>
+        <label style="display:block;color:#888;font-size:12px;margin-bottom:6px">BIO</label>
+        <textarea id="ep-bio" rows="3" placeholder="What are you building? What's your vibe?"
+          style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;resize:vertical;box-sizing:border-box;font-family:inherit"></textarea>
+      </div>
+      <div>
+        <label style="display:block;color:#888;font-size:12px;margin-bottom:6px">LOCATION</label>
+        <input id="ep-location" type="text" placeholder="City, Country or Remote"
+          style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box" />
+      </div>
+      <div>
+        <label style="display:block;color:#888;font-size:12px;margin-bottom:8px">SKILLS <span style="color:#555">(comma-separated)</span></label>
+        <input id="ep-skills" type="text" placeholder="e.g. React, Python, Figma, Go"
+          style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box" />
+        <div style="color:#555;font-size:11px;margin-top:4px">Separate with commas. These power the Discover search.</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <input type="checkbox" id="ep-open" style="accent-color:#c8ff00;width:16px;height:16px">
+        <label for="ep-open" style="color:#f0ece4;font-size:14px;cursor:pointer">Open to work / collaborations</label>
+      </div>
+    </div>
+
+    <div id="ep-err" style="display:none;color:#ff6b6b;font-size:13px;margin-top:16px"></div>
+
+    <div style="display:flex;gap:10px;margin-top:24px">
+      <button onclick="closeEditProfile()" style="flex:1;padding:12px;background:#1a1a1a;border:1px solid #2a2a2a;color:#888;border-radius:8px;cursor:pointer;font-size:14px">Cancel</button>
+      <button id="ep-save-btn" onclick="doSaveProfile()" style="flex:2;padding:12px;background:#c8ff00;color:#0a0a0a;border:none;border-radius:8px;cursor:pointer;font-size:14px;font-weight:700">Save Profile ✦</button>
+    </div>
   </div>
 </div>
 
@@ -2788,10 +2843,31 @@ async function loadMyProfile() {
   if (!_sb || !window._currentUser) return;
   var user = window._currentUser;
   var meta = user.user_metadata || {};
-  var name = meta.first_name ? meta.first_name + ' ' + (meta.last_name||'') : (meta.name || user.email);
+
+  // fetch full profile from DB (may have been edited)
+  var { data: profile } = await _sb.from('profiles').select('*').eq('id', user.id).single();
+  window._myProfile = profile || {};
+
+  var firstName = (profile && profile.first_name) || meta.first_name || '';
+  var lastName  = (profile && profile.last_name)  || meta.last_name  || '';
+  var name      = (firstName + ' ' + lastName).trim() || meta.name || user.email;
+  var location  = (profile && profile.location)   || meta.location || '';
+  var bio       = (profile && profile.bio)        || '';
+  var skills    = (profile && profile.skills)     || [];
+
   document.getElementById('mp-avatar').textContent = _initials(name);
   document.getElementById('mp-name').textContent = name.trim();
-  document.getElementById('mp-sub').textContent = (meta.role || '') + (meta.location ? ' · ' + meta.location : '');
+  document.getElementById('mp-sub').textContent = (meta.role || '') + (location ? ' · ' + location : '');
+
+  // bio
+  var bioEl = document.getElementById('mp-bio');
+  if (bio) { bioEl.textContent = bio; bioEl.style.display = 'block'; } else { bioEl.style.display = 'none'; }
+
+  // skills row
+  var skillsRow = document.getElementById('mp-skills-row');
+  skillsRow.innerHTML = skills.length
+    ? skills.map(function(s){ return '<span class="vtag" style="font-size:12px">'+s+'</span>'; }).join('')
+    : '<span style="color:#555;font-size:12px">No skills added yet — click Edit Profile</span>';
 
   // fetch reels
   var { data: reels } = await _sb.from('reels').select('*').eq('user_id', user.id).order('created_at', {ascending:false});
@@ -2962,93 +3038,4 @@ async function _doLoadDiscover() {
 /* ══════════════════════════════════════════════
    PROJECT LAB — individual's own projects
 ══════════════════════════════════════════════ */
-async function loadLabIndividual() {
-  var grid = document.getElementById('lab-my-grid');
-  if (!grid) return;
-  if (!_sb || !window._currentUser) {
-    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Sign in to see your projects.</div>';
-    return;
-  }
-  grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Loading…</div>';
-
-  var res = await _sb.from('individual_projects').select('*').eq('user_id', window._currentUser.id).order('created_at', {ascending:false});
-  var projects = res.data || [];
-
-  if (projects.length === 0) {
-    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">No projects yet. Add your first one ✦</div>';
-    return;
-  }
-
-  var visLabels = {public:'🌐 Public', private:'🔒 Private', managers:'👔 Managers Only'};
-  grid.innerHTML = projects.map(function(p) {
-    var skills = (p.skills||[]).map(function(s){ return '<span class="spill">'+s+'</span>'; }).join('');
-    var vis = p.visibility || 'private';
-    var link = p.demo_link ? '<a href="'+p.demo_link+'" target="_blank" style="color:#c8ff00;font-size:12px;text-decoration:none">🔗 View</a>' : '';
-    return '<div class="lab-my-card">'
-      +'<div class="lab-my-top"><div class="lab-my-emoji">🗂️</div>'
-      +'<span class="lab-vis-pill" data-id="'+p.id+'" data-vis="'+vis+'" onclick="cycleVis(this)" title="Click to change visibility">'+visLabels[vis]+'</span></div>'
-      +'<div class="lab-my-title">'+p.title+'</div>'
-      +'<div class="lab-my-desc">'+(p.description||'')+'</div>'
-      +'<div class="lab-my-foot"><span class="lab-my-status '+(p.status||'draft')+'">'+_capitalize(p.status||'draft')+'</span>'
-      +'<div class="stack">'+skills+'</div>'+link+'</div>'
-      +'</div>';
-  }).join('');
-}
-
-/* ══════════════════════════════════════════════
-   PROJECT LAB — community (public manager projects)
-══════════════════════════════════════════════ */
-async function loadLabCommunity() {
-  var grid = document.getElementById('lab-community-grid');
-  if (!grid || !_sb) return;
-  grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Loading open projects…</div>';
-
-  var res = await _sb.from('manager_projects').select('*, managers(name, company)').eq('visibility','public').eq('status','open').order('created_at',{ascending:false}).limit(12);
-  var projects = res.data || [];
-
-  if (projects.length === 0) {
-    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">No open community projects yet.</div>';
-    return;
-  }
-
-  grid.innerHTML = projects.map(function(p) {
-    var skills = (p.skills_required||[]).map(function(s){ return '<span class="spill">'+s+'</span>'; }).join('');
-    var by = p.managers ? (p.managers.name + (p.managers.company ? ' · '+p.managers.company : '')) : '';
-    var pay = p.pay_type === 'paid' ? '💰 Paid' : p.pay_type === 'equity' ? '📈 Equity' : '🤝 Unpaid';
-    return '<div class="pcard">'
-      +'<div class="pcard-top"><div class="pcard-emoji">🚀</div><span class="diff d-med">'+pay+'</span></div>'
-      +'<h3>'+p.title+'</h3>'
-      +'<div class="pmeta"><span>⏱ '+(p.timeline||'Flexible')+'</span>'+(by?'<span>👤 '+by+'</span>':'')+'</div>'
-      +'<p>'+(p.description||'')+'</p>'
-      +'<div class="pcard-foot"><div class="stack">'+skills+'</div>'
-      +'<button class="btn-claim" onclick="applyToProject(\''+p.id+'\')">Apply →</button></div>'
-      +'</div>';
-  }).join('');
-}
-
-/* ══════════════════════════════════════════════
-   PROJECT LAB — manager's own posted projects
-══════════════════════════════════════════════ */
-async function loadLabManager() {
-  var grid = document.getElementById('lab-mgr-grid');
-  if (!grid) return;
-  if (!_sb || !window._currentUser) {
-    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Sign in as a manager to see your projects.</div>';
-    return;
-  }
-  grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Loading…</div>';
-
-  var res = await _sb.from('manager_projects').select('*').eq('manager_id', window._currentUser.id).order('created_at',{ascending:false});
-  var projects = res.data || [];
-
-  if (projects.length === 0) {
-    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">No projects posted yet. Post your first one ✦</div>';
-    return;
-  }
-
-  var badgeClass = {open:'open', assigned:'assigned', closed:'closed', 'in-progress':'open'};
-  grid.innerHTML = projects.map(function(p) {
-    var skills = (p.skills_required||[]).map(function(s){ return '<span class="spill">'+s+'</span>'; }).join('');
-    var pay = p.pay_type === 'paid' ? '💰 Paid' : p.pay_type === 'equity' ? '📈 Equity' : '🤝 Unpaid';
-    var bc = badgeClass[p.status] || 'open';
-    return '<div cl
+a
