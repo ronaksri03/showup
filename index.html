@@ -2699,14 +2699,14 @@
     <h2 class="SH">Find your <span class="v">people.</span></h2>
     <p class="sec-sub">Interest-led communities where conversations actually go somewhere useful.</p>
     <div class="comm-row">
-      <div class="comm" onclick="showToast('Communities launching soon! Join the waitlist.')"><div class="comm-icon">🤖</div><div><div class="comm-name">AI / ML Builders</div><div class="comm-cnt">6,200 members</div></div></div>
-      <div class="comm" onclick="showToast('Communities launching soon! Join the waitlist.')"><div class="comm-icon">🎨</div><div><div class="comm-name">Design &amp; Motion</div><div class="comm-cnt">4,800 members</div></div></div>
-      <div class="comm" onclick="showToast('Communities launching soon! Join the waitlist.')"><div class="comm-icon">⛓️</div><div><div class="comm-name">Web3 Dev</div><div class="comm-cnt">3,100 members</div></div></div>
-      <div class="comm" onclick="showToast('Communities launching soon! Join the waitlist.')"><div class="comm-icon">📱</div><div><div class="comm-name">Mobile Devs</div><div class="comm-cnt">5,500 members</div></div></div>
-      <div class="comm" onclick="showToast('Communities launching soon! Join the waitlist.')"><div class="comm-icon">🎮</div><div><div class="comm-name">Indie Game Dev</div><div class="comm-cnt">2,700 members</div></div></div>
-      <div class="comm" onclick="showToast('Communities launching soon! Join the waitlist.')"><div class="comm-icon">🚀</div><div><div class="comm-name">Founders &amp; 0→1</div><div class="comm-cnt">8,900 members</div></div></div>
-      <div class="comm" onclick="showToast('Communities launching soon! Join the waitlist.')"><div class="comm-icon">🔐</div><div><div class="comm-name">Security &amp; CTF</div><div class="comm-cnt">1,900 members</div></div></div>
-      <div class="comm" onclick="showToast('Communities launching soon! Join the waitlist.')"><div class="comm-icon">🌱</div><div><div class="comm-name">Open Source</div><div class="comm-cnt">7,300 members</div></div></div>
+      <div class="comm" onclick="showCommunity('AI')"><div class="comm-icon">🤖</div><div><div class="comm-name">AI / ML Builders</div><div class="comm-cnt">6,200 members</div></div></div>
+      <div class="comm" onclick="showCommunity('Design')"><div class="comm-icon">🎨</div><div><div class="comm-name">Design &amp; Motion</div><div class="comm-cnt">4,800 members</div></div></div>
+      <div class="comm" onclick="showCommunity('Web3')"><div class="comm-icon">⛓️</div><div><div class="comm-name">Web3 Dev</div><div class="comm-cnt">3,100 members</div></div></div>
+      <div class="comm" onclick="showCommunity('Mobile')"><div class="comm-icon">📱</div><div><div class="comm-name">Mobile Devs</div><div class="comm-cnt">5,500 members</div></div></div>
+      <div class="comm" onclick="showCommunity('Game')"><div class="comm-icon">🎮</div><div><div class="comm-name">Indie Game Dev</div><div class="comm-cnt">2,700 members</div></div></div>
+      <div class="comm" onclick="showCommunity('Founder')"><div class="comm-icon">🚀</div><div><div class="comm-name">Founders &amp; 0→1</div><div class="comm-cnt">8,900 members</div></div></div>
+      <div class="comm" onclick="showCommunity('Security')"><div class="comm-icon">🔐</div><div><div class="comm-name">Security &amp; CTF</div><div class="comm-cnt">1,900 members</div></div></div>
+      <div class="comm" onclick="showCommunity('Open Source')"><div class="comm-icon">🌱</div><div><div class="comm-name">Open Source</div><div class="comm-cnt">7,300 members</div></div></div>
     </div>
   </div>
 </div>
@@ -2742,6 +2742,20 @@ function showPage(id) {
   if (id === 'discover') { var si=document.getElementById('disc-search'); if(si) si.value=''; var oi=document.getElementById('disc-open'); if(oi) oi.checked=false; loadDiscover(); }
   if (id === 'lab') { loadLabIndividual(); loadLabCommunity(); loadLabManager(); }
   if (id === 'mgr-auth') mgrGoTo(1);
+}
+function showCommunity(tag) {
+  // Navigate to Discover pre-filtered for this community's skill tag
+  document.getElementById('home-view').style.display = 'none';
+  document.querySelector('footer').style.display = 'none';
+  document.body.style.overflow = '';
+  document.querySelectorAll('.page-view').forEach(function(p){ p.classList.remove('active'); });
+  var page = document.getElementById('page-discover');
+  if (page) { page.classList.add('active'); window.scrollTo(0, 0); }
+  var si = document.getElementById('disc-search');
+  if (si) si.value = tag;
+  var oi = document.getElementById('disc-open');
+  if (oi) oi.checked = false;
+  loadDiscover();
 }
 function goHome() {
   document.querySelectorAll('.page-view').forEach(function(p) { p.classList.remove('active'); });
