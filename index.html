@@ -2791,6 +2791,7 @@ async function doSignUp() {
       await _sb.from('reels').insert({ user_id: data.user.id, url: reelUrl, title: reelTitle || 'My first reel', source: detectSource(reelUrl), skills: indSelected, visibility: 'public', created_at: new Date().toISOString() });
     }
   }
+  await checkAuthState();
   var linkEl = document.querySelector('#ind-step-6 .url');
   if (linkEl) linkEl.textContent = 'pitchNpivot.com/@' + username;
   indGoTo(6);
@@ -2813,6 +2814,7 @@ async function doSignIn() {
   }
   var { data: profile } = await _sb.from('profiles').select('username').eq('id', data.user.id).single();
   var handle = profile ? profile.username : data.user.email;
+  await checkAuthState();
   var linkEl = document.querySelector('#ind-step-6 .url');
   if (linkEl) linkEl.textContent = 'pitchNpivot.com/@' + handle;
   indGoTo(6);
@@ -2841,6 +2843,7 @@ async function doMgrSignUp() {
   var { data, error } = await _sb.auth.signUp({ email, password, options: { data: { name, company, role, account_type: 'manager' } } });
   if (error) { errEl.textContent = error.message; errEl.style.display = 'block'; btn.textContent = 'Create account ✦'; btn.disabled = false; return; }
   if (data.user) { await _sb.from('managers').upsert({ id: data.user.id, name, company, role, created_at: new Date().toISOString() }); }
+  await checkAuthState();
   mgrGoTo(4);
   btn.textContent = 'Create account ✦'; btn.disabled = false;
 }
@@ -2856,6 +2859,7 @@ async function doMgrSignIn() {
   btn.textContent = 'Signing in…'; btn.disabled = true;
   var { data, error } = await _sb.auth.signInWithPassword({ email, password });
   if (error) { errEl.textContent = error.message; errEl.style.display = 'block'; btn.textContent = 'Sign in →'; btn.disabled = false; return; }
+  await checkAuthState();
   mgrGoTo(4);
   btn.textContent = 'Sign in →'; btn.disabled = false;
 }
