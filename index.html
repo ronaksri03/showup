@@ -3098,14 +3098,14 @@ async function checkAuthState() {
   document.getElementById('nav-avatar-ic').textContent = _initials(displayName);
   document.getElementById('nav-cta').style.display = 'none';
   document.getElementById('nav-user').style.display = 'flex';
+  // toggle dropdown items based on role
+  var isManager = (meta.account_type === 'manager');
   var roleBadge = document.getElementById('nav-role-badge');
   if (roleBadge) {
     roleBadge.textContent = isManager ? 'Manager' : 'Individual';
     roleBadge.className = 'nav-role-badge ' + (isManager ? 'manager' : 'individual');
     roleBadge.style.display = 'inline-block';
   }
-  // toggle dropdown items based on role
-  var isManager = (meta.account_type === 'manager');
   var ddProfile   = document.getElementById('dd-myprofile');
   var ddDashboard = document.getElementById('dd-mydashboard');
   if (ddProfile)   ddProfile.style.display   = isManager ? 'none'  : 'block';
