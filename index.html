@@ -1949,4 +1949,576 @@
             <span class="skill-pill" onclick="toggleSkill(this)">Flutter</span>
             <span class="skill-pill" onclick="toggleSkill(this)">AWS</span>
             <span class="skill-pill" onclick="toggleSkill(this)">ML / AI</span>
-            <span class="skill-pill" onclick="toggleSkill(this)">UX Desi
+            <span class="skill-pill" onclick="toggleSkill(this)">UX Desi            <span class="skill-pill" onclick="toggleSkill(this)">UX Design</span>
+            <span class="skill-pill" onclick="toggleSkill(this)">Motion</span>
+            <span class="skill-pill" onclick="toggleSkill(this)">Web3</span>
+            <span class="skill-pill" onclick="toggleSkill(this)">Docker</span>
+            <span class="skill-pill" onclick="toggleSkill(this)">Solidity</span>
+            <span class="skill-pill" onclick="toggleSkill(this)">Product</span>
+            <span class="skill-pill" onclick="toggleSkill(this)">Data</span>
+          </div>
+          <div class="ind-hint" id="skill-count" style="margin-top:8px">0 / 6 selected</div>
+        </div>
+        <button class="ind-btn-primary" onclick="indGoTo(5)">Continue →</button>
+      </div>
+
+      <!-- STEP 5: Privacy -->
+      <div class="ind-step" id="ind-step-5">
+        <button class="ind-btn-back" onclick="indGoTo(4)">← Back</button>
+        <div class="ind-progress">
+          <div class="ind-dot done"></div><div class="ind-dot done"></div><div class="ind-dot active"></div>
+        </div>
+        <div class="ind-step-title">Who can see you?</div>
+        <div class="ind-step-sub">You're in full control. Change this any time from your settings.</div>
+        <div class="ind-toggle-row">
+          <div class="ind-toggle-label">
+            <strong>👔 Visible to Managers</strong>
+            <span>Hiring managers and recruiters can find your profile and reel when searching for talent.</span>
+          </div>
+          <div class="toggle-sw on" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div class="ind-toggle-row">
+          <div class="ind-toggle-label">
+            <strong>👥 Visible to Peers</strong>
+            <span>Other creators and builders in the community can see your profile, follow you, and collaborate.</span>
+          </div>
+          <div class="toggle-sw on" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div class="ind-toggle-row">
+          <div class="ind-toggle-label">
+            <strong>🌐 Public Profile</strong>
+            <span>Anyone with your link can view your profile — even without a pitchNpivot account.</span>
+          </div>
+          <div class="toggle-sw" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div id="create-error" style="color:#ff6b6b;font-size:0.78rem;margin-bottom:8px;display:none"></div>
+        <button class="ind-btn-primary" id="create-btn" onclick="doSignUp()" style="margin-top:4px">Create my profile ✦</button>
+      </div>
+
+      <!-- STEP 6: Success -->
+      <div class="ind-step" id="ind-step-6">
+        <div class="ind-success-av">🧑</div>
+        <div class="ind-step-title" style="font-size:1.5rem">You're live. 🎉</div>
+        <div class="ind-step-sub">Your profile is live on pitchNpivot. Start getting discovered.</div>
+        <div class="ind-profile-link">
+          <span class="url">pitchNpivot.com/@yourhandle</span>
+          <span class="copy" onclick="this.textContent='Copied!'">Copy link</span>
+        </div>
+        <div class="ind-success-chips" id="success-skills"></div>
+        <button class="ind-btn-primary" onclick="showPage('discover')">Explore the feed →</button>
+        <button class="ind-btn-secondary" onclick="goHome()">Back to home</button>
+      </div>
+
+    </div><!-- /.ind-form-area -->
+  </div><!-- /.ind-layout -->
+</div>
+
+<!-- INDIVIDUAL POST PROJECT MODAL -->
+<div class="modal-overlay" id="ind-project-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeIndProjectModal()">✕</button>
+    <div class="modal-title">Showcase a Project</div>
+    <div class="modal-sub">Share your work — publicly, with managers only, or keep it private.</div>
+    <div class="ind-row">
+      <div class="ind-field" style="margin-bottom:0">
+        <label class="ind-label">Project Title</label>
+        <input class="ind-input" id="ind-proj-title" type="text" placeholder="AI Resume Scanner">
+      </div>
+      <div class="ind-field" style="margin-bottom:0">
+        <label class="ind-label">Status</label>
+        <select class="ind-input" id="ind-proj-status" style="cursor:pointer">
+          <option value="completed">✅ Completed</option>
+          <option value="in-progress">🚧 In Progress</option>
+          <option value="draft">📝 Draft</option>
+        </select>
+      </div>
+    </div>
+    <div class="ind-field">
+      <label class="ind-label">Description</label>
+      <textarea class="ind-input" id="ind-proj-desc" rows="3" placeholder="What did you build? What problem does it solve?" style="resize:vertical;line-height:1.5"></textarea>
+    </div>
+    <div class="ind-field">
+      <label class="ind-label">Skills Used</label>
+      <input class="ind-input" id="ind-proj-skills" type="text" placeholder="Python, OpenAI, FastAPI (comma separated)">
+    </div>
+    <div class="ind-field">
+      <label class="ind-label">Project / Demo Link <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:0.7rem">(optional)</span></label>
+      <input class="ind-input" id="ind-proj-link" type="url" placeholder="GitHub, live demo, YouTube walkthrough…">
+    </div>
+    <div class="ind-field" style="margin-top:8px">
+      <label class="ind-label">Who can see this?</label>
+      <div class="vis-options">
+        <label class="vis-opt selected" onclick="selectIndVis(this,'public')">
+          <input type="radio" name="ind-visibility" value="public" checked>
+          <div class="vis-opt-label"><strong>🌐 Public</strong><span>Visible to everyone on pitchNpivot — great for building in public.</span></div>
+        </label>
+        <label class="vis-opt" onclick="selectIndVis(this,'managers')">
+          <input type="radio" name="ind-visibility" value="managers">
+          <div class="vis-opt-label"><strong>👔 Managers Only</strong><span>Only hiring managers and recruiters can see this project.</span></div>
+        </label>
+        <label class="vis-opt" onclick="selectIndVis(this,'private')">
+          <input type="radio" name="ind-visibility" value="private">
+          <div class="vis-opt-label"><strong>🔒 Private</strong><span>Only you can see this. Save it and share later when ready.</span></div>
+        </label>
+      </div>
+    </div>
+    <div id="ind-proj-error" style="color:#ff6b6b;font-size:0.78rem;margin-bottom:8px;display:none"></div>
+    <button class="ind-btn-primary" id="ind-proj-submit-btn" onclick="doPostIndProject()">Save Project ✦</button>
+  </div>
+</div>
+
+<!-- MANAGER AUTH -->
+<div class="page-view" id="page-mgr-auth">
+  <div class="ind-layout">
+    <div class="ind-brand">
+      <div class="ind-brand-logo">pitchNpivot</div>
+      <h2 class="ind-brand-h">Hire on <span class="ilime">proof</span>,<br>not paper.</h2>
+      <p class="ind-brand-sub">Post projects, watch reels, assign work — all in one place.</p>
+      <div class="ind-brand-proof" style="margin-top:32px">
+        <div class="ind-proof-row"><div class="ind-proof-dot"></div>Post public projects anyone can pitch for</div>
+        <div class="ind-proof-row"><div class="ind-proof-dot"></div>Assign work directly to specific individuals</div>
+        <div class="ind-proof-row"><div class="ind-proof-dot"></div>Watch reels before the first interview</div>
+      </div>
+    </div>
+    <div class="ind-form-area">
+      <div class="ind-step active" id="mgr-step-1">
+        <div class="ind-step-title">Manager Portal</div>
+        <div class="ind-step-sub">Post projects, find talent, assign work.</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
+          <button class="ind-btn-primary" onclick="mgrGoTo(3)">✦ &nbsp;Create manager account — free</button>
+          <div class="ind-divider">already have an account?</div>
+          <button class="ind-btn-secondary" onclick="mgrGoTo(2)">Sign in →</button>
+        </div>
+      </div>
+      <div class="ind-step" id="mgr-step-2">
+        <button class="ind-btn-back" onclick="mgrGoTo(1)">← Back</button>
+        <div class="ind-step-title">Welcome back</div>
+        <div class="ind-step-sub">Sign in to your manager account.</div>
+        <div class="ind-field"><label class="ind-label">Email</label><input class="ind-input" id="mgr-signin-email" type="email" placeholder="you@company.com"></div>
+        <div class="ind-field"><label class="ind-label">Password</label><input class="ind-input" id="mgr-signin-password" type="password" placeholder="••••••••••••"></div>
+        <div id="mgr-signin-error" style="color:#ff6b6b;font-size:0.78rem;margin-bottom:8px;display:none"></div>
+        <button class="ind-btn-primary" id="mgr-signin-btn" onclick="doMgrSignIn()" style="margin-top:10px">Sign in →</button>
+        <div class="ind-foot">No account? <a onclick="mgrGoTo(3)">Create one free →</a></div>
+      </div>
+      <div class="ind-step" id="mgr-step-3">
+        <button class="ind-btn-back" onclick="mgrGoTo(1)">← Back</button>
+        <div class="ind-step-title">Create your account</div>
+        <div class="ind-step-sub">Start posting projects in minutes.</div>
+        <div class="ind-row">
+          <div class="ind-field" style="margin-bottom:0"><label class="ind-label">Your Name</label><input class="ind-input" id="mgr-name" type="text" placeholder="Alex Singh"></div>
+          <div class="ind-field" style="margin-bottom:0"><label class="ind-label">Company</label><input class="ind-input" id="mgr-company" type="text" placeholder="Acme Inc."></div>
+        </div>
+        <div class="ind-field"><label class="ind-label">Your Role</label><input class="ind-input" id="mgr-role" type="text" placeholder="Hiring Manager / Recruiter / Founder"></div>
+        <div class="ind-field"><label class="ind-label">Email</label><input class="ind-input" id="mgr-email" type="email" placeholder="you@company.com"></div>
+        <div class="ind-field"><label class="ind-label">Password</label><input class="ind-input" id="mgr-password" type="password" placeholder="Min 8 characters"></div>
+        <div id="mgr-signup-error" style="color:#ff6b6b;font-size:0.78rem;margin-bottom:8px;display:none"></div>
+        <button class="ind-btn-primary" id="mgr-signup-btn" onclick="doMgrSignUp()">Create account ✦</button>
+      </div>
+      <div class="ind-step" id="mgr-step-4">
+        <div class="ind-success-av">👔</div>
+        <div class="ind-step-title" style="font-size:1.5rem">You're in. 🎉</div>
+        <div class="ind-step-sub">Your manager account is live. Start posting projects in Project Lab.</div>
+        <button class="ind-btn-primary" onclick="showPage('lab')">Go to Project Lab →</button>
+        <button class="ind-btn-secondary" onclick="goHome()" style="margin-top:8px">Back to home</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- POST PROJECT MODAL -->
+<div class="modal-overlay" id="post-project-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeProjectModal()">✕</button>
+    <div class="modal-title">Post a Project</div>
+    <div class="modal-sub">Individuals will pitch with a reel. You pick who you want.</div>
+    <div class="ind-field"><label class="ind-label">Project Title</label><input class="ind-input" id="proj-title" type="text" placeholder="Build a customer dashboard"></div>
+    <div class="ind-field"><label class="ind-label">Description</label><textarea class="ind-input" id="proj-desc" rows="3" placeholder="What needs to be built? What skills are required?" style="resize:vertical;line-height:1.5"></textarea></div>
+    <div class="ind-row">
+      <div class="ind-field" style="margin-bottom:0"><label class="ind-label">Timeline</label><input class="ind-input" id="proj-timeline" type="text" placeholder="2–3 weeks"></div>
+      <div class="ind-field" style="margin-bottom:0"><label class="ind-label">Compensation</label>
+        <select class="ind-input" id="proj-pay" style="cursor:pointer">
+          <option value="paid">💰 Paid</option>
+          <option value="bounty">🏆 Bounty</option>
+          <option value="unpaid">🤝 Unpaid / Collab</option>
+        </select>
+      </div>
+    </div>
+    <div class="ind-field" style="margin-top:4px"><label class="ind-label">Skills Needed</label><input class="ind-input" id="proj-skills" type="text" placeholder="React, TypeScript, Figma (comma separated)"></div>
+    <div class="ind-field" style="margin-top:8px">
+      <label class="ind-label">Who can see this?</label>
+      <div class="vis-options">
+        <label class="vis-opt selected" onclick="selectVis(this,'public')">
+          <input type="radio" name="visibility" value="public" checked>
+          <div class="vis-opt-label"><strong>🌐 Public</strong><span>Anyone on pitchNpivot can see and pitch for this project.</span></div>
+        </label>
+        <label class="vis-opt" onclick="selectVis(this,'assigned')">
+          <input type="radio" name="visibility" value="assigned">
+          <div class="vis-opt-label"><strong>👤 Assign to Individual</strong><span>Visible only to a specific person you choose.</span></div>
+        </label>
+        <label class="vis-opt" onclick="selectVis(this,'private')">
+          <input type="radio" name="visibility" value="private">
+          <div class="vis-opt-label"><strong>🔒 Private Draft</strong><span>Only you can see this. Publish later.</span></div>
+        </label>
+      </div>
+      <div id="assign-field" style="display:none">
+        <label class="ind-label">Assign to @username</label>
+        <input class="ind-input" id="proj-assignee" type="text" placeholder="@priya_writes">
+        <div class="ind-hint">They'll get notified and can submit a reel directly to you.</div>
+      </div>
+    </div>
+    <div id="proj-error" style="color:#ff6b6b;font-size:0.78rem;margin-bottom:8px;display:none"></div>
+    <button class="ind-btn-primary" id="proj-submit-btn" onclick="doPostProject()">Post Project ✦</button>
+  </div>
+</div>
+
+<!-- FOR MANAGERS -->
+<div class="page-view" id="page-mgr">
+  <div class="page-header">
+    <button class="page-back" onclick="goHome()">← Back</button>
+    <div class="page-header-title">For Managers</div>
+  </div>
+  <div class="page-content">
+    <div class="mgr-wrap">
+      <div class="mgr-grid">
+        <div>
+          <div class="sec-eyebrow">For Managers &amp; Hiring Teams</div>
+          <h2 class="SH">Know who you're hiring<br><span class="g">before day one.</span></h2>
+          <p class="sec-sub">Watch candidates in action. 90 seconds of reel tells you more than a 60-minute first-round interview.</p>
+          <div class="mgr-feats">
+            <div class="mf"><div class="mf-ic">🎬</div><div><h4>Watch before you interview</h4><p>Review reels async, share with your team, align before spending an hour on a call.</p></div></div>
+            <div class="mf"><div class="mf-ic">✅</div><div><h4>Verify real project work</h4><p>Every project reel links to shipped code or a live demo.</p></div></div>
+            <div class="mf"><div class="mf-ic">🏗️</div><div><h4>Post bounty projects</h4><p>Drop a small problem. See who picks it up — the most natural audition there is.</p></div></div>
+            <div class="mf"><div class="mf-ic">💡</div><div><h4>Culture signal, not just skills</h4><p>Communication style, enthusiasm — all in 90 seconds of reel.</p></div></div>
+          </div>
+          <button class="ind-btn-primary" onclick="showPage('mgr-auth')" style="margin-top:28px;max-width:280px">Get started — free →</button>
+        </div>
+        <div class="mgr-cards">
+          <div class="mc"><div class="mc-icon">🎯</div><h5>Skill match</h5><div class="mc-score">94%</div><div class="mc-bar"><div class="mc-fill" style="width:94%"></div></div></div>
+          <div class="mc"><div class="mc-icon">🚢</div><h5>Projects shipped</h5><div class="mc-score">6</div><p>Last 6 months</p></div>
+          <div class="mc"><div class="mc-icon">💬</div><h5>Comms score</h5><div class="mc-score">A+</div><div class="mc-bar"><div class="mc-fill" style="width:88%"></div></div></div>
+          <div class="mc"><div class="mc-icon">🤝</div><h5>Collabs done</h5><div class="mc-score">11</div><p>Rating ⭐ 4.9</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COMMUNITIES -->
+<div class="page-view" id="page-comm">
+  <div class="page-header">
+    <button class="page-back" onclick="goHome()">← Back</button>
+    <div class="page-header-title">Communities</div>
+  </div>
+  <div class="page-content">
+    <div class="sec-eyebrow">Network</div>
+    <h2 class="SH">Find your <span class="v">people.</span></h2>
+    <p class="sec-sub">Interest-led communities where conversations actually go somewhere useful.</p>
+    <div class="comm-row">
+      <div class="comm"><div class="comm-icon">🤖</div><div><div class="comm-name">AI / ML Builders</div><div class="comm-cnt">6,200 members</div></div></div>
+      <div class="comm"><div class="comm-icon">🎨</div><div><div class="comm-name">Design &amp; Motion</div><div class="comm-cnt">4,800 members</div></div></div>
+      <div class="comm"><div class="comm-icon">⛓️</div><div><div class="comm-name">Web3 Dev</div><div class="comm-cnt">3,100 members</div></div></div>
+      <div class="comm"><div class="comm-icon">📱</div><div><div class="comm-name">Mobile Devs</div><div class="comm-cnt">5,500 members</div></div></div>
+      <div class="comm"><div class="comm-icon">🎮</div><div><div class="comm-name">Indie Game Dev</div><div class="comm-cnt">2,700 members</div></div></div>
+      <div class="comm"><div class="comm-icon">🚀</div><div><div class="comm-name">Founders &amp; 0→1</div><div class="comm-cnt">8,900 members</div></div></div>
+      <div class="comm"><div class="comm-icon">🔐</div><div><div class="comm-name">Security &amp; CTF</div><div class="comm-cnt">1,900 members</div></div></div>
+      <div class="comm"><div class="comm-icon">🌱</div><div><div class="comm-name">Open Source</div><div class="comm-cnt">7,300 members</div></div></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="f-links">
+    <a href="#" onclick="showPage('discover');return false">Discover</a>
+    <a href="#" onclick="showPage('lab');return false">Project Lab</a>
+    <a href="#" onclick="showPage('mgr-auth');return false">For Managers</a>
+    <a href="#">Privacy</a><a href="#">Terms</a>
+  </div>
+  <div class="f-copy">© 2026 pitchNpivot — built for the next generation ✦</div>
+</footer>
+
+<script>
+/* ── SPA NAVIGATION ── */
+function showPage(id) {
+  document.getElementById('home-view').style.display = 'none';
+  document.querySelector('footer').style.display = 'none';
+  document.body.style.overflow = '';
+  var page = document.getElementById('page-' + id);
+  if (page) { page.classList.add('active'); window.scrollTo(0, 0); }
+}
+function goHome() {
+  document.querySelectorAll('.page-view').forEach(function(p) { p.classList.remove('active'); });
+  var hw = document.getElementById('home-view');
+  hw.style.display = 'flex';
+  hw.style.flexDirection = 'column';
+  document.querySelector('footer').style.display = 'none';
+  document.body.style.overflow = 'hidden';
+  window.scrollTo(0, 0);
+}
+document.body.style.overflow = 'hidden';
+document.querySelector('footer').style.display = 'none';
+
+/* ── LANTERN ── */
+var lantern = document.getElementById('lantern');
+document.addEventListener('mousemove', function(e) {
+  lantern.style.left = e.clientX + 'px';
+  lantern.style.top  = e.clientY + 'px';
+});
+
+/* ── INDIVIDUAL ONBOARDING ── */
+var indSelected = [];
+var IND_MAX = 6;
+
+function indGoTo(step) {
+  document.querySelectorAll('.ind-step').forEach(function(s) { s.classList.remove('active'); });
+  var el = document.getElementById('ind-step-' + step);
+  if (el) el.classList.add('active');
+  if (step === 6) {
+    var container = document.getElementById('success-skills');
+    if (container) {
+      container.innerHTML = indSelected.map(function(s) {
+        return '<span class="ind-success-chip">' + s + '</span>';
+      }).join('');
+    }
+  }
+}
+
+function toggleSkill(el) {
+  if (el.classList.contains('selected')) {
+    el.classList.remove('selected');
+    indSelected = indSelected.filter(function(s) { return s !== el.textContent.trim(); });
+  } else {
+    if (indSelected.length >= IND_MAX) return;
+    el.classList.add('selected');
+    indSelected.push(el.textContent.trim());
+  }
+  var cnt = document.getElementById('skill-count');
+  if (cnt) cnt.textContent = indSelected.length + ' / ' + IND_MAX + ' selected';
+}
+
+/* ── PROJECT LAB TABS ── */
+function labTab(role, btn) {
+  document.querySelectorAll('.lab-tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.lab-panel').forEach(function(p) { p.classList.remove('active'); });
+  btn.classList.add('active');
+  var panel = document.getElementById('lab-' + role);
+  if (panel) panel.classList.add('active');
+}
+
+/* ── 3-STATE VISIBILITY CYCLE ── */
+var _visStates = [
+  { val:'private',  label:'🔒 Private' },
+  { val:'managers', label:'👔 Managers Only' },
+  { val:'public',   label:'🌐 Public' }
+];
+function cycleVis(pill) {
+  var cur = pill.getAttribute('data-vis');
+  var idx = _visStates.findIndex(function(s) { return s.val === cur; });
+  var next = _visStates[(idx + 1) % _visStates.length];
+  pill.setAttribute('data-vis', next.val);
+  pill.textContent = next.label;
+}
+
+/* ── SUPABASE ── */
+var _sb = null;
+try {
+  _sb = supabase.createClient(
+    'https://vzwnptawdkjyiaeefoxd.supabase.co',
+    'sb_publishable_bK65tyHj1NDejK5Wtu-OBQ_yxdoch9-'
+  );
+} catch(e) {
+  console.warn('Supabase init failed:', e.message);
+}
+
+function detectSource(url) {
+  if (!url) return 'other';
+  url = url.toLowerCase();
+  if (url.includes('drive.google'))  return 'google_drive';
+  if (url.includes('icloud'))        return 'icloud';
+  if (url.includes('youtube') || url.includes('youtu.be')) return 'youtube';
+  if (url.includes('instagram'))     return 'instagram';
+  if (url.includes('vimeo'))         return 'vimeo';
+  if (url.includes('loom'))          return 'loom';
+  return 'other';
+}
+
+async function doSignUp() {
+  var btn = document.getElementById('create-btn');
+  var errEl = document.getElementById('create-error');
+  errEl.style.display = 'none';
+  if (!_sb) { errEl.textContent = 'Service unavailable. Try again later.'; errEl.style.display = 'block'; return; }
+  var email    = document.getElementById('signup-email').value.trim();
+  var password = document.getElementById('signup-password').value;
+  var username = document.getElementById('signup-username').value.trim().replace(/^@/, '');
+  var firstName = document.getElementById('signup-firstname').value.trim();
+  var lastName  = document.getElementById('signup-lastname').value.trim();
+  var role      = document.getElementById('signup-role').value.trim();
+  var location  = document.getElementById('signup-location').value.trim();
+  if (!email || !password || !username) {
+    errEl.textContent = 'Please fill in email, password and username.';
+    errEl.style.display = 'block'; return;
+  }
+  btn.textContent = 'Creating…'; btn.disabled = true;
+  var { data, error } = await _sb.auth.signUp({ email, password,
+    options: { data: { username, first_name: firstName, last_name: lastName, role, location } }
+  });
+  if (error) {
+    errEl.textContent = error.message; errEl.style.display = 'block';
+    btn.textContent = 'Create my profile ✦'; btn.disabled = false; return;
+  }
+  if (data.user) {
+    await _sb.from('profiles').upsert({ id: data.user.id, username, first_name: firstName, last_name: lastName, role, location, created_at: new Date().toISOString() });
+    var reelUrl = (document.getElementById('reel-url') || {}).value || '';
+    var reelTitle = (document.getElementById('reel-title') || {}).value || '';
+    if (reelUrl) {
+      await _sb.from('reels').insert({ user_id: data.user.id, url: reelUrl, title: reelTitle || 'My first reel', source: detectSource(reelUrl), skills: indSelected, visibility: 'public', created_at: new Date().toISOString() });
+    }
+  }
+  var linkEl = document.querySelector('#ind-step-6 .url');
+  if (linkEl) linkEl.textContent = 'pitchNpivot.com/@' + username;
+  indGoTo(6);
+  btn.textContent = 'Create my profile ✦'; btn.disabled = false;
+}
+
+async function doSignIn() {
+  var btn = document.getElementById('signin-btn');
+  var errEl = document.getElementById('signin-error');
+  errEl.style.display = 'none';
+  if (!_sb) { errEl.textContent = 'Service unavailable. Try again later.'; errEl.style.display = 'block'; return; }
+  var email    = document.getElementById('signin-email').value.trim();
+  var password = document.getElementById('signin-password').value;
+  if (!email || !password) { errEl.textContent = 'Please enter your email and password.'; errEl.style.display = 'block'; return; }
+  btn.textContent = 'Signing in…'; btn.disabled = true;
+  var { data, error } = await _sb.auth.signInWithPassword({ email, password });
+  if (error) {
+    errEl.textContent = error.message; errEl.style.display = 'block';
+    btn.textContent = 'Sign in →'; btn.disabled = false; return;
+  }
+  var { data: profile } = await _sb.from('profiles').select('username').eq('id', data.user.id).single();
+  var handle = profile ? profile.username : data.user.email;
+  var linkEl = document.querySelector('#ind-step-6 .url');
+  if (linkEl) linkEl.textContent = 'pitchNpivot.com/@' + handle;
+  indGoTo(6);
+  btn.textContent = 'Sign in →'; btn.disabled = false;
+}
+
+/* ── MANAGER AUTH ── */
+function mgrGoTo(step) {
+  document.querySelectorAll('#page-mgr-auth .ind-step').forEach(function(s) { s.classList.remove('active'); });
+  var el = document.getElementById('mgr-step-' + step);
+  if (el) el.classList.add('active');
+}
+
+async function doMgrSignUp() {
+  var btn = document.getElementById('mgr-signup-btn');
+  var errEl = document.getElementById('mgr-signup-error');
+  errEl.style.display = 'none';
+  if (!_sb) { errEl.textContent = 'Service unavailable. Try again later.'; errEl.style.display = 'block'; return; }
+  var name = document.getElementById('mgr-name').value.trim();
+  var company = document.getElementById('mgr-company').value.trim();
+  var role = document.getElementById('mgr-role').value.trim();
+  var email = document.getElementById('mgr-email').value.trim();
+  var password = document.getElementById('mgr-password').value;
+  if (!email || !password || !name) { errEl.textContent = 'Please fill in name, email and password.'; errEl.style.display = 'block'; return; }
+  btn.textContent = 'Creating…'; btn.disabled = true;
+  var { data, error } = await _sb.auth.signUp({ email, password, options: { data: { name, company, role, account_type: 'manager' } } });
+  if (error) { errEl.textContent = error.message; errEl.style.display = 'block'; btn.textContent = 'Create account ✦'; btn.disabled = false; return; }
+  if (data.user) { await _sb.from('managers').upsert({ id: data.user.id, name, company, role, created_at: new Date().toISOString() }); }
+  mgrGoTo(4);
+  btn.textContent = 'Create account ✦'; btn.disabled = false;
+}
+
+async function doMgrSignIn() {
+  var btn = document.getElementById('mgr-signin-btn');
+  var errEl = document.getElementById('mgr-signin-error');
+  errEl.style.display = 'none';
+  if (!_sb) { errEl.textContent = 'Service unavailable. Try again later.'; errEl.style.display = 'block'; return; }
+  var email = document.getElementById('mgr-signin-email').value.trim();
+  var password = document.getElementById('mgr-signin-password').value;
+  if (!email || !password) { errEl.textContent = 'Please enter your email and password.'; errEl.style.display = 'block'; return; }
+  btn.textContent = 'Signing in…'; btn.disabled = true;
+  var { data, error } = await _sb.auth.signInWithPassword({ email, password });
+  if (error) { errEl.textContent = error.message; errEl.style.display = 'block'; btn.textContent = 'Sign in →'; btn.disabled = false; return; }
+  mgrGoTo(4);
+  btn.textContent = 'Sign in →'; btn.disabled = false;
+}
+
+/* ── POST PROJECT MODAL (MANAGER) ── */
+var _projVisibility = 'public';
+function openProjectModal() { document.getElementById('post-project-modal').classList.add('open'); }
+function closeProjectModal() { document.getElementById('post-project-modal').classList.remove('open'); }
+function selectVis(label, value) {
+  document.querySelectorAll('#post-project-modal .vis-opt').forEach(function(o) { o.classList.remove('selected'); });
+  label.classList.add('selected');
+  _projVisibility = value;
+  document.getElementById('assign-field').style.display = value === 'assigned' ? 'block' : 'none';
+}
+document.getElementById('post-project-modal').addEventListener('click', function(e) { if (e.target === this) closeProjectModal(); });
+
+async function doPostProject() {
+  var btn = document.getElementById('proj-submit-btn');
+  var errEl = document.getElementById('proj-error');
+  errEl.style.display = 'none';
+  var title = document.getElementById('proj-title').value.trim();
+  if (!title) { errEl.textContent = 'Please add a project title.'; errEl.style.display = 'block'; return; }
+  if (!_sb) { errEl.textContent = 'Service unavailable.'; errEl.style.display = 'block'; return; }
+  var { data: { user } } = await _sb.auth.getUser();
+  if (!user) { errEl.textContent = 'Please sign in to post a project.'; errEl.style.display = 'block'; return; }
+  btn.textContent = 'Posting…'; btn.disabled = true;
+  var skills = document.getElementById('proj-skills').value.split(',').map(function(s){return s.trim();}).filter(Boolean);
+  var assignee = _projVisibility === 'assigned' ? document.getElementById('proj-assignee').value.trim().replace(/^@/,'') : null;
+  var { error } = await _sb.from('projects').insert({ manager_id: user.id, title, description: document.getElementById('proj-desc').value.trim(), timeline: document.getElementById('proj-timeline').value.trim(), pay_type: document.getElementById('proj-pay').value, skills, visibility: _projVisibility, assigned_to: assignee, status: _projVisibility === 'private' ? 'draft' : 'open', created_at: new Date().toISOString() });
+  if (error) { errEl.textContent = error.message; errEl.style.display = 'block'; btn.textContent = 'Post Project ✦'; btn.disabled = false; return; }
+  closeProjectModal();
+  btn.textContent = 'Post Project ✦'; btn.disabled = false;
+  alert('Project posted! ✦');
+}
+
+/* ── INDIVIDUAL PROJECT MODAL ── */
+var _indProjVisibility = 'public';
+function openIndProjectModal() { document.getElementById('ind-project-modal').classList.add('open'); }
+function closeIndProjectModal() { document.getElementById('ind-project-modal').classList.remove('open'); }
+function selectIndVis(label, value) {
+  document.querySelectorAll('#ind-project-modal .vis-opt').forEach(function(o) { o.classList.remove('selected'); });
+  label.classList.add('selected');
+  _indProjVisibility = value;
+}
+document.getElementById('ind-project-modal').addEventListener('click', function(e) { if (e.target === this) closeIndProjectModal(); });
+
+async function doPostIndProject() {
+  var btn = document.getElementById('ind-proj-submit-btn');
+  var errEl = document.getElementById('ind-proj-error');
+  errEl.style.display = 'none';
+  var title = document.getElementById('ind-proj-title').value.trim();
+  if (!title) { errEl.textContent = 'Please add a project title.'; errEl.style.display = 'block'; return; }
+  if (!_sb) { errEl.textContent = 'Service unavailable.'; errEl.style.display = 'block'; return; }
+  var { data: { user } } = await _sb.auth.getUser();
+  if (!user) { errEl.textContent = 'Please sign in to save a project.'; errEl.style.display = 'block'; return; }
+  btn.textContent = 'Saving…'; btn.disabled = true;
+  var skills = document.getElementById('ind-proj-skills').value.split(',').map(function(s){return s.trim();}).filter(Boolean);
+  var { error } = await _sb.from('individual_projects').insert({ user_id: user.id, title, description: document.getElementById('ind-proj-desc').value.trim(), status: document.getElementById('ind-proj-status').value, skills, demo_link: document.getElementById('ind-proj-link').value.trim(), visibility: _indProjVisibility, created_at: new Date().toISOString() });
+  if (error) { errEl.textContent = error.message; errEl.style.display = 'block'; btn.textContent = 'Save Project ✦'; btn.disabled = false; return; }
+  closeIndProjectModal();
+  btn.textContent = 'Save Project ✦'; btn.disabled = false;
+  alert('Project saved! ✦');
+}
+
+/* ── MAGNETIC BUTTONS ── */
+document.querySelectorAll('.btn-fire, .nav-pill').forEach(function(btn) {
+  btn.addEventListener('mousemove', function(e) {
+    var r = btn.getBoundingClientRect();
+    var dx = (e.clientX - r.left - r.width / 2);
+    var dy = (e.clientY - r.top - r.height / 2);
+    btn.style.transform = 'translate(' + (dx * 0.32) + 'px, ' + (dy * 0.32) + 'px)';
+  });
+  btn.addEventListener('mouseleave', function() {
+    btn.style.transition = 'transform 0.45s cubic-bezier(.34,1.56,.64,1), box-shadow .18s, background .18s';
+    btn.style.transform = 'translate(0,0)';
+    setTimeout(function() { btn.style.transition = ''; }, 450);
+  });
+  btn.addEventListener('mouseenter', function() {
+    btn.style.transition = 'transform 0.1s ease, box-shadow .18s, background .18s';
+  });
+});
+</script>
+</body>
+</html>
