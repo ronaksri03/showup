@@ -1664,26 +1664,42 @@
       font-family:'Plus Jakarta Sans',sans-serif; font-weight:700; font-size:1rem;
       margin-bottom:16px; display:flex; align-items:center; gap:8px;
     }
-    .reel-row {
-      display:flex; align-items:center; gap:14px;
-      padding:14px 16px; border-radius:12px;
+    .reel-card {
+      position:relative; border-radius:14px; overflow:hidden;
       background:var(--surf); border:1.5px solid var(--border2);
-      margin-bottom:10px; transition:border-color .15s;
+      margin-bottom:12px; transition:border-color .15s, transform .15s;
     }
-    .reel-row:hover { border-color:rgba(200,255,0,0.3); }
-    .reel-source-icon { font-size:1.4rem; flex-shrink:0; }
-    .reel-info { flex:1; min-width:0; }
-    .reel-title-text { font-weight:600; font-size:0.88rem; margin-bottom:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .reel-meta { font-size:0.7rem; color:var(--muted); display:flex; gap:12px; align-items:center; }
-    .reel-views { display:flex; align-items:center; gap:4px; color:var(--peach2); font-weight:600; }
-    .reel-view-btn {
-      flex-shrink:0; width:32px; height:32px; border-radius:8px;
-      background:rgba(200,255,0,0.08); border:1px solid rgba(200,255,0,0.25);
-      color:var(--peach2); font-size:0.9rem; cursor:pointer;
+    .reel-card:hover { border-color:rgba(200,255,0,0.35); transform:translateY(-2px); }
+    .reel-card-top {
+      position:relative; height:120px;
+      background:linear-gradient(135deg,#0d0d00,#001a00);
       display:flex; align-items:center; justify-content:center;
-      text-decoration:none; transition:background .15s;
+      cursor:pointer;
     }
-    .reel-view-btn:hover { background:rgba(200,255,0,0.18); }
+    .reel-play-btn {
+      width:52px; height:52px; border-radius:50%;
+      background:rgba(200,255,0,0.92); border:none;
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.3rem; cursor:pointer; transition:transform .15s, background .15s;
+      text-decoration:none; color:#0a0a0a;
+    }
+    .reel-play-btn:hover { transform:scale(1.12); background:#c8ff00; }
+    .reel-source-badge {
+      position:absolute; top:10px; left:12px;
+      background:rgba(0,0,0,0.6); border-radius:6px;
+      padding:3px 8px; font-size:11px; color:#aaa;
+    }
+    .reel-card-body { padding:12px 14px; }
+    .reel-title-text { font-weight:600; font-size:0.88rem; margin-bottom:4px; }
+    .reel-meta { font-size:0.7rem; color:var(--muted); display:flex; gap:12px; align-items:center; justify-content:space-between; }
+    .reel-views { color:var(--peach2); font-weight:600; }
+    .reel-actions { display:flex; gap:8px; }
+    .reel-action-btn {
+      background:none; border:1px solid #2a2a2a; color:#888;
+      border-radius:6px; padding:3px 10px; font-size:11px; cursor:pointer;
+      transition:border-color .15s, color .15s;
+    }
+    .reel-action-btn:hover { border-color:rgba(200,255,0,0.4); color:#c8ff00; }
 
     /* manager visits */
     .visit-row {
@@ -2933,20 +2949,32 @@ async function loadMyProfile() {
   var totalViews = reels.reduce(function(a,r){return a+(r.view_count||0);},0);
   document.getElementById('mp-view-count').textContent = totalViews > 999 ? (totalViews/1000).toFixed(1)+'k' : totalViews;
 
-  var reelSrc = {'youtube':'▶','google_drive':'📁','icloud':'🍎','instagram':'📸','vimeo':'🎬','loom':'🎥','other':'🔗'};
+  var reelSrcLabel = {'youtube':'YouTube','google_drive':'Google Drive','icloud':'iCloud','instagram':'Instagram','vimeo':'Vimeo','loom':'Loom','other':'Link'};
+  var reelSrcIcon  = {'youtube':'▶ ','google_drive':'📁 ','icloud':'🍎 ','instagram':'📸 ','vimeo':'🎬 ','loom':'🎥 ','other':'🔗 '};
   var reelHtml = reels.length ? reels.map(function(r){
-    return '<div class="reel-row">'
-      +'<div class="reel-source-icon">'+(reelSrc[r.source]||'🔗')+'</div>'
-      +'<div class="reel-info">'
+    var src   = r.source || 'other';
+    var label = reelSrcLabel[src] || 'Link';
+    var icon  = reelSrcIcon[src]  || '🔗 ';
+    var skills= (r.skills||[]).slice(0,3).join(' · ');
+    var safeUrl = r.url ? r.url.replace(/"/g,'&quot;') : '#';
+    return '<div class="reel-card">'
+      +'<div class="reel-card-top" onclick="window.open(\''+safeUrl+'\',\'_blank\')">'
+        +'<span class="reel-source-badge">'+icon+label+'</span>'
+        +'<a class="reel-play-btn" href="'+safeUrl+'" target="_blank" onclick="event.stopPropagation()">&#9654;</a>'
+      +'</div>'
+      +'<div class="reel-card-body">'
         +'<div class="reel-title-text">'+(r.title||'Untitled reel')+'</div>'
         +'<div class="reel-meta">'
-          +'<span class="reel-views">👁 '+(r.view_count||0)+'</span>'
-          +'<span>'+(r.skills||[]).slice(0,3).join(' · ')+'</span>'
+          +'<span class="reel-views">👁 '+(r.view_count||0)+' views</span>'
+          +'<div class="reel-actions">'
+            +'<button class="reel-action-btn" onclick="editReel(\''+r.id+'\',\''+safeUrl+'\',\''+((r.title||'').replace(/'/g,"\\\'"))+'\')">✏️ Edit</button>'
+            +'<button class="reel-action-btn" onclick="deleteReel(\''+r.id+'\')">🗑 Delete</button>'
+          +'</div>'
         +'</div>'
+        +(skills ? '<div style="font-size:11px;color:#666;margin-top:4px">'+skills+'</div>' : '')
       +'</div>'
-      +'<a class="reel-view-btn" href="'+r.url+'" target="_blank" title="Open reel">↗</a>'
     +'</div>';
-  }).join('') : '<div class="empty-state">No reels yet.</div>';
+  }).join('') : '<div class="empty-state">No reels yet. Drop your first reel to get discovered.</div>';
   document.getElementById('mp-reels-list').innerHTML = reelHtml;
 
   // fetch manager visits
@@ -3209,6 +3237,28 @@ function cycleVis(pill) {
 }
 
 function _capitalize(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
+
+/* ── REEL EDIT / DELETE ── */
+function editReel(id, url, title) {
+  var newTitle = prompt('Reel title:', title);
+  if (newTitle === null) return; // cancelled
+  var newUrl = prompt('Reel link:', url);
+  if (newUrl === null) return;
+  newTitle = newTitle.trim(); newUrl = newUrl.trim();
+  if (!newUrl) return;
+  _sb.from('reels').update({ url: newUrl, title: newTitle, source: detectSource(newUrl) })
+    .eq('id', id).then(function(res) {
+      if (res.error) { alert('Error: ' + res.error.message); return; }
+      loadMyProfile();
+    });
+}
+
+async function deleteReel(id) {
+  if (!confirm('Delete this reel?')) return;
+  var res = await _sb.from('reels').delete().eq('id', id);
+  if (res.error) { alert('Error: ' + res.error.message); return; }
+  loadMyProfile();
+}
 
 function openEditProfile() {
   var p = window._myProfile || {};
