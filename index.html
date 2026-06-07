@@ -2281,6 +2281,10 @@
 
 <!-- MANAGER AUTH -->
 <div class="page-view" id="page-mgr-auth">
+  <div class="page-header">
+    <button class="page-back" onclick="goHome()">← Back</button>
+    <div class="page-header-title">For Managers</div>
+  </div>
   <div class="ind-layout">
     <div class="ind-brand">
       <div class="ind-brand-logo">pitchNpivot</div>
@@ -2620,6 +2624,7 @@ function showPage(id) {
   if (page) { page.classList.add('active'); window.scrollTo(0, 0); }
   if (id === 'discover') loadDiscover();
   if (id === 'lab') { loadLabIndividual(); loadLabCommunity(); loadLabManager(); }
+  if (id === 'mgr-auth') mgrGoTo(1);
 }
 function goHome() {
   document.querySelectorAll('.page-view').forEach(function(p) { p.classList.remove('active'); });
