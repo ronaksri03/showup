@@ -2122,6 +2122,15 @@
         </div>
         <div class="ind-field">
           <label class="ind-label">Your Skills <span style="font-weight:400;text-transform:none;letter-spacing:0">(pick up to 6)</span></label>
+          <div style="position:relative;margin-bottom:10px">
+            <input id="skill-search" type="text" autocomplete="off" placeholder="Search skills or type your own…"
+              style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box"
+              oninput="_indFilterSkills(this.value)"
+              onfocus="_indFilterSkills(this.value)"
+              onkeydown="if(event.key===&#39;Enter&#39;){event.preventDefault();var v=this.value.trim();if(v){_indAddSkillByName(v);this.value=&#39;&#39;;_indFilterSkills(&#39;&#39;);}}"
+            />
+            <div id="skill-search-dd" style="display:none;position:absolute;top:100%;left:0;right:0;background:#111;border:1px solid #2a2a2a;border-radius:0 0 8px 8px;z-index:100;max-height:200px;overflow-y:auto"></div>
+          </div>
           <div class="skill-grid" id="skill-grid">
             <span class="skill-pill" onclick="toggleSkill(this)">React</span>
             <span class="skill-pill" onclick="toggleSkill(this)">Python</span>
@@ -2136,7 +2145,7 @@
             <span class="skill-pill" onclick="toggleSkill(this)">Flutter</span>
             <span class="skill-pill" onclick="toggleSkill(this)">AWS</span>
             <span class="skill-pill" onclick="toggleSkill(this)">ML / AI</span>
-            <span class="skill-pill" onclick="toggleSkill(this)">UX Desi            <span class="skill-pill" onclick="toggleSkill(this)">UX Design</span>
+            <span class="skill-pill" onclick="toggleSkill(this)">UX Design</span>
             <span class="skill-pill" onclick="toggleSkill(this)">Motion</span>
             <span class="skill-pill" onclick="toggleSkill(this)">Web3</span>
             <span class="skill-pill" onclick="toggleSkill(this)">Docker</span>
@@ -2424,10 +2433,18 @@
           style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box" />
       </div>
       <div>
-        <label style="display:block;color:#888;font-size:12px;margin-bottom:8px">SKILLS <span style="color:#555">(comma-separated)</span></label>
-        <input id="ep-skills" type="text" placeholder="e.g. React, Python, Figma, Go"
-          style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box" />
-        <div style="color:#555;font-size:11px;margin-top:4px">Separate with commas. These power the Discover search.</div>
+        <label style="display:block;color:#888;font-size:12px;margin-bottom:8px">SKILLS <span style="color:#555">(up to 10)</span></label>
+        <div id="ep-skills-tags" style="display:flex;flex-wrap:wrap;gap:6px;min-height:28px;margin-bottom:8px"></div>
+        <div style="position:relative">
+          <input id="ep-skill-input" type="text" placeholder="Type to search skills…" autocomplete="off"
+            style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box"
+            oninput="_epFilterDropdown(this.value)"
+            onfocus="_epFilterDropdown(this.value)"
+            onkeydown="if(event.key===&#39;Enter&#39;){event.preventDefault();var v=this.value.trim();if(v)epAddSkill(v);}"
+          />
+          <div id="ep-skill-dd" style="display:none;position:absolute;top:100%;left:0;right:0;background:#111;border:1px solid #2a2a2a;border-radius:0 0 8px 8px;z-index:100;max-height:220px;overflow-y:auto"></div>
+        </div>
+        <div style="color:#555;font-size:11px;margin-top:6px">Click a suggestion or press Enter to add a custom skill.</div>
       </div>
       <div style="display:flex;align-items:center;gap:10px">
         <input type="checkbox" id="ep-open" style="accent-color:#c8ff00;width:16px;height:16px">
@@ -2585,16 +2602,56 @@ function indGoTo(step) {
 }
 
 function toggleSkill(el) {
+  var skill = el.textContent.trim();
   if (el.classList.contains('selected')) {
     el.classList.remove('selected');
-    indSelected = indSelected.filter(function(s) { return s !== el.textContent.trim(); });
+    indSelected = indSelected.filter(function(s) { return s !== skill; });
   } else {
     if (indSelected.length >= IND_MAX) return;
     el.classList.add('selected');
-    indSelected.push(el.textContent.trim());
+    indSelected.push(skill);
   }
   var cnt = document.getElementById('skill-count');
   if (cnt) cnt.textContent = indSelected.length + ' / ' + IND_MAX + ' selected';
+}
+
+function _indAddSkillByName(s) {
+  s = s.trim();
+  if (!s || indSelected.length >= IND_MAX || indSelected.indexOf(s) !== -1) return;
+  indSelected.push(s);
+  // check if a pill exists for it; if so, mark selected
+  var pills = document.querySelectorAll('#skill-grid .skill-pill');
+  pills.forEach(function(p){ if(p.textContent.trim()===s) p.classList.add('selected'); });
+  // if not a preset pill, add a dynamic pill
+  var exists = Array.from(pills).some(function(p){ return p.textContent.trim()===s; });
+  if (!exists) {
+    var grid = document.getElementById('skill-grid');
+    if (grid) {
+      var pill = document.createElement('span');
+      pill.className = 'skill-pill selected';
+      pill.textContent = s;
+      pill.onclick = function(){ toggleSkill(pill); };
+      grid.appendChild(pill);
+    }
+  }
+  var cnt = document.getElementById('skill-count');
+  if (cnt) cnt.textContent = indSelected.length + ' / ' + IND_MAX + ' selected';
+}
+
+function _indFilterSkills(q) {
+  var dd = document.getElementById('skill-search-dd');
+  if (!dd) return;
+  if (!q) { dd.style.display='none'; return; }
+  var matches = SKILL_SUGGESTIONS.filter(function(s){
+    return s.toLowerCase().indexOf(q.toLowerCase()) !== -1 && indSelected.indexOf(s) === -1;
+  }).slice(0, 8);
+  if (matches.length === 0 && q.length > 1) matches = [q];
+  if (matches.length === 0) { dd.style.display='none'; return; }
+  dd.innerHTML = matches.map(function(s){
+    var safe = s.replace(/'/g, "\\'");
+    return "<div class='skill-dd-item' onclick=\"_indAddSkillByName('" + safe + "');document.getElementById('skill-search').value='';_indFilterSkills('');\" style='padding:8px 14px;cursor:pointer;color:#f0ece4;font-size:13px;border-bottom:1px solid #1a1a1a' onmouseover=\"this.style.background='#1a1a1a'\" onmouseout=\"this.style.background=''\">" + s + "</div>";
+  }).join('');
+  dd.style.display = 'block';
 }
 
 /* ── PROJECT LAB TABS ── */
@@ -3160,8 +3217,14 @@ function openEditProfile() {
   document.getElementById('ep-lastname').value  = p.last_name  || meta.last_name  || '';
   document.getElementById('ep-bio').value       = p.bio        || '';
   document.getElementById('ep-location').value  = p.location   || meta.location   || '';
-  document.getElementById('ep-skills').value    = (p.skills    || []).join(', ');
   document.getElementById('ep-open').checked    = p.open_to_work !== false;
+  // load existing skills into tag system
+  window._epSelectedSkills = (p.skills || (meta.skills_arr) || []).slice();
+  _renderEpSkills();
+  var inp = document.getElementById('ep-skill-input');
+  if (inp) inp.value = '';
+  var dd = document.getElementById('ep-skill-dd');
+  if (dd) dd.style.display = 'none';
   document.getElementById('ep-err').style.display = 'none';
   document.getElementById('edit-profile-modal').style.display = 'block';
   document.body.style.overflow = 'hidden';
@@ -3181,12 +3244,15 @@ async function doSaveProfile() {
   var lastName  = document.getElementById('ep-lastname').value.trim();
   var bio       = document.getElementById('ep-bio').value.trim();
   var location  = document.getElementById('ep-location').value.trim();
-  var skillsRaw = document.getElementById('ep-skills').value;
-  var skills    = skillsRaw.split(',').map(function(s){ return s.trim(); }).filter(Boolean);
   var openWork  = document.getElementById('ep-open').checked;
-  btn.textContent = 'Saving…'; btn.disabled = true;
+  var skills    = window._epSelectedSkills || [];
+  btn.textContent = 'Saving\u2026'; btn.disabled = true;
+  var existingUsername = (window._myProfile && window._myProfile.username)
+    || (window._currentUser.user_metadata && window._currentUser.user_metadata.username)
+    || window._currentUser.email.split('@')[0];
   var res = await _sb.from('profiles').upsert({
     id: window._currentUser.id,
+    username: existingUsername,
     first_name: firstName,
     last_name: lastName,
     bio: bio,
@@ -3194,10 +3260,56 @@ async function doSaveProfile() {
     skills: skills,
     open_to_work: openWork
   });
-  btn.textContent = 'Save Profile ✶'; btn.disabled = false;
+  btn.textContent = 'Save Profile \u2756'; btn.disabled = false;
   if (res.error) { errEl.textContent = res.error.message; errEl.style.display = 'block'; return; }
   closeEditProfile();
   loadMyProfile();
+}
+
+/* skill tag input helpers */
+var SKILL_SUGGESTIONS = ['React', 'Vue', 'Angular', 'Next.js', 'TypeScript', 'JavaScript', 'Python', 'Go', 'Rust', 'Java', 'Swift', 'Kotlin', 'Flutter', 'React Native', 'Node.js', 'Django', 'FastAPI', 'PostgreSQL', 'MongoDB', 'Redis', 'Docker', 'Kubernetes', 'AWS', 'Figma', 'Tailwind CSS', 'GraphQL', 'WebRTC', 'Solidity', 'OpenAI', 'PyTorch', 'TensorFlow', 'Unity', 'C#', 'C++', 'Shopify', 'WordPress'];
+
+function _renderEpSkills() {
+  var box = document.getElementById('ep-skills-tags');
+  if (!box) return;
+  box.innerHTML = (window._epSelectedSkills||[]).map(function(s){
+    return '<span style="display:inline-flex;align-items:center;gap:4px;background:rgba(200,255,0,0.12);border:1px solid rgba(200,255,0,0.4);color:#c8ff00;padding:3px 10px;border-radius:20px;font-size:12px;cursor:default">'
+      +s+'<span onclick="epRemoveSkill(\''+s+'\')" style="cursor:pointer;color:#888;margin-left:2px">&times;</span></span>';
+  }).join('');
+}
+
+function epRemoveSkill(s) {
+  window._epSelectedSkills = (window._epSelectedSkills||[]).filter(function(x){ return x!==s; });
+  _renderEpSkills();
+}
+
+function epAddSkill(s) {
+  s = s.trim();
+  if (!s) return;
+  if (!window._epSelectedSkills) window._epSelectedSkills = [];
+  if (window._epSelectedSkills.indexOf(s) === -1 && window._epSelectedSkills.length < 10) {
+    window._epSelectedSkills.push(s);
+    _renderEpSkills();
+  }
+  var inp = document.getElementById('ep-skill-input');
+  if (inp) { inp.value = ''; _epFilterDropdown(''); }
+}
+
+function _epFilterDropdown(q) {
+  var dd = document.getElementById('ep-skill-dd');
+  if (!dd) return;
+  var selected = window._epSelectedSkills || [];
+  var matches = q
+    ? SKILL_SUGGESTIONS.filter(function(s){ return s.toLowerCase().indexOf(q.toLowerCase()) !== -1 && selected.indexOf(s) === -1; })
+    : SKILL_SUGGESTIONS.filter(function(s){ return selected.indexOf(s) === -1; });
+  matches = matches.slice(0, 8);
+  if (matches.length === 0 && q && q.length > 1) matches = [q];
+  if (matches.length === 0) { dd.style.display='none'; return; }
+  dd.innerHTML = matches.map(function(s){
+    var safe = s.replace(/'/g, "\\'");
+    return "<div onclick=\"epAddSkill('" + safe + "')\" style='padding:8px 14px;cursor:pointer;color:#f0ece4;font-size:13px;border-bottom:1px solid #1a1a1a' onmouseover=\"this.style.background='#1a1a1a'\" onmouseout=\"this.style.background=''\">" + s + "</div>";
+  }).join('');
+  dd.style.display = 'block';
 }
 
 document.querySelectorAll('.btn-fire, .nav-pill').forEach(function(btn) {
