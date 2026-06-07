@@ -1428,6 +1428,47 @@
       .ind-form-area { padding: 28px 20px; }
     }
 
+    /* ── POST PROJECT MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 999;
+      background: rgba(0,0,0,0.72); backdrop-filter: blur(6px);
+      display: none; align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: var(--surf); border: 1px solid rgba(200,255,0,0.18);
+      border-radius: 18px; padding: 36px 40px; width: 100%; max-width: 520px;
+      max-height: 90vh; overflow-y: auto; position: relative;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(200,255,0,0.06);
+      animation: pvin .2s ease;
+    }
+    .modal-close {
+      position: absolute; top: 16px; right: 18px;
+      background: none; border: none; color: var(--muted); font-size: 1.2rem;
+      cursor: pointer; line-height: 1; padding: 4px 8px; border-radius: 6px;
+      transition: color .15s;
+    }
+    .modal-close:hover { color: var(--text); }
+    .modal-title {
+      font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800;
+      font-size: 1.4rem; letter-spacing: -0.02em; margin-bottom: 5px;
+    }
+    .modal-sub { font-size: 0.8rem; color: var(--muted); margin-bottom: 24px; }
+
+    /* visibility picker */
+    .vis-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+    .vis-opt {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 14px; border-radius: 10px; border: 1.5px solid rgba(255,255,255,0.1);
+      cursor: pointer; transition: border-color .15s, background .15s;
+    }
+    .vis-opt:hover { border-color: rgba(200,255,0,0.3); }
+    .vis-opt.selected { border-color: rgba(200,255,0,0.6); background: rgba(200,255,0,0.06); }
+    .vis-opt input[type=radio] { margin-top: 3px; accent-color: var(--peach); flex-shrink: 0; }
+    .vis-opt-label strong { display: block; font-size: 0.85rem; font-weight: 600; }
+    .vis-opt-label span { font-size: 0.72rem; color: var(--muted); line-height: 1.4; }
+    #assign-field { display: none; margin-top: -4px; margin-bottom: 12px; }
+
   </style>
 </head>
 <body>
@@ -1448,7 +1489,7 @@
   <div class="nav-links">
     <a href="#" onclick="showPage('discover');return false">Discover</a>
     <a href="#" onclick="showPage('lab');return false">Project Lab</a>
-    <a href="#" onclick="showPage('mgr');return false">For Managers</a>
+    <a href="#" onclick="showPage('mgr-auth');return false">For Managers</a>
   </div>
   <button class="nav-pill" onclick="showPage('individual')">Drop your reel ✦</button>
 </nav>
@@ -1542,7 +1583,7 @@
       <div><div class="zf-icon">🙋</div><div class="zf-label">For Individuals</div><div class="zf-desc">Create your account</div></div>
       <div class="zf-arr">↗</div>
     </div>
-    <div class="zf-card" onclick="showPage('mgr')">
+    <div class="zf-card" onclick="showPage('mgr-auth')">
       <div><div class="zf-icon">👔</div><div class="zf-label">For Managers</div><div class="zf-desc">Watch before you hire</div></div>
       <div class="zf-arr">↗</div>
     </div>
@@ -1703,7 +1744,7 @@
         <div class="lab-section-title">Your Posted Projects</div>
         <div class="lab-section-sub">Post publicly for anyone to pick up, or assign directly to an individual.</div>
       </div>
-      <button class="lab-new-btn">+ Post Project</button>
+      <button class="lab-new-btn" onclick="openProjectModal()">+ Post Project</button>
     </div>
 
     <div class="lab-mgr-grid">
@@ -1921,38 +1962,3 @@
             <span class="skill-pill" onclick="toggleSkill(this)">Rust</span>
             <span class="skill-pill" onclick="toggleSkill(this)">Node.js</span>
             <span class="skill-pill" onclick="toggleSkill(this)">Next.js</span>
-            <span class="skill-pill" onclick="toggleSkill(this)">Flutter</span>
-            <span class="skill-pill" onclick="toggleSkill(this)">AWS</span>
-            <span class="skill-pill" onclick="toggleSkill(this)">ML / AI</span>
-            <span class="skill-pill" onclick="toggleSkill(this)">UX Design</span>
-            <span class="skill-pill" onclick="toggleSkill(this)">Motion</span>
-            <span class="skill-pill" onclick="toggleSkill(this)">Web3</span>
-            <span class="skill-pill" onclick="toggleSkill(this)">Docker</span>
-            <span class="skill-pill" onclick="toggleSkill(this)">Solidity</span>
-            <span class="skill-pill" onclick="toggleSkill(this)">Product</span>
-            <span class="skill-pill" onclick="toggleSkill(this)">Data</span>
-          </div>
-          <div class="ind-hint" id="skill-count" style="margin-top:8px">0 / 6 selected</div>
-        </div>
-        <button class="ind-btn-primary" onclick="indGoTo(5)">Continue →</button>
-      </div>
-
-      <!-- STEP 5: Privacy (step 3 of 3) -->
-      <div class="ind-step" id="ind-step-5">
-        <button class="ind-btn-back" onclick="indGoTo(4)">← Back</button>
-        <div class="ind-progress">
-          <div class="ind-dot done"></div><div class="ind-dot done"></div><div class="ind-dot active"></div>
-        </div>
-        <div class="ind-step-title">Who can see you?</div>
-        <div class="ind-step-sub">You're in full control. Change this any time from your settings.</div>
-        <div class="ind-toggle-row">
-          <div class="ind-toggle-label">
-            <strong>👔 Visible to Managers</strong>
-            <span>Hiring managers and recruiters can find your profile and reel when searching for talent.</span>
-          </div>
-          <div class="toggle-sw on" onclick="this.classList.toggle('on')"></div>
-        </div>
-        <div class="ind-toggle-row">
-          <div class="ind-toggle-label">
-            <strong>👥 Visible to Peers</strong>
-            <span>Other creators and builders in the community can see your profile, follow you, and collab
