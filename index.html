@@ -2798,7 +2798,7 @@ async function doPostProject() {
   btn.textContent = 'Posting…'; btn.disabled = true;
   var skills = document.getElementById('proj-skills').value.split(',').map(function(s){return s.trim();}).filter(Boolean);
   var assignee = _projVisibility === 'assigned' ? document.getElementById('proj-assignee').value.trim().replace(/^@/,'') : null;
-  var { error } = await _sb.from('projects').insert({ manager_id: user.id, title, description: document.getElementById('proj-desc').value.trim(), timeline: document.getElementById('proj-timeline').value.trim(), pay_type: document.getElementById('proj-pay').value, skills, visibility: _projVisibility, assigned_to: assignee, status: _projVisibility === 'private' ? 'draft' : 'open', created_at: new Date().toISOString() });
+  var { error } = await _sb.from('manager_projects').insert({ manager_id: user.id, title, description: document.getElementById('proj-desc').value.trim(), timeline: document.getElementById('proj-timeline').value.trim(), pay_type: document.getElementById('proj-pay').value, skills: skills, visibility: _projVisibility, assigned_to: assignee, status: _projVisibility === 'private' ? 'draft' : 'open', created_at: new Date().toISOString() });
   if (error) { errEl.textContent = error.message; errEl.style.display = 'block'; btn.textContent = 'Post Project ✦'; btn.disabled = false; return; }
   closeProjectModal();
   btn.textContent = 'Post Project ✦'; btn.disabled = false;
@@ -2928,7 +2928,7 @@ async function loadMyDashboard() {
   document.getElementById('md-name').textContent = name;
   document.getElementById('md-sub').textContent = (meta.role||'') + (meta.company ? ' · '+meta.company : '');
 
-  var { data: projects } = await _sb.from('projects').select('*').eq('manager_id', user.id).order('created_at', {ascending:false});
+  var { data: projects } = await _sb.from('manager_projects').select('*').eq('manager_id', user.id).order('created_at', {ascending:false});
   projects = projects || [];
   document.getElementById('md-proj-count').textContent = projects.length;
   document.getElementById('md-open-count').textContent = projects.filter(function(p){return p.status==='open';}).length;
@@ -2998,6 +2998,4 @@ document.querySelectorAll('.btn-fire, .nav-pill').forEach(function(btn) {
     btn.style.transition = 'transform 0.1s ease, box-shadow .18s, background .18s';
   });
 });
-</script>
-</body>
-</html>
+</
