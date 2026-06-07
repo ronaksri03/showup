@@ -2472,6 +2472,11 @@
     <div class="mypage-section-title">👔 Managers who visited your profile</div>
     <div id="mp-visits-list"><div class="empty-state">No manager visits yet. Once a manager views your profile, they'll appear here.</div></div>
   </div>
+
+  <div class="mypage-section">
+    <div class="mypage-section-title">📋 Projects assigned to me</div>
+    <div id="mp-assigned-list"><div class="empty-state">No projects assigned to you yet. Once a manager assigns a project, it'll appear here.</div></div>
+  </div>
 </div>
 
 <!-- EDIT PROFILE MODAL -->
@@ -3007,8 +3012,8 @@ async function doMgrSignIn() {
   var { data, error } = await _sb.auth.signInWithPassword({ email, password });
   if (error) { errEl.textContent = error.message; errEl.style.display = 'block'; btn.textContent = 'Sign in →'; btn.disabled = false; return; }
   await checkAuthState();
-  mgrGoTo(4);
   btn.textContent = 'Sign in →'; btn.disabled = false;
+  loadMyDashboard(); showPage('my-dashboard');
 }
 
 /* ── POST PROJECT MODAL (MANAGER) ── */
@@ -3048,7 +3053,7 @@ async function doPostProject() {
   if (error) { errEl.textContent = error.message; errEl.style.display = 'block'; btn.textContent = 'Post Project ✦'; btn.disabled = false; return; }
   closeProjectModal();
   btn.textContent = 'Post Project ✦'; btn.disabled = false;
-  alert('Project posted! ✦');
+  showToast('Project posted! ✦');
 }
 
 /* ── INDIVIDUAL PROJECT MODAL ── */
@@ -3077,7 +3082,7 @@ async function doPostIndProject() {
   if (error) { errEl.textContent = error.message; errEl.style.display = 'block'; btn.textContent = 'Save Project ✦'; btn.disabled = false; return; }
   closeIndProjectModal();
   btn.textContent = 'Save Project ✦'; btn.disabled = false;
-  alert('Project saved! ✦');
+  showToast('Project saved! ✦');
 }
 
 
@@ -3245,6 +3250,35 @@ async function loadMyProfile() {
     +'</div>';
   }).join('') : '<div class="empty-state">No manager visits yet.</div>';
   document.getElementById('mp-visits-list').innerHTML = visitHtml;
+
+  // fetch projects assigned to this individual by managers
+  var { data: assignedProjects } = await _sb.from('manager_projects')
+    .select('*, managers(name, company)')
+    .eq('assigned_to', user.id)
+    .order('created_at', {ascending: false});
+  assignedProjects = assignedProjects || [];
+  var assignedHtml = assignedProjects.length ? assignedProjects.map(function(p) {
+    var mgr = p.managers || {};
+    var skills = (p.skills_required || []).slice(0, 4).map(function(s) {
+      return '<span class="vtag" style="font-size:11px">'+s+'</span>';
+    }).join('');
+    var pay = p.pay_type === 'paid' ? '💰 Paid' : p.pay_type === 'bounty' ? '🏆 Bounty' : '🤝 Unpaid';
+    return '<div style="background:#111;border:1px solid #2a2a2a;border-radius:12px;padding:16px 18px;margin-bottom:10px">'
+      +'<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">'
+        +'<div>'
+          +'<div style="font-weight:700;font-size:14px;color:#f0ece4;margin-bottom:4px">'+p.title+'</div>'
+          +'<div style="font-size:12px;color:#888">'
+            +(mgr.name ? '👔 '+mgr.name+(mgr.company ? ' · '+mgr.company : '') : '')
+            +(p.timeline ? ' &nbsp;·&nbsp; ⏱ '+p.timeline : '')
+          +'</div>'
+        +'</div>'
+        +'<span style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;background:rgba(200,255,0,0.12);border:1px solid rgba(200,255,0,0.3);color:#c8ff00;white-space:nowrap">'+pay+'</span>'
+      +'</div>'
+      +(p.description ? '<div style="font-size:13px;color:#888;margin-top:8px;line-height:1.5">'+p.description+'</div>' : '')
+      +(skills ? '<div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:10px">'+skills+'</div>' : '')
+    +'</div>';
+  }).join('') : '<div class="empty-state">No projects assigned to you yet.</div>';
+  document.getElementById('mp-assigned-list').innerHTML = assignedHtml;
 }
 
 async function loadMyDashboard() {
@@ -3641,7 +3675,7 @@ function editReel(id, url, title) {
   if (!newUrl) return;
   _sb.from('reels').update({ url: newUrl, title: newTitle, source: detectSource(newUrl) })
     .eq('id', id).then(function(res) {
-      if (res.error) { alert('Error: ' + res.error.message); return; }
+      if (res.error) { showToast('Error: ' + res.error.message); return; }
       loadMyProfile();
     });
 }
