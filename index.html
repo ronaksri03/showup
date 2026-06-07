@@ -2759,8 +2759,22 @@ function showPage(id) {
   if (id === 'lab') { loadLabIndividual(); loadLabCommunity(); loadLabManager(); }
   if (id === 'mgr-auth') mgrGoTo(1);
 }
+var _communitySkills = {
+  'AI':          'Python, Machine Learning, AI, TensorFlow, PyTorch, NLP, LLM, Data Science, Computer Vision, Deep Learning',
+  'Design':      'Figma, UI Design, UX Design, Motion Design, After Effects, Illustrator, Graphic Design, Branding, Prototyping',
+  'Web3':        'Solidity, Web3, Blockchain, Smart Contracts, Ethereum, DeFi, NFT, Rust, Crypto',
+  'Mobile':      'React Native, Flutter, iOS, Android, Swift, Kotlin, Mobile Development',
+  'Game':        'Unity, Unreal Engine, Game Design, C#, Godot, 2D Game Dev, 3D Game Dev, Pygame',
+  'Founder':     'Startup, Product Management, Growth Hacking, Marketing, Business Development, Entrepreneurship, Product Strategy',
+  'Security':    'Cybersecurity, Penetration Testing, CTF, Ethical Hacking, Network Security, OSCP, Bug Bounty',
+  'Open Source': 'Open Source, Linux, DevOps, Infrastructure, CLI, Rust, Go, Kubernetes, Docker, Bash'
+};
+var _communityNames = {
+  'AI': 'AI / ML Builders', 'Design': 'Design & Motion', 'Web3': 'Web3 Dev',
+  'Mobile': 'Mobile Devs', 'Game': 'Indie Game Dev', 'Founder': 'Founders & 0→1',
+  'Security': 'Security & CTF', 'Open Source': 'Open Source'
+};
 function showCommunity(tag) {
-  // Navigate to Discover pre-filtered for this community's skill tag
   document.getElementById('home-view').style.display = 'none';
   document.querySelector('footer').style.display = 'none';
   document.body.style.overflow = '';
@@ -2768,9 +2782,19 @@ function showCommunity(tag) {
   var page = document.getElementById('page-discover');
   if (page) { page.classList.add('active'); window.scrollTo(0, 0); }
   var si = document.getElementById('disc-search');
-  if (si) si.value = tag;
+  if (si) si.value = _communitySkills[tag] || tag;
   var oi = document.getElementById('disc-open');
   if (oi) oi.checked = false;
+  // Show community label above the feed
+  var feed = document.getElementById('discover-feed');
+  if (feed) {
+    var label = _communityNames[tag] || tag;
+    feed.innerHTML = '<div style="grid-column:1/-1;margin-bottom:8px;display:flex;align-items:center;gap:10px">'
+      +'<span style="background:rgba(200,255,0,0.12);border:1px solid rgba(200,255,0,0.3);color:#c8ff00;padding:4px 14px;border-radius:20px;font-size:12px;font-weight:700">'+label+'</span>'
+      +'<span style="color:#555;font-size:12px">Members with matching skills</span>'
+      +'<button onclick="showPage(&quot;discover&quot;)" style="background:none;border:none;color:#555;font-size:12px;cursor:pointer;margin-left:auto">✕ Clear</button>'
+      +'</div>';
+  }
   loadDiscover();
 }
 function goHome() {
@@ -2964,13 +2988,9 @@ async function doSignIn() {
     errEl.textContent = error.message; errEl.style.display = 'block';
     btn.textContent = 'Sign in →'; btn.disabled = false; return;
   }
-  var { data: profile } = await _sb.from('profiles').select('username').eq('id', data.user.id).single();
-  var handle = profile ? profile.username : data.user.email;
   await checkAuthState();
-  var linkEl = document.querySelector('#ind-step-6 .url');
-  if (linkEl) linkEl.textContent = 'pitchNpivot.com/@' + handle;
-  indGoTo(6);
   btn.textContent = 'Sign in →'; btn.disabled = false;
+  loadMyProfile(); showPage('my-profile');
 }
 
 /* ── MANAGER AUTH ── */
@@ -3420,7 +3440,15 @@ async function doSignOut() {
 
 // run on load
 window.addEventListener('DOMContentLoaded', function() {
-  setTimeout(checkAuthState, 300);
+  setTimeout(async function() {
+    await checkAuthState();
+    // Auto-route returning logged-in users to their profile/dashboard
+    if (window._currentUser) {
+      var isManager = ((window._currentUser.user_metadata||{}).account_type === 'manager');
+      if (isManager) { loadMyDashboard(); showPage('my-dashboard'); }
+      else { loadMyProfile(); showPage('my-profile'); }
+    }
+  }, 300);
 });
 
 /* ── MAGNETIC BUTTONS ── */
@@ -3482,7 +3510,7 @@ async function _doLoadDiscover() {
 
   var query = _sb.from('profiles').select('id, username, first_name, last_name, location, skills, open_to_work, job_title, work_pref').limit(24);
   if (openOnly) query = query.eq('open_to_work', true);
-  if (skills.length > 0) query = query.contains('skills', skills);
+  if (skills.length > 0) query = query.overlaps('skills', skills);
 
   var res = await query;
   var data = res.data || [];
