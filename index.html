@@ -2143,6 +2143,7 @@
               style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box"
               oninput="_indFilterSkills(this.value)"
               onfocus="_indFilterSkills(this.value)"
+              onblur="setTimeout(function(){var d=document.getElementById('skill-search-dd');if(d)d.style.display='none';},180)"
               onkeydown="if(event.key===&#39;Enter&#39;){event.preventDefault();var v=this.value.trim();if(v){_indAddSkillByName(v);this.value=&#39;&#39;;_indFilterSkills(&#39;&#39;);}}"
             />
             <div id="skill-search-dd" style="display:none;position:absolute;top:100%;left:0;right:0;background:#111;border:1px solid #2a2a2a;border-radius:0 0 8px 8px;z-index:100;max-height:200px;overflow-y:auto"></div>
@@ -2497,6 +2498,7 @@
             style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box"
             oninput="_epFilterDropdown(this.value)"
             onfocus="_epFilterDropdown(this.value)"
+            onblur="setTimeout(function(){var d=document.getElementById('ep-skill-dd');if(d)d.style.display='none';},180)"
             onkeydown="if(event.key===&#39;Enter&#39;){event.preventDefault();var v=this.value.trim();if(v)epAddSkill(v);}"
           />
           <div id="ep-skill-dd" style="display:none;position:absolute;top:100%;left:0;right:0;background:#111;border:1px solid #2a2a2a;border-radius:0 0 8px 8px;z-index:100;max-height:220px;overflow-y:auto"></div>
@@ -3123,21 +3125,24 @@ window.addEventListener('DOMContentLoaded', function() {
 
 /* ── MAGNETIC BUTTONS ── */
 /* ── close skill dropdowns on outside click ── */
-document.addEventListener('click', function(e) {
+document.addEventListener('mousedown', function(e) {
   var epInp = document.getElementById('ep-skill-input');
   var epDd  = document.getElementById('ep-skill-dd');
   var sgInp = document.getElementById('skill-search');
   var sgDd  = document.getElementById('skill-search-dd');
-  if (epDd && epInp && !epInp.contains(e.target) && !epDd.contains(e.target)) {
-    epDd.style.display = 'none';
+  if (epDd && epDd.style.display !== 'none') {
+    if (epInp && !epInp.contains(e.target) && !epDd.contains(e.target)) {
+      epDd.style.display = 'none';
+    }
   }
-  if (sgDd && sgInp && !sgInp.contains(e.target) && !sgDd.contains(e.target)) {
-    sgDd.style.display = 'none';
+  if (sgDd && sgDd.style.display !== 'none') {
+    if (sgInp && !sgInp.contains(e.target) && !sgDd.contains(e.target)) {
+      sgDd.style.display = 'none';
+    }
   }
-  // close nav dropdown
   var navUser = document.getElementById('nav-user');
   if (navUser && !navUser.contains(e.target)) navUser.classList.remove('open');
-});
+}, true); /* useCapture=true so it fires before any stopPropagation */
 
 document.querySelectorAll('.btn-fire, .nav-pill').forEach(function(btn) {
   btn.addEventListener('mousemove', function(e) {
