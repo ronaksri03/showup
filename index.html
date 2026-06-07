@@ -1620,6 +1620,16 @@
       font-size:0.82rem; font-weight:600; color:var(--text);
       max-width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
     }
+    .nav-role-badge {
+      font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;
+      padding:2px 8px; border-radius:20px; white-space:nowrap; flex-shrink:0;
+    }
+    .nav-role-badge.manager {
+      background:rgba(200,255,0,0.12); border:1px solid rgba(200,255,0,0.35); color:#c8ff00;
+    }
+    .nav-role-badge.individual {
+      background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.18); color:#aaa;
+    }
     .nav-dropdown {
       position:absolute; top:calc(100% + 10px); right:0;
       background:var(--surf); border:1px solid rgba(200,255,0,0.18);
@@ -1768,6 +1778,7 @@
   <div class="nav-user" id="nav-user" onclick="this.classList.toggle('open')">
     <div class="nav-avatar" id="nav-avatar-ic">?</div>
     <span class="nav-username" id="nav-username-txt">You</span>
+    <span class="nav-role-badge" id="nav-role-badge" style="display:none"></span>
     <div class="nav-dropdown">
       <button class="nav-dd-item" id="dd-myprofile" onclick="event.stopPropagation();showMyPage()">👤 My Profile</button>
       <button class="nav-dd-item" id="dd-mydashboard" onclick="event.stopPropagation();showMyPage()" style="display:none">📊 My Dashboard</button>
@@ -3087,6 +3098,12 @@ async function checkAuthState() {
   document.getElementById('nav-avatar-ic').textContent = _initials(displayName);
   document.getElementById('nav-cta').style.display = 'none';
   document.getElementById('nav-user').style.display = 'flex';
+  var roleBadge = document.getElementById('nav-role-badge');
+  if (roleBadge) {
+    roleBadge.textContent = isManager ? 'Manager' : 'Individual';
+    roleBadge.className = 'nav-role-badge ' + (isManager ? 'manager' : 'individual');
+    roleBadge.style.display = 'inline-block';
+  }
   // toggle dropdown items based on role
   var isManager = (meta.account_type === 'manager');
   var ddProfile   = document.getElementById('dd-myprofile');
@@ -3361,6 +3378,7 @@ async function doSignOut() {
   await _sb.auth.signOut();
   document.getElementById('nav-cta').style.display = '';
   document.getElementById('nav-user').style.display = 'none';
+  var rb = document.getElementById('nav-role-badge'); if (rb) rb.style.display = 'none';
   window._currentUser = null;
   document.getElementById('nav-user').classList.remove('open');
   goHome();
