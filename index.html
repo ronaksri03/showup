@@ -3038,4 +3038,184 @@ async function _doLoadDiscover() {
 /* ══════════════════════════════════════════════
    PROJECT LAB — individual's own projects
 ══════════════════════════════════════════════ */
-a
+async function loadLabIndividual() {
+  var grid = document.getElementById('lab-my-grid');
+  if (!grid) return;
+  if (!_sb || !window._currentUser) {
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Sign in to see your projects.</div>';
+    return;
+  }
+  grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Loading…</div>';
+  var res = await _sb.from('individual_projects').select('*').eq('user_id', window._currentUser.id).order('created_at', {ascending:false});
+  var projects = res.data || [];
+  if (projects.length === 0) {
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">No projects yet. Add your first one ✶</div>';
+    return;
+  }
+  var visLabels = {public:'🌐 Public', private:'🔒 Private', managers:'👔 Managers Only'};
+  grid.innerHTML = projects.map(function(p) {
+    var skills = (p.skills||[]).map(function(s){ return '<span class="spill">'+s+'</span>'; }).join('');
+    var vis = p.visibility || 'private';
+    var link = p.demo_link ? '<a href="'+p.demo_link+'" target="_blank" style="color:#c8ff00;font-size:12px;text-decoration:none">🔗 View</a>' : '';
+    return '<div class="lab-my-card">'
+      +'<div class="lab-my-top"><div class="lab-my-emoji">🗂️</div>'
+      +'<span class="lab-vis-pill" data-id="'+p.id+'" data-vis="'+vis+'" onclick="cycleVis(this)" title="Click to change visibility">'+(visLabels[vis]||vis)+'</span></div>'
+      +'<div class="lab-my-title">'+p.title+'</div>'
+      +'<div class="lab-my-desc">'+(p.description||'')+'</div>'
+      +'<div class="lab-my-foot"><span class="lab-my-status '+(p.status||'draft')+'">'+_capitalize(p.status||'draft')+'</span>'
+      +'<div class="stack">'+skills+'</div>'+link+'</div>'
+      +'</div>';
+  }).join('');
+}
+
+async function loadLabCommunity() {
+  var grid = document.getElementById('lab-community-grid');
+  if (!grid || !_sb) return;
+  grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Loading open projects…</div>';
+  var res = await _sb.from('manager_projects').select('*, managers(name, company)').eq('visibility','public').eq('status','open').order('created_at',{ascending:false}).limit(12);
+  var projects = res.data || [];
+  if (projects.length === 0) {
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">No open community projects yet.</div>';
+    return;
+  }
+  grid.innerHTML = projects.map(function(p) {
+    var skills = (p.skills_required||[]).map(function(s){ return '<span class="spill">'+s+'</span>'; }).join('');
+    var by = p.managers ? (p.managers.name + (p.managers.company ? ' · '+p.managers.company : '')) : '';
+    var pay = p.pay_type === 'paid' ? '💰 Paid' : p.pay_type === 'equity' ? '📈 Equity' : '🤝 Unpaid';
+    return '<div class="pcard">'
+      +'<div class="pcard-top"><div class="pcard-emoji">🚀</div><span class="diff d-med">'+pay+'</span></div>'
+      +'<h3>'+p.title+'</h3>'
+      +'<div class="pmeta"><span>⏱ '+(p.timeline||'Flexible')+'</span>'+(by?'<span>👤 '+by+'</span>':'')+'</div>'
+      +'<p>'+(p.description||'')+'</p>'
+      +'<div class="pcard-foot"><div class="stack">'+skills+'</div>'
+      +'<button class="btn-claim" onclick="applyToProject(\''+p.id+'\')">Apply →</button></div>'
+      +'</div>';
+  }).join('');
+}
+
+async function loadLabManager() {
+  var grid = document.getElementById('lab-mgr-grid');
+  if (!grid) return;
+  if (!_sb || !window._currentUser) {
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Sign in as a manager to see your projects.</div>';
+    return;
+  }
+  grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Loading…</div>';
+  var res = await _sb.from('manager_projects').select('*').eq('manager_id', window._currentUser.id).order('created_at',{ascending:false});
+  var projects = res.data || [];
+  if (projects.length === 0) {
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">No projects posted yet. Post your first one ✶</div>';
+    return;
+  }
+  var badgeClass = {open:'open', assigned:'assigned', closed:'closed', 'in-progress':'open'};
+  grid.innerHTML = projects.map(function(p) {
+    var skills = (p.skills_required||[]).map(function(s){ return '<span class="spill">'+s+'</span>'; }).join('');
+    var pay = p.pay_type === 'paid' ? '💰 Paid' : p.pay_type === 'equity' ? '📈 Equity' : '🤝 Unpaid';
+    var bc = badgeClass[p.status] || 'open';
+    return '<div class="lab-mgr-card">'
+      +'<div class="lab-mgr-top"><div><div class="lab-mgr-title">'+p.title+'</div>'
+      +'<div class="lab-mgr-meta"><span>⏱ '+(p.timeline||'–')+'</span><span>'+pay+'</span></div></div>'
+      +'<span class="lab-mgr-badge '+bc+'">'+_capitalize(p.status||'open')+'</span></div>'
+      +'<div class="lab-mgr-desc">'+(p.description||'')+'</div>'
+      +'<div class="stack" style="margin-bottom:16px">'+skills+'</div>'
+      +'<div class="lab-mgr-foot"><div class="lab-submissions">'+_capitalize(p.visibility)+' project</div>'
+      +'<button class="lab-assign-btn" onclick="deleteManagerProject(\''+p.id+'\')">Delete</button></div>'
+      +'</div>';
+  }).join('');
+}
+
+function applyToProject(projectId) {
+  if (!window._currentUser) { showPage('individual'); return; }
+  alert('Application feature coming soon!');
+}
+
+async function deleteManagerProject(projectId) {
+  if (!confirm('Delete this project?')) return;
+  await _sb.from('manager_projects').delete().eq('id', projectId);
+  loadLabManager();
+}
+
+var _visOrder = ['public','managers','private'];
+var _visLabels = {public:'🌐 Public', managers:'👔 Managers Only', private:'🔒 Private'};
+function cycleVis(pill) {
+  var cur = pill.getAttribute('data-vis') || 'private';
+  var idx = _visOrder.indexOf(cur);
+  var next = _visOrder[(idx + 1) % _visOrder.length];
+  pill.setAttribute('data-vis', next);
+  pill.textContent = _visLabels[next];
+  var id = pill.getAttribute('data-id');
+  if (id && _sb) {
+    _sb.from('individual_projects').update({visibility: next}).eq('id', id).then(function(res){
+      if (res.error) console.warn('vis update failed:', res.error.message);
+    });
+  }
+}
+
+function _capitalize(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
+
+function openEditProfile() {
+  var p = window._myProfile || {};
+  var meta = (window._currentUser || {}).user_metadata || {};
+  document.getElementById('ep-firstname').value = p.first_name || meta.first_name || '';
+  document.getElementById('ep-lastname').value  = p.last_name  || meta.last_name  || '';
+  document.getElementById('ep-bio').value       = p.bio        || '';
+  document.getElementById('ep-location').value  = p.location   || meta.location   || '';
+  document.getElementById('ep-skills').value    = (p.skills    || []).join(', ');
+  document.getElementById('ep-open').checked    = p.open_to_work !== false;
+  document.getElementById('ep-err').style.display = 'none';
+  document.getElementById('edit-profile-modal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeEditProfile() {
+  document.getElementById('edit-profile-modal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+async function doSaveProfile() {
+  var btn = document.getElementById('ep-save-btn');
+  var errEl = document.getElementById('ep-err');
+  errEl.style.display = 'none';
+  if (!_sb || !window._currentUser) { errEl.textContent = 'Not signed in.'; errEl.style.display = 'block'; return; }
+  var firstName = document.getElementById('ep-firstname').value.trim();
+  var lastName  = document.getElementById('ep-lastname').value.trim();
+  var bio       = document.getElementById('ep-bio').value.trim();
+  var location  = document.getElementById('ep-location').value.trim();
+  var skillsRaw = document.getElementById('ep-skills').value;
+  var skills    = skillsRaw.split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+  var openWork  = document.getElementById('ep-open').checked;
+  btn.textContent = 'Saving…'; btn.disabled = true;
+  var res = await _sb.from('profiles').upsert({
+    id: window._currentUser.id,
+    first_name: firstName,
+    last_name: lastName,
+    bio: bio,
+    location: location,
+    skills: skills,
+    open_to_work: openWork
+  });
+  btn.textContent = 'Save Profile ✶'; btn.disabled = false;
+  if (res.error) { errEl.textContent = res.error.message; errEl.style.display = 'block'; return; }
+  closeEditProfile();
+  loadMyProfile();
+}
+
+document.querySelectorAll('.btn-fire, .nav-pill').forEach(function(btn) {
+  btn.addEventListener('mousemove', function(e) {
+    var r = btn.getBoundingClientRect();
+    var dx = (e.clientX - r.left - r.width / 2);
+    var dy = (e.clientY - r.top - r.height / 2);
+    btn.style.transform = 'translate(' + (dx * 0.32) + 'px, ' + (dy * 0.32) + 'px)';
+  });
+  btn.addEventListener('mouseleave', function() {
+    btn.style.transition = 'transform 0.45s cubic-bezier(.34,1.56,.64,1), box-shadow .18s, background .18s';
+    btn.style.transform = 'translate(0,0)';
+    setTimeout(function() { btn.style.transition = ''; }, 450);
+  });
+  btn.addEventListener('mouseenter', function() {
+    btn.style.transition = 'transform 0.1s ease, box-shadow .18s, background .18s';
+  });
+});
+</script>
+</body>
+</html>
