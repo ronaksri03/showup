@@ -1800,7 +1800,7 @@
       </p>
       <div class="zh-btns">
         <button class="btn-fire" id="cta-hero" onclick="showPage('individual')"><span>Drop your first reel — free</span> <span>→</span></button>
-        <button class="btn-ghost">▶ Watch a reel</button>
+        <button class="btn-ghost" onclick="showPage('discover')">▶ Watch a reel</button>
       </div>
       <div class="zh-stats">
         <div><div class="zh-stat-n">48k+</div><div class="zh-stat-l">Creators live</div></div>
@@ -2699,14 +2699,14 @@
     <h2 class="SH">Find your <span class="v">people.</span></h2>
     <p class="sec-sub">Interest-led communities where conversations actually go somewhere useful.</p>
     <div class="comm-row">
-      <div class="comm"><div class="comm-icon">🤖</div><div><div class="comm-name">AI / ML Builders</div><div class="comm-cnt">6,200 members</div></div></div>
-      <div class="comm"><div class="comm-icon">🎨</div><div><div class="comm-name">Design &amp; Motion</div><div class="comm-cnt">4,800 members</div></div></div>
-      <div class="comm"><div class="comm-icon">⛓️</div><div><div class="comm-name">Web3 Dev</div><div class="comm-cnt">3,100 members</div></div></div>
-      <div class="comm"><div class="comm-icon">📱</div><div><div class="comm-name">Mobile Devs</div><div class="comm-cnt">5,500 members</div></div></div>
-      <div class="comm"><div class="comm-icon">🎮</div><div><div class="comm-name">Indie Game Dev</div><div class="comm-cnt">2,700 members</div></div></div>
-      <div class="comm"><div class="comm-icon">🚀</div><div><div class="comm-name">Founders &amp; 0→1</div><div class="comm-cnt">8,900 members</div></div></div>
-      <div class="comm"><div class="comm-icon">🔐</div><div><div class="comm-name">Security &amp; CTF</div><div class="comm-cnt">1,900 members</div></div></div>
-      <div class="comm"><div class="comm-icon">🌱</div><div><div class="comm-name">Open Source</div><div class="comm-cnt">7,300 members</div></div></div>
+      <div class="comm" onclick="showToast('Communities launching soon! Join the waitlist.')"><div class="comm-icon">🤖</div><div><div class="comm-name">AI / ML Builders</div><div class="comm-cnt">6,200 members</div></div></div>
+      <div class="comm" onclick="showToast('Communities launching soon! Join the waitlist.')"><div class="comm-icon">🎨</div><div><div class="comm-name">Design &amp; Motion</div><div class="comm-cnt">4,800 members</div></div></div>
+      <div class="comm" onclick="showToast('Communities launching soon! Join the waitlist.')"><div class="comm-icon">⛓️</div><div><div class="comm-name">Web3 Dev</div><div class="comm-cnt">3,100 members</div></div></div>
+      <div class="comm" onclick="showToast('Communities launching soon! Join the waitlist.')"><div class="comm-icon">📱</div><div><div class="comm-name">Mobile Devs</div><div class="comm-cnt">5,500 members</div></div></div>
+      <div class="comm" onclick="showToast('Communities launching soon! Join the waitlist.')"><div class="comm-icon">🎮</div><div><div class="comm-name">Indie Game Dev</div><div class="comm-cnt">2,700 members</div></div></div>
+      <div class="comm" onclick="showToast('Communities launching soon! Join the waitlist.')"><div class="comm-icon">🚀</div><div><div class="comm-name">Founders &amp; 0→1</div><div class="comm-cnt">8,900 members</div></div></div>
+      <div class="comm" onclick="showToast('Communities launching soon! Join the waitlist.')"><div class="comm-icon">🔐</div><div><div class="comm-name">Security &amp; CTF</div><div class="comm-cnt">1,900 members</div></div></div>
+      <div class="comm" onclick="showToast('Communities launching soon! Join the waitlist.')"><div class="comm-icon">🌱</div><div><div class="comm-name">Open Source</div><div class="comm-cnt">7,300 members</div></div></div>
     </div>
   </div>
 </div>
@@ -2724,12 +2724,22 @@
 <script>
 /* ── SPA NAVIGATION ── */
 function showPage(id) {
+  // redirect logged-in managers away from auth page
+  if (id === 'mgr-auth' && window._currentUser && (window._currentUser.user_metadata||{}).account_type === 'manager') {
+    id = 'my-dashboard';
+    loadMyDashboard();
+  }
+  // redirect logged-in individuals away from individual auth page
+  if (id === 'individual' && window._currentUser && (window._currentUser.user_metadata||{}).account_type !== 'manager') {
+    id = 'my-profile';
+    loadMyProfile();
+  }
   document.getElementById('home-view').style.display = 'none';
   document.querySelector('footer').style.display = 'none';
   document.body.style.overflow = '';
   var page = document.getElementById('page-' + id);
   if (page) { page.classList.add('active'); window.scrollTo(0, 0); }
-  if (id === 'discover') loadDiscover();
+  if (id === 'discover') { var si=document.getElementById('disc-search'); if(si) si.value=''; var oi=document.getElementById('disc-open'); if(oi) oi.checked=false; loadDiscover(); }
   if (id === 'lab') { loadLabIndividual(); loadLabCommunity(); loadLabManager(); }
   if (id === 'mgr-auth') mgrGoTo(1);
 }
@@ -3000,7 +3010,7 @@ async function doPostProject() {
   btn.textContent = 'Posting…'; btn.disabled = true;
   var skills = document.getElementById('proj-skills').value.split(',').map(function(s){return s.trim();}).filter(Boolean);
   var assignee = _projVisibility === 'assigned' ? document.getElementById('proj-assignee').value.trim().replace(/^@/,'') : null;
-  var { error } = await _sb.from('manager_projects').insert({ manager_id: user.id, title, description: document.getElementById('proj-desc').value.trim(), timeline: document.getElementById('proj-timeline').value.trim(), pay_type: document.getElementById('proj-pay').value, skills: skills, visibility: _projVisibility, assigned_to: assignee, status: _projVisibility === 'private' ? 'draft' : 'open', created_at: new Date().toISOString() });
+  var { error } = await _sb.from('manager_projects').insert({ manager_id: user.id, title, description: document.getElementById('proj-desc').value.trim(), timeline: document.getElementById('proj-timeline').value.trim(), pay_type: document.getElementById('proj-pay').value, skills_required: skills, visibility: _projVisibility, assigned_to: assignee, status: _projVisibility === 'private' ? 'draft' : 'open', created_at: new Date().toISOString() });
   if (error) { errEl.textContent = error.message; errEl.style.display = 'block'; btn.textContent = 'Post Project ✦'; btn.disabled = false; return; }
   closeProjectModal();
   btn.textContent = 'Post Project ✦'; btn.disabled = false;
@@ -3054,6 +3064,12 @@ async function checkAuthState() {
   document.getElementById('nav-avatar-ic').textContent = _initials(displayName);
   document.getElementById('nav-cta').style.display = 'none';
   document.getElementById('nav-user').style.display = 'flex';
+  // toggle dropdown items based on role
+  var isManager = (meta.account_type === 'manager');
+  var ddProfile   = document.getElementById('dd-myprofile');
+  var ddDashboard = document.getElementById('dd-mydashboard');
+  if (ddProfile)   ddProfile.style.display   = isManager ? 'none'  : 'block';
+  if (ddDashboard) ddDashboard.style.display = isManager ? 'block' : 'none';
   // store for profile page
   window._currentUser = user;
   window._currentDisplayName = displayName;
@@ -3249,6 +3265,74 @@ function _timeAgo(ts) {
   return Math.floor(diff/86400) + 'd ago';
 }
 
+function showToast(msg) {
+  var t = document.getElementById('toast-msg');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'toast-msg';
+    t.style.cssText = 'position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:#1a1a1a;border:1px solid rgba(200,255,0,0.4);color:#f0ece4;padding:12px 24px;border-radius:100px;font-size:13px;z-index:99999;pointer-events:none;transition:opacity 0.3s';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function(){ t.style.opacity = '0'; }, 3000);
+}
+
+async function openDiscoverProfile(profileId) {
+  if (!_sb) return;
+  var modal = document.getElementById('discover-profile-modal');
+  if (!modal) return;
+  document.getElementById('dp-body').innerHTML = '<div style="text-align:center;padding:40px;color:#666">Loading…</div>';
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  var [profRes, reelRes] = await Promise.all([
+    _sb.from('profiles').select('*').eq('id', profileId).single(),
+    _sb.from('reels').select('*').eq('user_id', profileId).eq('visibility','public').order('created_at',{ascending:false}).limit(3)
+  ]);
+  var p = profRes.data || {};
+  var reels = reelRes.data || [];
+  var name = ((p.first_name||'') + ' ' + (p.last_name||'')).trim() || p.username || 'Anonymous';
+  var availMap = {'full-time':'🟢 Full-time','part-time':'🟡 Part-time','freelance':'⚡ Freelance','internship':'🎓 Internship'};
+  var prefMap  = {'remote':'🌍 Remote','onsite':'🏢 On-site','hybrid':'🔀 Hybrid','flexible':'🔀 Flexible'};
+  var skills = (p.skills||[]).map(function(s){ return '<span class="vtag" style="font-size:12px">'+s+'</span>'; }).join('');
+  var chips = '';
+  if (p.availability && availMap[p.availability]) chips += '<span style="background:rgba(200,255,0,0.12);border:1px solid rgba(200,255,0,0.35);color:#c8ff00;padding:3px 10px;border-radius:20px;font-size:11px">'+availMap[p.availability]+'</span> ';
+  if (p.work_pref && prefMap[p.work_pref]) chips += '<span style="background:rgba(255,255,255,0.06);border:1px solid #333;color:#aaa;padding:3px 10px;border-radius:20px;font-size:11px">'+prefMap[p.work_pref]+'</span>';
+  var links = '';
+  if (p.github_url)    links += '<a href="'+p.github_url+'" target="_blank" style="color:#c8ff00;text-decoration:none;font-size:13px">⌥ GitHub</a> ';
+  if (p.portfolio_url) links += '<a href="'+p.portfolio_url+'" target="_blank" style="color:#c8ff00;text-decoration:none;font-size:13px">🔗 Portfolio</a> ';
+  if (p.linkedin_url)  links += '<a href="'+p.linkedin_url+'" target="_blank" style="color:#c8ff00;text-decoration:none;font-size:13px">in LinkedIn</a>';
+  var subtitle = p.job_title || '';
+  if (p.years_exp) subtitle += (subtitle ? ' · ' : '') + p.years_exp + ' exp';
+  if (p.location)  subtitle += (subtitle ? ' · ' : '') + p.location;
+  var reelsHtml = reels.length ? reels.map(function(r){
+    return '<a href="'+r.url+'" target="_blank" style="display:block;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:12px 14px;color:#f0ece4;text-decoration:none;font-size:13px;margin-bottom:8px">▶ '+(r.title||'Untitled reel')+'</a>';
+  }).join('') : '<div style="color:#555;font-size:13px">No public reels yet.</div>';
+  document.getElementById('dp-body').innerHTML =
+    '<div style="display:flex;align-items:center;gap:16px;margin-bottom:20px">'
+      +'<div style="width:56px;height:56px;border-radius:50%;background:#c8ff00;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#0a0a0a;flex-shrink:0">'+_initials(name)+'</div>'
+      +'<div><div style="font-size:18px;font-weight:700;color:#f0ece4">'+name+'</div>'
+        +(subtitle ? '<div style="font-size:13px;color:#888;margin-top:2px">'+subtitle+'</div>' : '')
+      +'</div>'
+    +'</div>'
+    +(p.bio ? '<p style="color:#aaa;font-size:13px;margin:0 0 16px;line-height:1.6">'+p.bio+'</p>' : '')
+    +(chips ? '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px">'+chips+'</div>' : '')
+    +(skills ? '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px">'+skills+'</div>' : '')
+    +(links ? '<div style="display:flex;flex-wrap:wrap;gap:16px;margin-bottom:20px">'+links+'</div>' : '')
+    +'<div style="font-size:12px;font-weight:700;color:#666;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px">Reels</div>'
+    +reelsHtml;
+  // log profile view if manager
+  if (window._currentUser && (window._currentUser.user_metadata||{}).account_type === 'manager') {
+    _sb.from('profile_views').insert({ profile_user_id: profileId, manager_id: window._currentUser.id });
+  }
+}
+function closeDiscoverProfile() {
+  var modal = document.getElementById('discover-profile-modal');
+  if (modal) modal.style.display = 'none';
+  document.body.style.overflow = '';
+}
+
 async function doSignOut() {
   if (!_sb) return;
   await _sb.auth.signOut();
@@ -3321,7 +3405,7 @@ async function _doLoadDiscover() {
 
   container.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Loading…</div>';
 
-  var query = _sb.from('profiles').select('id, username, first_name, last_name, location, skills, open_to_work').limit(24);
+  var query = _sb.from('profiles').select('id, username, first_name, last_name, location, skills, open_to_work, job_title, work_pref').limit(24);
   if (openOnly) query = query.eq('open_to_work', true);
   if (skills.length > 0) query = query.contains('skills', skills);
 
@@ -3341,7 +3425,11 @@ async function _doLoadDiscover() {
     var emoji  = emojis[i % emojis.length];
     var grad   = 'linear-gradient(150deg,#0a0a00,' + grads[i % grads.length] + ')';
     var initials = _initials(name);
-    return '<div class="vcard" style="cursor:pointer"><div class="vcard-art" style="background:'+grad+'">'+emoji+'</div><div class="vcard-overlay"></div><div class="vcard-play">▶</div><div class="vcard-info"><div class="vcard-av">'+initials+'</div><div class="vcard-name">'+name+'</div><div class="vcard-role">'+(p.location||'Remote')+(p.open_to_work ? ' · <span style="color:#c8ff00">Open</span>' : '')+'</div><div class="vcard-tags">'+tags+'</div></div></div>';
+    var sub = p.job_title || '';
+    if (p.location) sub = sub ? sub + ' · ' + p.location : p.location;
+    if (p.open_to_work) sub += (sub ? ' · ' : '') + '<span style="color:#c8ff00">Open</span>';
+    var pid = p.id;
+    return '<div class="vcard" style="cursor:pointer" onclick="openDiscoverProfile(\'' + pid + '\')"><div class="vcard-art" style="background:'+grad+'">'+emoji+'</div><div class="vcard-overlay"></div><div class="vcard-play">▶</div><div class="vcard-info"><div class="vcard-av">'+initials+'</div><div class="vcard-name">'+name+'</div><div class="vcard-role">'+sub+'</div><div class="vcard-tags">'+tags+'</div></div></div>';
   }).join('');
 }
 
@@ -3684,5 +3772,13 @@ document.querySelectorAll('.btn-fire, .nav-pill').forEach(function(btn) {
   });
 });
 </script>
+<!-- DISCOVER PROFILE MODAL -->
+<div id="discover-profile-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9998;align-items:center;justify-content:center;padding:24px">
+  <div style="max-width:480px;width:100%;background:#111;border:1px solid #2a2a2a;border-radius:16px;padding:28px;max-height:90vh;overflow-y:auto;position:relative">
+    <button onclick="closeDiscoverProfile()" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#666;font-size:20px;cursor:pointer;line-height:1">✕</button>
+    <div id="dp-body"></div>
+  </div>
+</div>
+
 </body>
 </html>
