@@ -1462,6 +1462,147 @@
     .vis-opt-label span { font-size: 0.72rem; color: var(--muted); line-height: 1.4; }
     #assign-field { display: none; margin-top: -4px; margin-bottom: 12px; }
 
+
+    /* ══════════════════════════════════════════
+       MOBILE — comprehensive responsive layer
+    ══════════════════════════════════════════ */
+
+    /* Use dynamic viewport height so mobile browser chrome doesn't clip */
+    @supports (height: 100dvh) {
+      .zine-wrap { height: 100dvh; }
+      .ind-layout { height: calc(100dvh - 56px); }
+    }
+
+    @media (max-width: 768px) {
+
+      /* ── NAV ── */
+      nav { padding: 0 16px; height: 54px; }
+      .nav-logo { font-size: 1.15rem; }
+      .nav-pill { padding: 6px 12px; font-size: 0.75rem; }
+
+      /* ── HOME ZINE ── */
+      .zine-wrap { height: auto; min-height: 100svh; overflow: visible; padding-top: 54px; }
+      .zine-hero {
+        grid-template-columns: 1fr;
+        padding: 20px 18px 10px;
+        gap: 16px; overflow: visible;
+      }
+      .zh-right { display: none; }
+      .zh-h1 { font-size: clamp(2.2rem, 11vw, 3.6rem); }
+      .zh-sub { font-size: 0.82rem; }
+      .zh-btns { flex-direction: column; gap: 10px; }
+      .zh-btns .btn-fire, .zh-btns .btn-ghost { width: 100%; justify-content: center; }
+      .zh-pill { font-size: 0.7rem; }
+
+      /* strips — horizontal scroll on mobile */
+      .zine-strips {
+        display: flex; flex-direction: row;
+        overflow-x: auto; overflow-y: visible;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        gap: 8px; padding: 0 18px 16px;
+        height: auto;
+        grid-template-columns: unset;
+      }
+      .zine-strip {
+        min-width: 140px; flex-shrink: 0;
+        scroll-snap-align: start;
+        height: 80px;
+      }
+      .zine-strips::-webkit-scrollbar { display: none; }
+
+      /* ── BENTO ── */
+      .bento-outer { padding: 58px 8px 8px; }
+      .bento-grid { grid-template-columns: 1fr; }
+      .bcard-top,.bcard-center,.bcard-bottom,
+      .bcard-discover,.bcard-works,.bcard-profile,
+      .bcard-lab,.bcard-mgr,.bcard-comm { grid-column: 1; grid-row: auto; }
+      .bcard-center { padding: 22px 18px; }
+
+      /* ── PAGES ── */
+      .page-header { padding: 0 16px; height: 48px; }
+      .page-content { padding: 24px 16px 60px; }
+      .page-back { font-size: 0.75rem; }
+      .page-header-title { font-size: 0.9rem; }
+
+      /* ── INDIVIDUAL ONBOARDING ── */
+      .ind-layout {
+        grid-template-columns: 1fr;
+        height: auto; min-height: calc(100svh - 54px);
+        overflow: visible;
+      }
+      .ind-brand { display: none; }
+      .ind-form-area {
+        padding: 28px 18px 48px;
+        align-items: flex-start;
+        min-height: calc(100svh - 54px);
+      }
+      .ind-step { max-width: 100%; }
+      .ind-step-title { font-size: 1.4rem; }
+      .ind-row { grid-template-columns: 1fr; gap: 0; }
+
+      /* ── MODALS — full screen on mobile ── */
+      .modal-overlay { padding: 0; align-items: flex-end; }
+      .modal-box {
+        border-radius: 20px 20px 0 0;
+        padding: 28px 20px 36px;
+        max-height: 92svh;
+        width: 100%;
+        max-width: 100%;
+      }
+      .modal-title { font-size: 1.2rem; }
+
+      /* ── PROJECT LAB ── */
+      .lab-tabs { padding: 16px 16px 0; gap: 6px; }
+      .lab-tab { font-size: 0.78rem; padding: 8px 14px; }
+      .lab-panel { padding: 20px 16px 40px; }
+      .lab-section-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .lab-my-grid { grid-template-columns: 1fr; }
+      .lab-mgr-grid { grid-template-columns: 1fr; }
+      .proj-grid { grid-template-columns: 1fr; }
+      .lab-divider { margin: 24px 0 16px; }
+
+      /* ── FOR MANAGERS PAGE ── */
+      .mgr-outer { padding: 0 16px 48px; }
+      .mgr-wrap { padding: 32px 20px; border-radius: 16px; }
+      .mgr-grid { grid-template-columns: 1fr; gap: 32px; }
+      .mgr-cards { grid-template-columns: 1fr 1fr; }
+      .mgr-feats { gap: 14px; }
+
+      /* ── HOW IT WORKS ── */
+      .steps-row { grid-template-columns: 1fr; gap: 16px; }
+      .step-card { padding: 22px 20px; }
+
+      /* ── COMMUNITIES ── */
+      .comm-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+
+      /* ── PROFILE ── */
+      .profile-wrap { grid-template-columns: 1fr; }
+
+      /* ── DISCOVER ── */
+      .vgrid { grid-template-columns: 1fr 1fr; }
+
+      /* ── FOOTER ── */
+      footer { flex-direction: column; gap: 12px; text-align: center; padding: 24px 16px; }
+      .f-links { flex-wrap: wrap; justify-content: center; gap: 12px 18px; }
+      .f-copy { font-size: 0.7rem; }
+
+      /* ── GENERAL ── */
+      .btn-fire { width: 100%; justify-content: center; font-size: 0.88rem; }
+      .sec { padding: 48px 16px; }
+      .sec-eyebrow { margin-bottom: 10px; }
+      h2.SH { font-size: clamp(1.8rem, 7vw, 2.6rem); }
+      .cta-wrap { margin: 0 0 48px; padding: 44px 20px; border-radius: 16px; }
+    }
+
+    @media (max-width: 420px) {
+      .zh-h1 { font-size: clamp(1.9rem, 12vw, 3rem); }
+      .mgr-cards { grid-template-columns: 1fr; }
+      .comm-row { grid-template-columns: 1fr; }
+      .vgrid { grid-template-columns: 1fr; }
+      .nav-pill { display: none; } /* hide CTA in nav on tiny screens — it's in hero */
+    }
+
   </style>
 </head>
 <body>
