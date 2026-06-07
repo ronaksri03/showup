@@ -2441,6 +2441,8 @@
       </div>
       <div class="mypage-info-sub" id="mp-sub">—</div>
       <div id="mp-bio" style="color:#888;font-size:13px;margin-top:4px;display:none"></div>
+      <div id="mp-chips" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px"></div>
+      <div id="mp-links" style="display:flex;flex-wrap:wrap;gap:16px;margin-top:6px"></div>
       <div id="mp-skills-row" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px"></div>
       <div class="mypage-stats">
         <div class="mypage-stat"><div class="mypage-stat-n" id="mp-reel-count">0</div><div class="mypage-stat-l">Reels</div></div>
@@ -2463,35 +2465,97 @@
 
 <!-- EDIT PROFILE MODAL -->
 <div id="edit-profile-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;overflow-y:auto;padding:24px 16px">
-  <div style="max-width:520px;margin:0 auto;background:#111;border:1px solid #2a2a2a;border-radius:16px;padding:32px">
+  <div style="max-width:560px;margin:0 auto;background:#111;border:1px solid #2a2a2a;border-radius:16px;padding:32px">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
       <div style="font-size:18px;font-weight:700;color:#f0ece4">Edit Profile</div>
       <button onclick="closeEditProfile()" style="background:none;border:none;color:#666;font-size:20px;cursor:pointer">✕</button>
     </div>
 
     <div style="display:flex;flex-direction:column;gap:16px">
-      <div>
-        <label style="display:block;color:#888;font-size:12px;margin-bottom:6px">FIRST NAME</label>
-        <input id="ep-firstname" type="text" placeholder="Your first name"
-          style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box" />
+
+      <!-- NAME -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div>
+          <label style="display:block;color:#888;font-size:11px;letter-spacing:.08em;margin-bottom:6px">FIRST NAME</label>
+          <input id="ep-firstname" type="text" placeholder="First name"
+            style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box" />
+        </div>
+        <div>
+          <label style="display:block;color:#888;font-size:11px;letter-spacing:.08em;margin-bottom:6px">LAST NAME</label>
+          <input id="ep-lastname" type="text" placeholder="Last name"
+            style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box" />
+        </div>
       </div>
-      <div>
-        <label style="display:block;color:#888;font-size:12px;margin-bottom:6px">LAST NAME</label>
-        <input id="ep-lastname" type="text" placeholder="Your last name"
-          style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box" />
+
+      <!-- ROLE + EXPERIENCE -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div>
+          <label style="display:block;color:#888;font-size:11px;letter-spacing:.08em;margin-bottom:6px">ROLE / TITLE</label>
+          <input id="ep-role" type="text" placeholder="e.g. Frontend Developer"
+            style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box" />
+        </div>
+        <div>
+          <label style="display:block;color:#888;font-size:11px;letter-spacing:.08em;margin-bottom:6px">EXPERIENCE</label>
+          <select id="ep-exp"
+            style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box">
+            <option value="">Select…</option>
+            <option value="student">Student / Fresher</option>
+            <option value="0-1">0–1 years</option>
+            <option value="1-3">1–3 years</option>
+            <option value="3-5">3–5 years</option>
+            <option value="5+">5+ years</option>
+          </select>
+        </div>
       </div>
+
+      <!-- BIO -->
       <div>
-        <label style="display:block;color:#888;font-size:12px;margin-bottom:6px">BIO</label>
-        <textarea id="ep-bio" rows="3" placeholder="What are you building? What's your vibe?"
+        <label style="display:block;color:#888;font-size:11px;letter-spacing:.08em;margin-bottom:6px">BIO</label>
+        <textarea id="ep-bio" rows="3" placeholder="What do you build? What kind of work excites you? Keep it real."
           style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;resize:vertical;box-sizing:border-box;font-family:inherit"></textarea>
       </div>
-      <div>
-        <label style="display:block;color:#888;font-size:12px;margin-bottom:6px">LOCATION</label>
-        <input id="ep-location" type="text" placeholder="City, Country or Remote"
-          style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box" />
+
+      <!-- LOCATION + WORK PREF -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div>
+          <label style="display:block;color:#888;font-size:11px;letter-spacing:.08em;margin-bottom:6px">LOCATION</label>
+          <input id="ep-location" type="text" placeholder="City, Country"
+            style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box" />
+        </div>
+        <div>
+          <label style="display:block;color:#888;font-size:11px;letter-spacing:.08em;margin-bottom:6px">WORK PREFERENCE</label>
+          <select id="ep-workpref"
+            style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box">
+            <option value="flexible">Flexible</option>
+            <option value="remote">Remote only</option>
+            <option value="hybrid">Hybrid</option>
+            <option value="onsite">On-site</option>
+          </select>
+        </div>
       </div>
+
+      <!-- AVAILABILITY -->
       <div>
-        <label style="display:block;color:#888;font-size:12px;margin-bottom:8px">SKILLS <span style="color:#555">(up to 10)</span></label>
+        <label style="display:block;color:#888;font-size:11px;letter-spacing:.08em;margin-bottom:8px">LOOKING FOR</label>
+        <div style="display:flex;flex-wrap:wrap;gap:8px" id="ep-avail-group">
+          <label style="display:flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid #2a2a2a;border-radius:20px;cursor:pointer;font-size:13px;color:#f0ece4">
+            <input type="radio" name="ep-avail" value="full-time" style="accent-color:#c8ff00"> Full-time
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid #2a2a2a;border-radius:20px;cursor:pointer;font-size:13px;color:#f0ece4">
+            <input type="radio" name="ep-avail" value="part-time" style="accent-color:#c8ff00"> Part-time
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid #2a2a2a;border-radius:20px;cursor:pointer;font-size:13px;color:#f0ece4">
+            <input type="radio" name="ep-avail" value="freelance" style="accent-color:#c8ff00"> Freelance
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid #2a2a2a;border-radius:20px;cursor:pointer;font-size:13px;color:#f0ece4">
+            <input type="radio" name="ep-avail" value="internship" style="accent-color:#c8ff00"> Internship
+          </label>
+        </div>
+      </div>
+
+      <!-- SKILLS -->
+      <div>
+        <label style="display:block;color:#888;font-size:11px;letter-spacing:.08em;margin-bottom:8px">SKILLS <span style="color:#555;text-transform:none;letter-spacing:0">(up to 10)</span></label>
         <div id="ep-skills-tags" style="display:flex;flex-wrap:wrap;gap:6px;min-height:28px;margin-bottom:8px"></div>
         <div style="position:relative">
           <input id="ep-skill-input" type="text" placeholder="Type to search skills…" autocomplete="off"
@@ -2505,21 +2569,51 @@
         </div>
         <div style="color:#555;font-size:11px;margin-top:6px">Click a suggestion or press Enter to add a custom skill.</div>
       </div>
+
+      <!-- LINKS -->
       <div>
-        <label style="display:block;color:#888;font-size:12px;margin-bottom:6px">REEL / RESUME LINK</label>
+        <label style="display:block;color:#888;font-size:11px;letter-spacing:.08em;margin-bottom:8px">LINKS</label>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="width:22px;text-align:center;font-size:16px">🐙</span>
+            <input id="ep-github" type="url" placeholder="github.com/yourname"
+              style="flex:1;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:9px 12px;border-radius:8px;font-size:13px;outline:none;box-sizing:border-box" />
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="width:22px;text-align:center;font-size:16px">🌐</span>
+            <input id="ep-portfolio" type="url" placeholder="yourportfolio.com"
+              style="flex:1;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:9px 12px;border-radius:8px;font-size:13px;outline:none;box-sizing:border-box" />
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="width:22px;text-align:center;font-size:16px">💼</span>
+            <input id="ep-linkedin" type="url" placeholder="linkedin.com/in/yourname"
+              style="flex:1;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:9px 12px;border-radius:8px;font-size:13px;outline:none;box-sizing:border-box" />
+          </div>
+        </div>
+      </div>
+
+      <!-- REEL -->
+      <div>
+        <label style="display:block;color:#888;font-size:11px;letter-spacing:.08em;margin-bottom:6px">REEL / VIDEO RESUME LINK</label>
         <input id="ep-reel-url" type="url" placeholder="YouTube, Google Drive, Loom, Instagram…"
           style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box" />
-        <div style="color:#555;font-size:11px;margin-top:4px">This appears on your profile as your primary reel. Must be a public link.</div>
+        <div style="color:#555;font-size:11px;margin-top:4px">Public link — this is your primary 60–180 sec intro reel.</div>
       </div>
       <div>
-        <label style="display:block;color:#888;font-size:12px;margin-bottom:6px">REEL TITLE</label>
-        <input id="ep-reel-title" type="text" placeholder="e.g. Building an AI app in 2 weekends"
+        <label style="display:block;color:#888;font-size:11px;letter-spacing:.08em;margin-bottom:6px">REEL TITLE</label>
+        <input id="ep-reel-title" type="text" placeholder="e.g. Building a SaaS product from scratch"
           style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box" />
       </div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <input type="checkbox" id="ep-open" style="accent-color:#c8ff00;width:16px;height:16px">
-        <label for="ep-open" style="color:#f0ece4;font-size:14px;cursor:pointer">Open to work / collaborations</label>
+
+      <!-- OPEN TO WORK -->
+      <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:#0a0a0a;border:1px solid #2a2a2a;border-radius:8px">
+        <input type="checkbox" id="ep-open" style="accent-color:#c8ff00;width:18px;height:18px;flex-shrink:0">
+        <div>
+          <div style="color:#f0ece4;font-size:14px;font-weight:600">Open to work</div>
+          <div style="color:#666;font-size:12px;margin-top:2px">Appear in manager searches and Discover feed</div>
+        </div>
       </div>
+
     </div>
 
     <div id="ep-err" style="display:none;color:#ff6b6b;font-size:13px;margin-top:16px"></div>
@@ -2984,20 +3078,55 @@ async function loadMyProfile() {
   var { data: profile } = await _sb.from('profiles').select('*').eq('id', user.id).single();
   window._myProfile = profile || {};
 
-  var firstName = (profile && profile.first_name) || meta.first_name || '';
-  var lastName  = (profile && profile.last_name)  || meta.last_name  || '';
-  var name      = (firstName + ' ' + lastName).trim() || meta.name || user.email;
-  var location  = (profile && profile.location)   || meta.location || '';
-  var bio       = (profile && profile.bio)        || '';
-  var skills    = (profile && profile.skills)     || [];
+  var firstName    = (profile && profile.first_name)    || meta.first_name || '';
+  var lastName     = (profile && profile.last_name)     || meta.last_name  || '';
+  var name         = (firstName + ' ' + lastName).trim() || meta.name || user.email;
+  var location     = (profile && profile.location)      || meta.location || '';
+  var bio          = (profile && profile.bio)           || '';
+  var skills       = (profile && profile.skills)        || [];
+  var jobTitle     = (profile && profile.job_title)     || '';
+  var yearsExp     = (profile && profile.years_exp)     || '';
+  var availability = (profile && profile.availability)  || '';
+  var workPref     = (profile && profile.work_pref)     || '';
+  var githubUrl    = (profile && profile.github_url)    || '';
+  var portfolioUrl = (profile && profile.portfolio_url) || '';
+  var linkedinUrl  = (profile && profile.linkedin_url)  || '';
 
   document.getElementById('mp-avatar').textContent = _initials(name);
   document.getElementById('mp-name').textContent = name.trim();
-  document.getElementById('mp-sub').textContent = (meta.role || '') + (location ? ' · ' + location : '');
+  // subtitle: job title + location
+  var subParts = [];
+  if (jobTitle) subParts.push(jobTitle);
+  if (yearsExp) subParts.push(yearsExp + ' exp');
+  if (location) subParts.push(location);
+  document.getElementById('mp-sub').textContent = subParts.join(' · ') || (meta.role || '');
 
   // bio
   var bioEl = document.getElementById('mp-bio');
   if (bio) { bioEl.textContent = bio; bioEl.style.display = 'block'; } else { bioEl.style.display = 'none'; }
+
+  // availability + work pref chips
+  var chipEl = document.getElementById('mp-chips');
+  if (chipEl) {
+    var chips = [];
+    var availMap = {'full-time':'🟢 Open to full-time','part-time':'🟡 Part-time','freelance':'⚡ Freelance','internship':'🎓 Internship'};
+    var prefMap  = {'remote':'🌍 Remote','onsite':'🏢 On-site','hybrid':'🔀 Hybrid','flexible':'🔀 Flexible'};
+    if (availability && availMap[availability]) chips.push('<span style="background:rgba(200,255,0,0.12);border:1px solid rgba(200,255,0,0.35);color:#c8ff00;padding:3px 10px;border-radius:20px;font-size:11px">' + availMap[availability] + '</span>');
+    if (workPref && prefMap[workPref]) chips.push('<span style="background:rgba(255,255,255,0.06);border:1px solid #333;color:#aaa;padding:3px 10px;border-radius:20px;font-size:11px">' + prefMap[workPref] + '</span>');
+    chipEl.innerHTML = chips.join('');
+    chipEl.style.display = chips.length ? 'flex' : 'none';
+  }
+
+  // links row
+  var linksEl = document.getElementById('mp-links');
+  if (linksEl) {
+    var links = [];
+    if (githubUrl)    links.push('<a href="' + githubUrl    + '" target="_blank" style="color:#c8ff00;text-decoration:none;font-size:12px">⌥ GitHub</a>');
+    if (portfolioUrl) links.push('<a href="' + portfolioUrl + '" target="_blank" style="color:#c8ff00;text-decoration:none;font-size:12px">🔗 Portfolio</a>');
+    if (linkedinUrl)  links.push('<a href="' + linkedinUrl  + '" target="_blank" style="color:#c8ff00;text-decoration:none;font-size:12px">in LinkedIn</a>');
+    linksEl.innerHTML = links.join('');
+    linksEl.style.display = links.length ? 'flex' : 'none';
+  }
 
   // skills row
   var skillsRow = document.getElementById('mp-skills-row');
@@ -3429,12 +3558,20 @@ async function doSaveProfile() {
   var errEl = document.getElementById('ep-err');
   errEl.style.display = 'none';
   if (!_sb || !window._currentUser) { errEl.textContent = 'Not signed in.'; errEl.style.display = 'block'; return; }
-  var firstName = document.getElementById('ep-firstname').value.trim();
-  var lastName  = document.getElementById('ep-lastname').value.trim();
-  var bio       = document.getElementById('ep-bio').value.trim();
-  var location  = document.getElementById('ep-location').value.trim();
-  var openWork  = document.getElementById('ep-open').checked;
-  var skills    = window._epSelectedSkills || [];
+  var firstName    = document.getElementById('ep-firstname').value.trim();
+  var lastName     = document.getElementById('ep-lastname').value.trim();
+  var jobTitle     = document.getElementById('ep-role').value.trim();
+  var yearsExp     = document.getElementById('ep-exp').value;
+  var bio          = document.getElementById('ep-bio').value.trim();
+  var location     = document.getElementById('ep-location').value.trim();
+  var workPref     = document.getElementById('ep-workpref').value;
+  var githubUrl    = document.getElementById('ep-github').value.trim();
+  var portfolioUrl = document.getElementById('ep-portfolio').value.trim();
+  var linkedinUrl  = document.getElementById('ep-linkedin').value.trim();
+  var openWork     = document.getElementById('ep-open').checked;
+  var skills       = window._epSelectedSkills || [];
+  var availRadio   = document.querySelector('input[name="ep-avail"]:checked');
+  var availability = availRadio ? availRadio.value : 'full-time';
   btn.textContent = 'Saving\u2026'; btn.disabled = true;
   var existingUsername = (window._myProfile && window._myProfile.username)
     || (window._currentUser.user_metadata && window._currentUser.user_metadata.username)
@@ -3444,8 +3581,15 @@ async function doSaveProfile() {
     username: existingUsername,
     first_name: firstName,
     last_name: lastName,
+    job_title: jobTitle,
+    years_exp: yearsExp,
     bio: bio,
     location: location,
+    work_pref: workPref,
+    availability: availability,
+    github_url: githubUrl,
+    portfolio_url: portfolioUrl,
+    linkedin_url: linkedinUrl,
     skills: skills,
     open_to_work: openWork
   });
