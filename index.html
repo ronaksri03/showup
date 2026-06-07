@@ -2761,14 +2761,14 @@ function showPage(id) {
   if (id === 'mgr-auth') mgrGoTo(1);
 }
 var _communitySkills = {
-  'AI':          'Python, Machine Learning, AI, TensorFlow, PyTorch, NLP, LLM, Data Science, Computer Vision, Deep Learning',
-  'Design':      'Figma, UI Design, UX Design, Motion Design, After Effects, Illustrator, Graphic Design, Branding, Prototyping',
-  'Web3':        'Solidity, Web3, Blockchain, Smart Contracts, Ethereum, DeFi, NFT, Rust, Crypto',
-  'Mobile':      'React Native, Flutter, iOS, Android, Swift, Kotlin, Mobile Development',
-  'Game':        'Unity, Unreal Engine, Game Design, C#, Godot, 2D Game Dev, 3D Game Dev, Pygame',
-  'Founder':     'Startup, Product Management, Growth Hacking, Marketing, Business Development, Entrepreneurship, Product Strategy',
-  'Security':    'Cybersecurity, Penetration Testing, CTF, Ethical Hacking, Network Security, OSCP, Bug Bounty',
-  'Open Source': 'Open Source, Linux, DevOps, Infrastructure, CLI, Rust, Go, Kubernetes, Docker, Bash'
+  'AI':          'Python, Machine Learning, AI, TensorFlow, PyTorch, NLP, LLM, Data Science, Computer Vision, Deep Learning, Pandas, NumPy, Jupyter, Scikit',
+  'Design':      'Figma, UI, UX, Motion, After Effects, Illustrator, Graphic Design, Branding, Prototyping, Sketch, Framer, Design Systems, CSS, Tailwind',
+  'Web3':        'Solidity, Web3, Blockchain, Smart Contracts, Ethereum, DeFi, NFT, Rust, Crypto, Hardhat, Foundry, IPFS',
+  'Mobile':      'React Native, Flutter, iOS, Android, Swift, Kotlin, Mobile, Dart, Xcode, Expo',
+  'Game':        'Unity, Unreal Engine, Game Design, C#, Godot, Pygame, OpenGL, Blender, Game Dev, Shader',
+  'Founder':     'Startup, Product Management, Growth, Marketing, Business Development, Entrepreneurship, React, Vue, Angular, Next.js, TypeScript, JavaScript, Node.js, SaaS, Full Stack, Fullstack',
+  'Security':    'Cybersecurity, Penetration Testing, CTF, Ethical Hacking, Network Security, OSCP, Bug Bounty, Bash, Linux, Python',
+  'Open Source': 'Open Source, Linux, DevOps, Infrastructure, CLI, Rust, Go, Kubernetes, Docker, Bash, Git, GitHub, TypeScript, JavaScript, Vue, React, Angular, Node.js'
 };
 var _communityNames = {
   'AI': 'AI / ML Builders', 'Design': 'Design & Motion', 'Web3': 'Web3 Dev',
@@ -3511,19 +3511,39 @@ async function _doLoadDiscover() {
 
   var searchVal = (document.getElementById('disc-search') || {}).value || '';
   var openOnly  = (document.getElementById('disc-open') || {}).checked || false;
-  var skills    = searchVal.split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+  var searchTerms = searchVal.split(',').map(function(s){ return s.trim().toLowerCase(); }).filter(Boolean);
 
   container.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Loading…</div>';
 
-  var query = _sb.from('profiles').select('id, username, first_name, last_name, location, skills, open_to_work, job_title, work_pref').limit(24);
+  // Fetch all profiles server-side (no skill filter — do partial match client-side)
+  var query = _sb.from('profiles').select('id, username, first_name, last_name, location, skills, open_to_work, job_title, work_pref').limit(100);
   if (openOnly) query = query.eq('open_to_work', true);
-  if (skills.length > 0) query = query.overlaps('skills', skills);
 
   var res = await query;
   var data = res.data || [];
 
+  // Client-side partial/case-insensitive matching: "React" matches "React Native" and vice versa
+  if (searchTerms.length > 0) {
+    data = data.filter(function(p) {
+      var profileSkills = (p.skills || []).map(function(s){ return s.toLowerCase(); });
+      // Also match text fields for single-term freeform search
+      var textFields = [p.username, p.first_name, p.last_name, p.location, p.job_title]
+        .filter(Boolean).join(' ').toLowerCase();
+      return searchTerms.some(function(term) {
+        var skillMatch = profileSkills.some(function(skill) {
+          return skill.includes(term) || term.includes(skill);
+        });
+        var textMatch = searchTerms.length === 1 && textFields.includes(term);
+        return skillMatch || textMatch;
+      });
+    });
+  }
+
+  // Cap at 24 after client filtering
+  data = data.slice(0, 24);
+
   if (data.length === 0) {
-    container.innerHTML = '<div class="empty-state" style="grid-column:1/-1">No profiles found' + (skills.length ? ' for those skills' : '') + '. Be the first to drop your reel ✦</div>';
+    container.innerHTML = '<div class="empty-state" style="grid-column:1/-1">No profiles found' + (searchTerms.length ? ' for those skills' : '') + '. Be the first to drop your reel ✦</div>';
     return;
   }
 
