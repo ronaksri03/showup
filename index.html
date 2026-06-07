@@ -461,6 +461,99 @@
     }
     .btn-claim:hover { transform:translateY(-1px);box-shadow:0 4px 18px rgba(200,255,0,0.5); }
 
+    /* ── PROJECT LAB: DUAL ROLE ── */
+    .lab-tabs { display:flex;gap:8px;padding:24px 48px 0;border-bottom:1px solid rgba(200,255,0,0.12);margin-bottom:0; }
+    .lab-tab {
+      font-family:'Inter',sans-serif;font-size:0.84rem;font-weight:600;
+      padding:10px 22px;border-radius:10px 10px 0 0;border:none;
+      background:transparent;color:var(--muted);cursor:pointer;
+      border-bottom:2px solid transparent;transition:color .18s,border-color .18s;
+      margin-bottom:-1px;
+    }
+    .lab-tab.active { color:var(--peach);border-bottom-color:var(--peach); }
+    .lab-tab:hover:not(.active) { color:var(--text); }
+    .lab-panel { display:none;padding:32px 48px 48px; }
+    .lab-panel.active { display:block; }
+    .lab-section-header {
+      display:flex;justify-content:space-between;align-items:flex-start;
+      margin-bottom:20px;
+    }
+    .lab-section-title { font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:1.25rem;letter-spacing:-0.02em; }
+    .lab-section-sub { font-size:0.8rem;color:var(--muted);margin-top:4px; }
+    .lab-new-btn {
+      font-size:0.8rem;font-weight:700;padding:9px 20px;border-radius:50px;border:none;
+      background:linear-gradient(135deg,var(--peach),var(--peach-dk));color:#000;
+      font-family:'Inter',sans-serif;cursor:pointer;white-space:nowrap;flex-shrink:0;
+      transition:transform .15s,box-shadow .15s;
+      box-shadow:0 2px 12px rgba(200,255,0,0.3);
+    }
+    .lab-new-btn:hover { transform:translateY(-1px);box-shadow:0 4px 20px rgba(200,255,0,0.5); }
+    .lab-divider {
+      font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;
+      color:var(--subtle);margin:36px 0 20px;display:flex;align-items:center;gap:14px;
+    }
+    .lab-divider::before,.lab-divider::after {
+      content:'';flex:1;height:1px;background:rgba(255,255,255,0.07);
+    }
+    /* My project cards */
+    .lab-my-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px; }
+    .lab-my-card {
+      background:var(--surf);border:1.5px solid rgba(255,255,255,0.09);border-radius:var(--r);
+      padding:20px;transition:border-color .2s,transform .18s;
+    }
+    .lab-my-card:hover { border-color:rgba(200,255,0,0.35);transform:translateY(-2px); }
+    .lab-my-top { display:flex;justify-content:space-between;align-items:center;margin-bottom:10px; }
+    .lab-my-emoji { font-size:1.5rem; }
+    /* visibility toggle */
+    .lab-vis {
+      display:flex;align-items:center;gap:7px;font-size:0.7rem;font-weight:600;color:var(--muted);
+    }
+    .lab-vis-track {
+      width:34px;height:18px;border-radius:9px;background:var(--surf3);border:1px solid var(--border2);
+      position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;
+    }
+    .lab-vis-track.on { background:rgba(200,255,0,0.22);border-color:rgba(200,255,0,0.5); }
+    .lab-vis-track::after {
+      content:'';position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;
+      background:var(--muted);transition:transform .2s,background .2s;
+    }
+    .lab-vis-track.on::after { transform:translateX(16px);background:var(--peach); }
+    .lab-vis-label { transition:color .2s; }
+    .lab-vis-track.on ~ .lab-vis-label { color:var(--peach2); }
+    .lab-my-title { font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.97rem;margin-bottom:5px; }
+    .lab-my-desc { font-size:0.8rem;color:var(--muted);line-height:1.55;margin-bottom:14px; }
+    .lab-my-foot { display:flex;justify-content:space-between;align-items:center; }
+    .lab-my-status {
+      font-size:0.65rem;font-weight:700;padding:3px 9px;border-radius:50px;letter-spacing:0.04em;
+    }
+    .lab-my-status.in-progress { background:rgba(200,255,0,0.1);color:var(--peach2);border:1px solid var(--peach-b); }
+    .lab-my-status.draft { background:rgba(255,255,255,0.05);color:var(--subtle);border:1px solid var(--border); }
+    /* manager project cards */
+    .lab-mgr-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px; }
+    .lab-mgr-card {
+      background:var(--surf);border:1.5px solid rgba(255,255,255,0.09);border-radius:var(--r);
+      padding:22px;transition:border-color .2s,transform .18s;
+    }
+    .lab-mgr-card:hover { border-color:rgba(200,255,0,0.35);transform:translateY(-2px); }
+    .lab-mgr-top { display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px; }
+    .lab-mgr-badge {
+      font-size:0.62rem;font-weight:700;padding:3px 9px;border-radius:50px;letter-spacing:0.05em;flex-shrink:0;
+    }
+    .lab-mgr-badge.open { background:rgba(200,255,0,0.1);color:var(--peach2);border:1px solid var(--peach-b); }
+    .lab-mgr-badge.assigned { background:rgba(255,255,255,0.06);color:var(--muted);border:1px solid var(--border2); }
+    .lab-mgr-title { font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:1rem;margin-bottom:5px; }
+    .lab-mgr-desc { font-size:0.81rem;color:var(--muted);line-height:1.55;margin-bottom:16px; }
+    .lab-mgr-meta { display:flex;gap:14px;margin-bottom:16px; }
+    .lab-mgr-meta span { font-size:0.7rem;color:var(--subtle); }
+    .lab-mgr-foot { display:flex;justify-content:space-between;align-items:center;gap:8px; }
+    .lab-assign-btn {
+      font-size:0.75rem;font-weight:600;padding:7px 15px;border-radius:50px;
+      background:transparent;border:1.5px solid rgba(200,255,0,0.4);color:var(--peach2);
+      cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s,border-color .15s;
+    }
+    .lab-assign-btn:hover { background:rgba(200,255,0,0.08);border-color:rgba(200,255,0,0.7); }
+    .lab-submissions { font-size:0.7rem;color:var(--muted); }
+
     /* ── PROFILE SECTION ── */
     .profile-wrap { display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;margin-top:48px; }
     .profile-mock {
@@ -1088,7 +1181,7 @@
     /* ── FEATURE STRIP ROW ── */
     .zine-strips {
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
+      grid-template-columns: repeat(6, 1fr);
       gap: 8px;
       padding: 0 48px 14px;
       flex-shrink: 0;
@@ -1345,10 +1438,9 @@
   <div class="nav-links">
     <a href="#" onclick="showPage('discover');return false">Discover</a>
     <a href="#" onclick="showPage('lab');return false">Project Lab</a>
-    <a href="#" onclick="showPage('profile');return false">Profiles</a>
     <a href="#" onclick="showPage('mgr');return false">For Managers</a>
   </div>
-  <button class="nav-pill">Drop your reel ✦</button>
+  <button class="nav-pill" onclick="showPage('individual')">Drop your reel ✦</button>
 </nav>
 
 <!-- ══════════ HOME: ZINE / EDITORIAL LAYOUT ══════════ -->
@@ -1373,7 +1465,7 @@
         Show who you actually are — your energy, your thinking, your work.
       </p>
       <div class="zh-btns">
-        <button class="btn-fire" id="cta-hero"><span>Drop your first reel — free</span> <span>→</span></button>
+        <button class="btn-fire" id="cta-hero" onclick="showPage('individual')"><span>Drop your first reel — free</span> <span>→</span></button>
         <button class="btn-ghost">▶ Watch a reel</button>
       </div>
       <div class="zh-stats">
@@ -1434,10 +1526,6 @@
     </div>
     <div class="zf-card" onclick="showPage('lab')">
       <div><div class="zf-icon">🛠</div><div class="zf-label">Project Lab</div><div class="zf-desc">Pick, build & ship</div></div>
-      <div class="zf-arr">↗</div>
-    </div>
-    <div class="zf-card" onclick="showPage('profile')">
-      <div><div class="zf-icon">🎯</div><div class="zf-label">Your Profile</div><div class="zf-desc">Video-first identity</div></div>
       <div class="zf-arr">↗</div>
     </div>
     <div class="zf-card" onclick="showPage('individual')" style="border-color:rgba(200,255,0,0.65)">
@@ -1519,62 +1607,150 @@
     <button class="page-back" onclick="goHome()">← Back</button>
     <div class="page-header-title">Project Lab</div>
   </div>
-  <div class="page-content">
-    <div class="sec-eyebrow">Project Lab</div>
-    <h2 class="SH">Pick it. Build it. <span class="g">Ship it.</span></h2>
-    <p class="sec-sub">Open micro-projects from the community. Build one, post your reel, earn your reputation. Or drop your own idea.</p>
-    <div class="proj-grid">
-      <div class="pcard"><div class="pcard-top"><div class="pcard-emoji">🌱</div><span class="diff d-easy">Beginner</span></div><h3>AI Plant Care Companion</h3><div class="pmeta"><span>⏱ ~2 weekends</span><span>👀 142 watching</span></div><p>Snap a photo, get AI-powered plant care advice. Camera + GPT-4o vision. A great first AI project.</p><div class="pcard-foot"><div class="stack"><span class="spill">React Native</span><span class="spill">Python</span><span class="spill">OpenAI</span></div><button class="btn-claim">Claim →</button></div></div>
-      <div class="pcard"><div class="pcard-top"><div class="pcard-emoji">🎵</div><span class="diff d-med">Intermediate</span></div><h3>Vibe-Matched Playlist Gen</h3><div class="pmeta"><span>⏱ ~3 weekends</span><span>👀 89 watching</span></div><p>Type your mood → Spotify playlist that actually matches. Bonus: a beautiful shareable card.</p><div class="pcard-foot"><div class="stack"><span class="spill">Next.js</span><span class="spill">Spotify API</span><span class="spill">LLM</span></div><button class="btn-claim">Claim →</button></div></div>
-      <div class="pcard"><div class="pcard-top"><div class="pcard-emoji">⚡</div><span class="diff d-hard">Advanced</span></div><h3>Live Collab Code Reviewer</h3><div class="pmeta"><span>⏱ ~1 month</span><span>👀 213 watching</span></div><p>VS Code extension: two devs review the same PR live with inline voice comments. Figma for code review.</p><div class="pcard-foot"><div class="stack"><span class="spill">WebRTC</span><span class="spill">Go</span><span class="spill">VS Code API</span></div><button class="btn-claim">Claim →</button></div></div>
-      <div class="pcard"><div class="pcard-top"><div class="pcard-emoji">🧠</div><span class="diff d-med">Intermediate</span></div><h3>Second Brain CLI</h3><div class="pmeta"><span>⏱ ~3 weekends</span><span>👀 177 watching</span></div><p>Capture notes in your terminal, auto-tag with local AI, resurface them when starting a new task.</p><div class="pcard-foot"><div class="stack"><span class="spill">Go</span><span class="spill">Ollama</span><span class="spill">SQLite</span></div><button class="btn-claim">Claim →</button></div></div>
-      <div class="pcard"><div class="pcard-top"><div class="pcard-emoji">🗺️</div><span class="diff d-easy">Beginner</span></div><h3>Local Events Radar</h3><div class="pmeta"><span>⏱ ~2 weekends</span><span>👀 61 watching</span></div><p>Hyper-local events board — scrapes community boards to surface what's actually happening this weekend.</p><div class="pcard-foot"><div class="stack"><span class="spill">Svelte</span><span class="spill">Scraping</span><span class="spill">Maps API</span></div><button class="btn-claim">Claim →</button></div></div>
-      <div class="pcard"><div class="pcard-top"><div class="pcard-emoji">📸</div><span class="diff d-easy">Beginner</span></div><h3>Micro-Habit Photo Journal</h3><div class="pmeta"><span>⏱ ~2 weekends</span><span>👀 94 watching</span></div><p>Daily prompt → photo → auto-compiled year-in-review reel. Functional app and portfolio piece in one.</p><div class="pcard-foot"><div class="stack"><span class="spill">Flutter</span><span class="spill">FFmpeg</span><span class="spill">Supabase</span></div><button class="btn-claim">Claim →</button></div></div>
-    </div>
-  </div>
-</div>
 
-<!-- PROFILE -->
-<div class="page-view" id="page-profile">
-  <div class="page-header">
-    <button class="page-back" onclick="goHome()">← Back</button>
-    <div class="page-header-title">Your profile</div>
+  <!-- ROLE TABS -->
+  <div class="lab-tabs">
+    <button class="lab-tab active" onclick="labTab('individual', this)">🙋 For Individuals</button>
+    <button class="lab-tab" onclick="labTab('manager', this)">👔 For Managers</button>
   </div>
-  <div class="page-content">
-    <div class="sec-eyebrow">Your profile</div>
-    <h2 class="SH">A profile that works<br><span class="g">as hard as you do.</span></h2>
-    <p class="sec-sub">Your reel library, project history, and reputation — all in one place. No more static PDFs.</p>
-    <div class="profile-wrap">
-      <div class="profile-mock">
-        <div class="profile-cover"></div>
-        <div class="p-body">
-          <div class="p-av">🧑<div class="p-badge">✓</div></div>
-          <div class="p-name">Arjun Mehra</div>
-          <div class="p-title">ML Engineer · Building in public · Open to collabs</div>
-          <div class="p-pills"><span class="ppill">PyTorch</span><span class="ppill">LLMs</span><span class="ppill">Python</span><span class="ppill">Rust</span><span class="ppill">AWS</span></div>
-          <div class="p-reels">
-            <div class="p-reel" style="background:linear-gradient(150deg,#0a0a00,#111100)">🤖</div>
-            <div class="p-reel" style="background:linear-gradient(150deg,#0a0a00,#141400)">📊</div>
-            <div class="p-reel" style="background:linear-gradient(150deg,#090900,#121200)">🚀</div>
-            <div class="p-reel" style="background:linear-gradient(150deg,#070700,#0e0e00)">💡</div>
-          </div>
-          <div class="p-stats">
-            <div class="p-stat"><div class="p-sn">24</div><div class="p-sl">Reels</div></div>
-            <div class="p-stat"><div class="p-sn">8.4k</div><div class="p-sl">Followers</div></div>
-            <div class="p-stat"><div class="p-sn">6</div><div class="p-sl">Projects</div></div>
-            <div class="p-stat"><div class="p-sn">3</div><div class="p-sl">Offers</div></div>
+
+  <!-- ── INDIVIDUAL VIEW ── -->
+  <div class="lab-panel active" id="lab-individual">
+    <div class="lab-section-header">
+      <div>
+        <div class="lab-section-title">My Projects</div>
+        <div class="lab-section-sub">Private by default — flip the toggle to share with the world.</div>
+      </div>
+      <button class="lab-new-btn">+ New Project</button>
+    </div>
+
+    <div class="lab-my-grid">
+
+      <div class="lab-my-card">
+        <div class="lab-my-top">
+          <div class="lab-my-emoji">🤖</div>
+          <div class="lab-vis">
+            <div class="lab-vis-track" onclick="labToggleVis(this)" title="Toggle visibility"></div>
+            <span class="lab-vis-label">Private</span>
           </div>
         </div>
+        <div class="lab-my-title">AI Resume Scanner</div>
+        <div class="lab-my-desc">Parses job descriptions and highlights skill gaps. Built with Python + GPT-4o.</div>
+        <div class="lab-my-foot">
+          <span class="lab-my-status in-progress">In Progress</span>
+          <div class="stack"><span class="spill">Python</span><span class="spill">OpenAI</span></div>
+        </div>
       </div>
-      <div class="feat-list">
-        <div class="feat"><div class="feat-ic">🎬</div><div><h4>Video-first presence</h4><p>Your reel library is your portfolio. Show walkthroughs, explain your thinking, demo live projects. Skills you can see are skills hiring managers trust.</p></div></div>
-        <div class="feat"><div class="feat-ic" style="background:rgba(200,255,0,0.1);border-color:rgba(200,255,0,0.25)">🔎</div><div><h4>Smart discoverability</h4><p>Our algorithm matches you with the right opportunities based on actual skill signals — not who you know.</p></div></div>
-        <div class="feat"><div class="feat-ic" style="background:var(--violet-gl);border-color:rgba(200,255,0,0.3)">💬</div><div><h4>Context-first DMs</h4><p>Every message shows what the sender has built. You know who's reaching out and why before you open the thread.</p></div></div>
-        <div class="feat"><div class="feat-ic" style="background:var(--gold-gl);border-color:rgba(255,255,255,0.3)">📈</div><div><h4>Reputation that compounds</h4><p>Every project you ship adds to a verifiable track record. Your profile grows stronger just by doing what you love.</p></div></div>
+
+      <div class="lab-my-card">
+        <div class="lab-my-top">
+          <div class="lab-my-emoji">🎨</div>
+          <div class="lab-vis">
+            <div class="lab-vis-track on" onclick="labToggleVis(this)" title="Toggle visibility"></div>
+            <span class="lab-vis-label" style="color:var(--peach2)">Public</span>
+          </div>
+        </div>
+        <div class="lab-my-title">Design System Starter Kit</div>
+        <div class="lab-my-desc">A Figma + CSS tokens setup for rapid product prototyping. Open sourced.</div>
+        <div class="lab-my-foot">
+          <span class="lab-my-status in-progress">In Progress</span>
+          <div class="stack"><span class="spill">Figma</span><span class="spill">CSS</span></div>
+        </div>
       </div>
+
+      <div class="lab-my-card">
+        <div class="lab-my-top">
+          <div class="lab-my-emoji">📱</div>
+          <div class="lab-vis">
+            <div class="lab-vis-track" onclick="labToggleVis(this)" title="Toggle visibility"></div>
+            <span class="lab-vis-label">Private</span>
+          </div>
+        </div>
+        <div class="lab-my-title">Habit Tracker App</div>
+        <div class="lab-my-desc">Minimal daily habit tracker with streak visualization. Still in draft.</div>
+        <div class="lab-my-foot">
+          <span class="lab-my-status draft">Draft</span>
+          <div class="stack"><span class="spill">Flutter</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="lab-divider">Open Community Projects — pick one up</div>
+
+    <div class="proj-grid" style="margin-top:0">
+      <div class="pcard"><div class="pcard-top"><div class="pcard-emoji">🌱</div><span class="diff d-easy">Beginner</span></div><h3>AI Plant Care Companion</h3><div class="pmeta"><span>⏱ ~2 weekends</span><span>👀 142 watching</span></div><p>Snap a photo, get AI-powered plant care advice. Camera + GPT-4o vision.</p><div class="pcard-foot"><div class="stack"><span class="spill">React Native</span><span class="spill">OpenAI</span></div><button class="btn-claim">Claim →</button></div></div>
+      <div class="pcard"><div class="pcard-top"><div class="pcard-emoji">🎵</div><span class="diff d-med">Intermediate</span></div><h3>Vibe-Matched Playlist Gen</h3><div class="pmeta"><span>⏱ ~3 weekends</span><span>👀 89 watching</span></div><p>Type your mood → Spotify playlist that actually matches. Bonus: shareable card.</p><div class="pcard-foot"><div class="stack"><span class="spill">Next.js</span><span class="spill">Spotify API</span></div><button class="btn-claim">Claim →</button></div></div>
+      <div class="pcard"><div class="pcard-top"><div class="pcard-emoji">⚡</div><span class="diff d-hard">Advanced</span></div><h3>Live Collab Code Reviewer</h3><div class="pmeta"><span>⏱ ~1 month</span><span>👀 213 watching</span></div><p>VS Code extension: two devs review the same PR live with inline voice comments.</p><div class="pcard-foot"><div class="stack"><span class="spill">WebRTC</span><span class="spill">Go</span></div><button class="btn-claim">Claim →</button></div></div>
+      <div class="pcard"><div class="pcard-top"><div class="pcard-emoji">🧠</div><span class="diff d-med">Intermediate</span></div><h3>Second Brain CLI</h3><div class="pmeta"><span>⏱ ~3 weekends</span><span>👀 177 watching</span></div><p>Capture notes in your terminal, auto-tag with local AI, resurface when starting new tasks.</p><div class="pcard-foot"><div class="stack"><span class="spill">Go</span><span class="spill">Ollama</span></div><button class="btn-claim">Claim →</button></div></div>
     </div>
   </div>
+
+  <!-- ── MANAGER VIEW ── -->
+  <div class="lab-panel" id="lab-manager">
+    <div class="lab-section-header">
+      <div>
+        <div class="lab-section-title">Your Posted Projects</div>
+        <div class="lab-section-sub">Post publicly for anyone to pick up, or assign directly to an individual.</div>
+      </div>
+      <button class="lab-new-btn">+ Post Project</button>
+    </div>
+
+    <div class="lab-mgr-grid">
+
+      <div class="lab-mgr-card">
+        <div class="lab-mgr-top">
+          <div>
+            <div class="lab-mgr-title">Build a Customer Dashboard</div>
+            <div class="lab-mgr-meta"><span>⏱ 3–4 weeks</span><span>💰 Paid</span><span>👀 38 applicants</span></div>
+          </div>
+          <span class="lab-mgr-badge open">Open</span>
+        </div>
+        <div class="lab-mgr-desc">React + Recharts dashboard pulling from our REST API. Designs in Figma. Looking for a frontend dev who can ship fast.</div>
+        <div class="stack" style="margin-bottom:16px"><span class="spill">React</span><span class="spill">TypeScript</span><span class="spill">Recharts</span></div>
+        <div class="lab-mgr-foot">
+          <div class="lab-submissions">38 submitted reels</div>
+          <button class="lab-assign-btn">Review Reels →</button>
+        </div>
+      </div>
+
+      <div class="lab-mgr-card">
+        <div class="lab-mgr-top">
+          <div>
+            <div class="lab-mgr-title">Write API Docs — v2</div>
+            <div class="lab-mgr-meta"><span>⏱ 1–2 weeks</span><span>💰 Paid</span><span>👤 Assigned</span></div>
+          </div>
+          <span class="lab-mgr-badge assigned">Assigned</span>
+        </div>
+        <div class="lab-mgr-desc">Full API documentation for v2 endpoints. Assigned to @priya_writes. She starts Monday.</div>
+        <div class="stack" style="margin-bottom:16px"><span class="spill">Technical Writing</span><span class="spill">OpenAPI</span></div>
+        <div class="lab-mgr-foot">
+          <div class="lab-submissions" style="color:var(--peach2)">@priya_writes · starts Mon</div>
+          <button class="lab-assign-btn">Reassign</button>
+        </div>
+      </div>
+
+      <div class="lab-mgr-card">
+        <div class="lab-mgr-top">
+          <div>
+            <div class="lab-mgr-title">Mobile Push Notifications</div>
+            <div class="lab-mgr-meta"><span>⏱ 2 weeks</span><span>💰 Paid</span><span>👀 12 applicants</span></div>
+          </div>
+          <span class="lab-mgr-badge open">Open</span>
+        </div>
+        <div class="lab-mgr-desc">Integrate Firebase push notifications into our existing React Native app. iOS + Android. Must handle background & foreground states.</div>
+        <div class="stack" style="margin-bottom:16px"><span class="spill">React Native</span><span class="spill">Firebase</span></div>
+        <div class="lab-mgr-foot">
+          <div class="lab-submissions">12 submitted reels</div>
+          <button class="lab-assign-btn">Review Reels →</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </div>
+
 
 <!-- FOR INDIVIDUALS -->
 <div class="page-view" id="page-individual">
@@ -1584,16 +1760,36 @@
   </div>
   <div class="ind-layout">
 
-    <!-- LEFT: BRAND PANEL -->
+    <!-- LEFT: PROFILE PREVIEW PANEL -->
     <div class="ind-brand">
       <div class="ind-brand-logo">showup.</div>
-      <h2 class="ind-brand-h">Your career,<br>on <span class="ilime">camera.</span></h2>
-      <p class="ind-brand-sub">Drop a 90-second reel. Let your work speak louder than a bullet-point CV ever could.</p>
-      <div class="ind-brand-proof">
+      <h2 class="ind-brand-h">This is what<br>your <span class="ilime">profile</span> becomes.</h2>
+      <p class="ind-brand-sub">Video-first. Skill-verified. No static PDFs — just you, building in public.</p>
+      <div class="profile-mock" style="position:relative;z-index:1;margin-top:4px;max-width:320px">
+        <div class="profile-cover"></div>
+        <div class="p-body">
+          <div class="p-av">🧑<div class="p-badge">✓</div></div>
+          <div class="p-name">You, after signing up.</div>
+          <div class="p-title">Your Role · Building in public · Open to collabs</div>
+          <div class="p-pills"><span class="ppill">Your Skills</span><span class="ppill">Go here</span><span class="ppill">🔥</span></div>
+          <div class="p-reels">
+            <div class="p-reel" style="background:linear-gradient(150deg,#0a0a00,#111100)">🎬</div>
+            <div class="p-reel" style="background:linear-gradient(150deg,#0a0a00,#141400)">🚀</div>
+            <div class="p-reel" style="background:linear-gradient(150deg,#090900,#121200)">💡</div>
+            <div class="p-reel" style="background:linear-gradient(150deg,#070700,#0e0e00)">⚡</div>
+          </div>
+          <div class="p-stats">
+            <div class="p-stat"><div class="p-sn">—</div><div class="p-sl">Reels</div></div>
+            <div class="p-stat"><div class="p-sn">—</div><div class="p-sl">Followers</div></div>
+            <div class="p-stat"><div class="p-sn">—</div><div class="p-sl">Projects</div></div>
+            <div class="p-stat"><div class="p-sn">—</div><div class="p-sl">Offers</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="ind-brand-proof" style="margin-top:20px">
         <div class="ind-proof-row"><div class="ind-proof-dot"></div>48,000+ creators already live</div>
         <div class="ind-proof-row"><div class="ind-proof-dot"></div>92% of hired members used their reel</div>
         <div class="ind-proof-row"><div class="ind-proof-dot"></div>Avg 3 DMs within 48h of first reel</div>
-        <div class="ind-proof-row"><div class="ind-proof-dot"></div>Your data stays yours — no ads, ever</div>
       </div>
     </div>
 
@@ -1769,163 +1965,4 @@
           <span class="url">showup.so/@yourhandle</span>
           <span class="copy" onclick="this.textContent='Copied!'">Copy link</span>
         </div>
-        <div class="ind-success-chips" id="success-skills"></div>
-        <button class="ind-btn-primary" onclick="showPage('discover')">Explore the feed →</button>
-        <button class="ind-btn-secondary" onclick="goHome()">Back to home</button>
-      </div>
-
-    </div><!-- /.ind-form-area -->
-  </div><!-- /.ind-layout -->
-</div>
-
-<!-- FOR MANAGERS -->
-<div class="page-view" id="page-mgr">
-  <div class="page-header">
-    <button class="page-back" onclick="goHome()">← Back</button>
-    <div class="page-header-title">For Managers</div>
-  </div>
-  <div class="page-content">
-    <div class="mgr-wrap">
-      <div class="mgr-grid">
-        <div>
-          <div class="sec-eyebrow">For Managers &amp; Hiring Teams</div>
-          <h2 class="SH">Know who you're hiring<br><span class="g">before day one.</span></h2>
-          <p class="sec-sub">Watch candidates in action. 90 seconds of reel tells you more than a 60-minute first-round interview.</p>
-          <div class="mgr-feats">
-            <div class="mf"><div class="mf-ic">🎬</div><div><h4>Watch before you interview</h4><p>Review reels async, share with your team, align before spending an hour on a call.</p></div></div>
-            <div class="mf"><div class="mf-ic">✅</div><div><h4>Verify real project work</h4><p>Every project reel links to shipped code or a live demo. No more guessing if the line is real.</p></div></div>
-            <div class="mf"><div class="mf-ic">🏗️</div><div><h4>Post bounty projects</h4><p>Drop a small problem. See who picks it up — the most natural audition there is.</p></div></div>
-            <div class="mf"><div class="mf-ic">💡</div><div><h4>Culture signal, not just skills</h4><p>Communication style, enthusiasm, how someone explains complexity — all in 90 seconds of reel.</p></div></div>
-          </div>
-        </div>
-        <div class="mgr-cards">
-          <div class="mc"><div class="mc-icon">🎯</div><h5>Skill match</h5><div class="mc-score">94%</div><div class="mc-bar"><div class="mc-fill" style="width:94%"></div></div></div>
-          <div class="mc"><div class="mc-icon">🚢</div><h5>Projects shipped</h5><div class="mc-score">6</div><p>Last 6 months</p></div>
-          <div class="mc"><div class="mc-icon">💬</div><h5>Comms score</h5><div class="mc-score">A+</div><div class="mc-bar"><div class="mc-fill" style="width:88%"></div></div></div>
-          <div class="mc"><div class="mc-icon">🤝</div><h5>Collabs done</h5><div class="mc-score">11</div><p>Rating ⭐ 4.9</p></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- COMMUNITIES -->
-<div class="page-view" id="page-comm">
-  <div class="page-header">
-    <button class="page-back" onclick="goHome()">← Back</button>
-    <div class="page-header-title">Communities</div>
-  </div>
-  <div class="page-content">
-    <div class="sec-eyebrow">Network</div>
-    <h2 class="SH">Find your <span class="v">people.</span></h2>
-    <p class="sec-sub">Interest-led communities where conversations actually go somewhere useful.</p>
-    <div class="comm-row">
-      <div class="comm"><div class="comm-icon">🤖</div><div><div class="comm-name">AI / ML Builders</div><div class="comm-cnt">6,200 members</div></div></div>
-      <div class="comm"><div class="comm-icon">🎨</div><div><div class="comm-name">Design &amp; Motion</div><div class="comm-cnt">4,800 members</div></div></div>
-      <div class="comm"><div class="comm-icon">⛓️</div><div><div class="comm-name">Web3 Dev</div><div class="comm-cnt">3,100 members</div></div></div>
-      <div class="comm"><div class="comm-icon">📱</div><div><div class="comm-name">Mobile Devs</div><div class="comm-cnt">5,500 members</div></div></div>
-      <div class="comm"><div class="comm-icon">🎮</div><div><div class="comm-name">Indie Game Dev</div><div class="comm-cnt">2,700 members</div></div></div>
-      <div class="comm"><div class="comm-icon">🚀</div><div><div class="comm-name">Founders &amp; 0→1</div><div class="comm-cnt">8,900 members</div></div></div>
-      <div class="comm"><div class="comm-icon">🔐</div><div><div class="comm-name">Security &amp; CTF</div><div class="comm-cnt">1,900 members</div></div></div>
-      <div class="comm"><div class="comm-icon">🌱</div><div><div class="comm-name">Open Source</div><div class="comm-cnt">7,300 members</div></div></div>
-    </div>
-    <div class="cta-wrap" style="margin:48px 0 0">
-      <h2>Stop sending PDFs<br>into <span class="g">the void.</span></h2>
-      <p>Your first reel takes three minutes. Your next opportunity could be watching it tomorrow.</p>
-      <button class="btn-fire"><span>Post your first reel — free forever</span> <span>→</span></button>
-    </div>
-  </div>
-</div>
-
-<!-- FOOTER -->
-<footer>
-  <div class="f-logo">showup.</div>
-  <div class="f-links">
-    <a href="#">About</a><a href="#">Blog</a>
-    <a href="#" onclick="showPage('mgr');return false">For Managers</a>
-    <a href="#">Privacy</a><a href="#">Terms</a>
-  </div>
-  <div class="f-copy">© 2026 showup. — built for the next generation ✦</div>
-</footer>
-
-<script>
-/* ── SPA NAVIGATION ── */
-function showPage(id) {
-  document.getElementById('home-view').style.display = 'none';
-  document.querySelector('footer').style.display = 'none';
-  document.body.style.overflow = '';
-  var page = document.getElementById('page-' + id);
-  if (page) { page.classList.add('active'); window.scrollTo(0, 0); }
-}
-function goHome() {
-  document.querySelectorAll('.page-view').forEach(function(p) { p.classList.remove('active'); });
-  var hw = document.getElementById('home-view');
-  hw.style.display = 'flex';
-  hw.style.flexDirection = 'column';
-  document.querySelector('footer').style.display = 'none'; /* footer not shown on home */
-  document.body.style.overflow = 'hidden';
-  window.scrollTo(0, 0);
-}
-// lock scroll on initial load; hide footer on home
-document.body.style.overflow = 'hidden';
-document.querySelector('footer').style.display = 'none';
-
-/* ── LANTERN ── */
-const lantern = document.getElementById('lantern');
-document.addEventListener('mousemove', function(e) {
-  lantern.style.left = e.clientX + 'px';
-  lantern.style.top  = e.clientY + 'px';
-});
-
-/* ── INDIVIDUAL ONBOARDING ── */
-var indSelected = [];
-var IND_MAX = 6;
-
-function indGoTo(step) {
-  document.querySelectorAll('.ind-step').forEach(function(s) { s.classList.remove('active'); });
-  var el = document.getElementById('ind-step-' + step);
-  if (el) el.classList.add('active');
-  // populate success chips from selected skills
-  if (step === 6) {
-    var container = document.getElementById('success-skills');
-    if (container) {
-      container.innerHTML = indSelected.map(function(s) {
-        return '<span class="ind-success-chip">' + s + '</span>';
-      }).join('');
-    }
-  }
-}
-
-function toggleSkill(el) {
-  if (el.classList.contains('selected')) {
-    el.classList.remove('selected');
-    indSelected = indSelected.filter(function(s) { return s !== el.textContent.trim(); });
-  } else {
-    if (indSelected.length >= IND_MAX) return;
-    el.classList.add('selected');
-    indSelected.push(el.textContent.trim());
-  }
-  var cnt = document.getElementById('skill-count');
-  if (cnt) cnt.textContent = indSelected.length + ' / ' + IND_MAX + ' selected';
-}
-
-/* ── MAGNETIC BUTTONS ── */
-document.querySelectorAll('.btn-fire, .nav-pill').forEach(function(btn) {
-  btn.addEventListener('mousemove', function(e) {
-    const r = btn.getBoundingClientRect();
-    const dx = (e.clientX - r.left - r.width / 2);
-    const dy = (e.clientY - r.top - r.height / 2);
-    btn.style.transform = 'translate(' + (dx * 0.32) + 'px, ' + (dy * 0.32) + 'px)';
-  });
-  btn.addEventListener('mouseleave', function() {
-    btn.style.transition = 'transform 0.45s cubic-bezier(.34,1.56,.64,1), box-shadow .18s, background .18s';
-    btn.style.transform = 'translate(0,0)';
-    setTimeout(function() { btn.style.transition = ''; }, 450);
-  });
-  btn.addEventListener('mouseenter', function() {
-    btn.style.transition = 'transform 0.1s ease, box-shadow .18s, background .18s';
-  });
-});
-</script>
-</body>
-</html>
+        <div class="ind-success-chips" id="success-
