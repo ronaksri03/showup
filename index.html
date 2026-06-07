@@ -3122,6 +3122,23 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 
 /* ── MAGNETIC BUTTONS ── */
+/* ── close skill dropdowns on outside click ── */
+document.addEventListener('click', function(e) {
+  var epInp = document.getElementById('ep-skill-input');
+  var epDd  = document.getElementById('ep-skill-dd');
+  var sgInp = document.getElementById('skill-search');
+  var sgDd  = document.getElementById('skill-search-dd');
+  if (epDd && epInp && !epInp.contains(e.target) && !epDd.contains(e.target)) {
+    epDd.style.display = 'none';
+  }
+  if (sgDd && sgInp && !sgInp.contains(e.target) && !sgDd.contains(e.target)) {
+    sgDd.style.display = 'none';
+  }
+  // close nav dropdown
+  var navUser = document.getElementById('nav-user');
+  if (navUser && !navUser.contains(e.target)) navUser.classList.remove('open');
+});
+
 document.querySelectorAll('.btn-fire, .nav-pill').forEach(function(btn) {
   btn.addEventListener('mousemove', function(e) {
     var r = btn.getBoundingClientRect();
