@@ -1603,6 +1603,129 @@
       .nav-pill { display: none; } /* hide CTA in nav on tiny screens — it's in hero */
     }
 
+
+    /* ── NAV USER CHIP ── */
+    .nav-user {
+      display:none; align-items:center; gap:9px; cursor:pointer;
+      position:relative;
+    }
+    .nav-avatar {
+      width:32px; height:32px; border-radius:50%;
+      background:linear-gradient(135deg,var(--peach),var(--peach-dk));
+      color:#0a0a0a; font-weight:800; font-size:0.8rem;
+      display:flex; align-items:center; justify-content:center;
+      flex-shrink:0;
+    }
+    .nav-username {
+      font-size:0.82rem; font-weight:600; color:var(--text);
+      max-width:120px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+    }
+    .nav-dropdown {
+      position:absolute; top:calc(100% + 10px); right:0;
+      background:var(--surf); border:1px solid rgba(200,255,0,0.18);
+      border-radius:12px; padding:6px; min-width:180px;
+      box-shadow:0 16px 48px rgba(0,0,0,0.5); z-index:500;
+      display:none;
+    }
+    .nav-user:hover .nav-dropdown, .nav-user.open .nav-dropdown { display:block; }
+    .nav-dd-item {
+      display:block; width:100%; padding:9px 14px; border-radius:8px;
+      font-size:0.82rem; font-weight:500; color:var(--muted);
+      background:none; border:none; cursor:pointer; text-align:left;
+      font-family:'Inter',sans-serif; transition:background .12s, color .12s;
+    }
+    .nav-dd-item:hover { background:rgba(200,255,0,0.08); color:var(--text); }
+    .nav-dd-sep { height:1px; background:var(--border); margin:4px 6px; }
+    .nav-dd-item.danger { color:#ff6b6b; }
+    .nav-dd-item.danger:hover { background:rgba(255,107,107,0.08); }
+
+    /* ── MY PROFILE / DASHBOARD PAGES ── */
+    .mypage-header {
+      display:flex; align-items:center; gap:18px;
+      padding:32px 44px 24px; border-bottom:1px solid var(--border);
+    }
+    .mypage-av {
+      width:56px; height:56px; border-radius:50%; flex-shrink:0;
+      background:linear-gradient(135deg,var(--peach),var(--peach-dk));
+      color:#0a0a0a; font-weight:800; font-size:1.4rem;
+      display:flex; align-items:center; justify-content:center;
+      border:3px solid rgba(200,255,0,0.3);
+      box-shadow:0 0 0 6px rgba(200,255,0,0.07);
+    }
+    .mypage-info-name { font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:1.3rem; margin-bottom:3px; }
+    .mypage-info-sub { font-size:0.78rem; color:var(--muted); }
+    .mypage-stats { display:flex; gap:24px; margin-top:8px; }
+    .mypage-stat { text-align:center; }
+    .mypage-stat-n { font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:1.1rem; color:var(--peach2); }
+    .mypage-stat-l { font-size:0.62rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; }
+
+    .mypage-section { padding:28px 44px; border-bottom:1px solid var(--border); }
+    .mypage-section-title {
+      font-family:'Plus Jakarta Sans',sans-serif; font-weight:700; font-size:1rem;
+      margin-bottom:16px; display:flex; align-items:center; gap:8px;
+    }
+    .reel-row {
+      display:flex; align-items:center; gap:14px;
+      padding:14px 16px; border-radius:12px;
+      background:var(--surf); border:1.5px solid var(--border2);
+      margin-bottom:10px; transition:border-color .15s;
+    }
+    .reel-row:hover { border-color:rgba(200,255,0,0.3); }
+    .reel-source-icon { font-size:1.4rem; flex-shrink:0; }
+    .reel-info { flex:1; min-width:0; }
+    .reel-title-text { font-weight:600; font-size:0.88rem; margin-bottom:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .reel-meta { font-size:0.7rem; color:var(--muted); display:flex; gap:12px; align-items:center; }
+    .reel-views { display:flex; align-items:center; gap:4px; color:var(--peach2); font-weight:600; }
+    .reel-view-btn {
+      flex-shrink:0; width:32px; height:32px; border-radius:8px;
+      background:rgba(200,255,0,0.08); border:1px solid rgba(200,255,0,0.25);
+      color:var(--peach2); font-size:0.9rem; cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      text-decoration:none; transition:background .15s;
+    }
+    .reel-view-btn:hover { background:rgba(200,255,0,0.18); }
+
+    /* manager visits */
+    .visit-row {
+      display:flex; align-items:center; gap:12px;
+      padding:11px 14px; border-radius:10px;
+      background:var(--surf); border:1px solid var(--border2);
+      margin-bottom:8px;
+    }
+    .visit-av {
+      width:34px; height:34px; border-radius:50%; flex-shrink:0;
+      background:var(--surf3); border:1.5px solid var(--border2);
+      display:flex; align-items:center; justify-content:center; font-size:1rem;
+    }
+    .visit-name { font-weight:600; font-size:0.85rem; }
+    .visit-co { font-size:0.7rem; color:var(--muted); }
+    .visit-time { margin-left:auto; font-size:0.67rem; color:var(--subtle); }
+    .empty-state { text-align:center; padding:32px; color:var(--muted); font-size:0.82rem; }
+
+    /* manager dashboard project rows */
+    .dash-proj-row {
+      display:flex; align-items:center; gap:14px;
+      padding:14px 16px; border-radius:12px;
+      background:var(--surf); border:1.5px solid var(--border2);
+      margin-bottom:10px; transition:border-color .15s;
+    }
+    .dash-proj-row:hover { border-color:rgba(200,255,0,0.3); }
+    .dash-proj-info { flex:1; min-width:0; }
+    .dash-proj-title { font-weight:600; font-size:0.88rem; margin-bottom:4px; }
+    .dash-proj-meta { font-size:0.7rem; color:var(--muted); display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+    .dash-vis-badge {
+      font-size:0.62rem; font-weight:700; padding:2px 8px; border-radius:50px;
+      border:1px solid;
+    }
+    .dash-vis-badge.public   { color:var(--peach2); border-color:rgba(200,255,0,0.4); background:rgba(200,255,0,0.07); }
+    .dash-vis-badge.assigned { color:#e0e0e0; border-color:rgba(255,255,255,0.25); background:rgba(255,255,255,0.06); }
+    .dash-vis-badge.private  { color:var(--muted); border-color:var(--border2); background:transparent; }
+
+    @media(max-width:768px){
+      .mypage-header { padding:20px 16px; flex-wrap:wrap; }
+      .mypage-section { padding:20px 16px; }
+      .mypage-stats { gap:16px; }
+    }
   </style>
 </head>
 <body>
@@ -1625,7 +1748,17 @@
     <a href="#" onclick="showPage('lab');return false">Project Lab</a>
     <a href="#" onclick="showPage('mgr-auth');return false">For Managers</a>
   </div>
-  <button class="nav-pill" onclick="showPage('individual')">Drop your reel ✦</button>
+  <button class="nav-pill" id="nav-cta" onclick="showPage('individual')">Drop your reel ✦</button>
+  <div class="nav-user" id="nav-user" onclick="this.classList.toggle('open')">
+    <div class="nav-avatar" id="nav-avatar-ic">?</div>
+    <span class="nav-username" id="nav-username-txt">You</span>
+    <div class="nav-dropdown">
+      <button class="nav-dd-item" onclick="event.stopPropagation();showMyPage()">👤 My Profile</button>
+      <button class="nav-dd-item" onclick="event.stopPropagation();showPage('my-dashboard')">📊 My Dashboard</button>
+      <div class="nav-dd-sep"></div>
+      <button class="nav-dd-item danger" onclick="event.stopPropagation();doSignOut()">Sign out</button>
+    </div>
+  </div>
 </nav>
 
 <!-- ══════════ HOME: ZINE / EDITORIAL LAYOUT ══════════ -->
@@ -2146,7 +2279,7 @@
           <span class="copy" onclick="this.textContent='Copied!'">Copy link</span>
         </div>
         <div class="ind-success-chips" id="success-skills"></div>
-        <button class="ind-btn-primary" onclick="showPage('discover')">Explore the feed →</button>
+        <button class="ind-btn-primary" onclick="showMyPage()">View my profile →</button>
         <button class="ind-btn-secondary" onclick="goHome()">Back to home</button>
       </div>
 
@@ -2312,6 +2445,64 @@
   </div>
 </div>
 
+
+<!-- MY PROFILE (individual) -->
+<div class="page-view" id="page-my-profile">
+  <div class="page-header">
+    <button class="page-back" onclick="goHome()">← Back</button>
+    <div class="page-header-title">My Profile</div>
+  </div>
+  <div class="mypage-header">
+    <div class="mypage-av" id="mp-avatar">?</div>
+    <div class="mypage-info">
+      <div class="mypage-info-name" id="mp-name">—</div>
+      <div class="mypage-info-sub" id="mp-sub">—</div>
+      <div class="mypage-stats">
+        <div class="mypage-stat"><div class="mypage-stat-n" id="mp-reel-count">0</div><div class="mypage-stat-l">Reels</div></div>
+        <div class="mypage-stat"><div class="mypage-stat-n" id="mp-view-count">0</div><div class="mypage-stat-l">Total Views</div></div>
+        <div class="mypage-stat"><div class="mypage-stat-n" id="mp-visit-count">0</div><div class="mypage-stat-l">Manager Visits</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mypage-section">
+    <div class="mypage-section-title">🎬 My Reels</div>
+    <div id="mp-reels-list"><div class="empty-state">No reels yet. Drop your first reel to get discovered.</div></div>
+  </div>
+
+  <div class="mypage-section">
+    <div class="mypage-section-title">👔 Managers who visited your profile</div>
+    <div id="mp-visits-list"><div class="empty-state">No manager visits yet. Once a manager views your profile, they'll appear here.</div></div>
+  </div>
+</div>
+
+<!-- MY DASHBOARD (manager) -->
+<div class="page-view" id="page-my-dashboard">
+  <div class="page-header">
+    <button class="page-back" onclick="goHome()">← Back</button>
+    <div class="page-header-title">My Dashboard</div>
+  </div>
+  <div class="mypage-header">
+    <div class="mypage-av" id="md-avatar">👔</div>
+    <div class="mypage-info">
+      <div class="mypage-info-name" id="md-name">—</div>
+      <div class="mypage-info-sub" id="md-sub">—</div>
+      <div class="mypage-stats">
+        <div class="mypage-stat"><div class="mypage-stat-n" id="md-proj-count">0</div><div class="mypage-stat-l">Projects</div></div>
+        <div class="mypage-stat"><div class="mypage-stat-n" id="md-open-count">0</div><div class="mypage-stat-l">Open</div></div>
+        <div class="mypage-stat"><div class="mypage-stat-n" id="md-assigned-count">0</div><div class="mypage-stat-l">Assigned</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mypage-section">
+    <div class="mypage-section-title" style="justify-content:space-between">
+      <span>📋 Posted Projects</span>
+      <button class="lab-new-btn" onclick="openProjectModal()" style="margin:0">+ Post Project</button>
+    </div>
+    <div id="md-projects-list"><div class="empty-state">No projects yet. Post your first project to find talent.</div></div>
+  </div>
+</div>
 <!-- FOR MANAGERS -->
 <div class="page-view" id="page-mgr">
   <div class="page-header">
@@ -2642,6 +2833,153 @@ async function doPostIndProject() {
   btn.textContent = 'Save Project ✦'; btn.disabled = false;
   alert('Project saved! ✦');
 }
+
+
+/* ── AUTH STATE ── */
+function _initials(name) {
+  if (!name) return '?';
+  return name.trim().split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2);
+}
+
+async function checkAuthState() {
+  if (!_sb) return;
+  var { data: { user } } = await _sb.auth.getUser();
+  if (!user) return;
+  // show nav user chip
+  var meta = user.user_metadata || {};
+  var displayName = meta.first_name || meta.name || user.email.split('@')[0];
+  document.getElementById('nav-username-txt').textContent = displayName;
+  document.getElementById('nav-avatar-ic').textContent = _initials(displayName);
+  document.getElementById('nav-cta').style.display = 'none';
+  document.getElementById('nav-user').style.display = 'flex';
+  // store for profile page
+  window._currentUser = user;
+  window._currentDisplayName = displayName;
+}
+
+function showMyPage() {
+  if (!window._currentUser) { showPage('individual'); return; }
+  var meta = window._currentUser.user_metadata || {};
+  if (meta.account_type === 'manager') {
+    loadMyDashboard(); showPage('my-dashboard');
+  } else {
+    loadMyProfile(); showPage('my-profile');
+  }
+}
+
+async function loadMyProfile() {
+  if (!_sb || !window._currentUser) return;
+  var user = window._currentUser;
+  var meta = user.user_metadata || {};
+  var name = meta.first_name ? meta.first_name + ' ' + (meta.last_name||'') : (meta.name || user.email);
+  document.getElementById('mp-avatar').textContent = _initials(name);
+  document.getElementById('mp-name').textContent = name.trim();
+  document.getElementById('mp-sub').textContent = (meta.role || '') + (meta.location ? ' · ' + meta.location : '');
+
+  // fetch reels
+  var { data: reels } = await _sb.from('reels').select('*').eq('user_id', user.id).order('created_at', {ascending:false});
+  reels = reels || [];
+  document.getElementById('mp-reel-count').textContent = reels.length;
+  var totalViews = reels.reduce(function(a,r){return a+(r.view_count||0);},0);
+  document.getElementById('mp-view-count').textContent = totalViews > 999 ? (totalViews/1000).toFixed(1)+'k' : totalViews;
+
+  var reelSrc = {'youtube':'▶','google_drive':'📁','icloud':'🍎','instagram':'📸','vimeo':'🎬','loom':'🎥','other':'🔗'};
+  var reelHtml = reels.length ? reels.map(function(r){
+    return '<div class="reel-row">'
+      +'<div class="reel-source-icon">'+(reelSrc[r.source]||'🔗')+'</div>'
+      +'<div class="reel-info">'
+        +'<div class="reel-title-text">'+(r.title||'Untitled reel')+'</div>'
+        +'<div class="reel-meta">'
+          +'<span class="reel-views">👁 '+(r.view_count||0)+'</span>'
+          +'<span>'+(r.skills||[]).slice(0,3).join(' · ')+'</span>'
+        +'</div>'
+      +'</div>'
+      +'<a class="reel-view-btn" href="'+r.url+'" target="_blank" title="Open reel">↗</a>'
+    +'</div>';
+  }).join('') : '<div class="empty-state">No reels yet.</div>';
+  document.getElementById('mp-reels-list').innerHTML = reelHtml;
+
+  // fetch manager visits
+  var { data: visits } = await _sb.from('profile_views')
+    .select('*, managers(name, company)')
+    .eq('profile_user_id', user.id)
+    .order('viewed_at', {ascending:false})
+    .limit(20);
+  visits = visits || [];
+  document.getElementById('mp-visit-count').textContent = visits.length;
+  var visitHtml = visits.length ? visits.map(function(v){
+    var mgr = v.managers || {};
+    var ago = _timeAgo(v.viewed_at);
+    return '<div class="visit-row">'
+      +'<div class="visit-av">👔</div>'
+      +'<div><div class="visit-name">'+(mgr.name||'A manager')+'</div>'
+      +'<div class="visit-co">'+(mgr.company||'')+'</div></div>'
+      +'<div class="visit-time">'+ago+'</div>'
+    +'</div>';
+  }).join('') : '<div class="empty-state">No manager visits yet.</div>';
+  document.getElementById('mp-visits-list').innerHTML = visitHtml;
+}
+
+async function loadMyDashboard() {
+  if (!_sb || !window._currentUser) return;
+  var user = window._currentUser;
+  var meta = user.user_metadata || {};
+  var name = meta.name || user.email;
+  document.getElementById('md-name').textContent = name;
+  document.getElementById('md-sub').textContent = (meta.role||'') + (meta.company ? ' · '+meta.company : '');
+
+  var { data: projects } = await _sb.from('projects').select('*').eq('manager_id', user.id).order('created_at', {ascending:false});
+  projects = projects || [];
+  document.getElementById('md-proj-count').textContent = projects.length;
+  document.getElementById('md-open-count').textContent = projects.filter(function(p){return p.status==='open';}).length;
+  document.getElementById('md-assigned-count').textContent = projects.filter(function(p){return p.status==='assigned';}).length;
+
+  var visBadge = {public:'public',assigned:'assigned',private:'private'};
+  var visLabel = {public:'🌐 Public',assigned:'👤 Assigned',private:'🔒 Private'};
+  var projHtml = projects.length ? projects.map(function(p){
+    return '<div class="dash-proj-row">'
+      +'<div class="dash-proj-info">'
+        +'<div class="dash-proj-title">'+p.title+'</div>'
+        +'<div class="dash-proj-meta">'
+          +'<span class="dash-vis-badge '+(visBadge[p.visibility]||'public')+'">'+(visLabel[p.visibility]||'🌐 Public')+'</span>'
+          +(p.timeline ? '<span>⏱ '+p.timeline+'</span>' : '')
+          +(p.assigned_to ? '<span>→ @'+p.assigned_to+'</span>' : '')
+          +'<span>'+_statusLabel(p.status)+'</span>'
+        +'</div>'
+      +'</div>'
+    +'</div>';
+  }).join('') : '<div class="empty-state">No projects yet. Post your first project.</div>';
+  document.getElementById('md-projects-list').innerHTML = projHtml;
+}
+
+function _statusLabel(s) {
+  var map = {open:'🟢 Open',assigned:'🔵 Assigned',draft:'⚪ Draft',closed:'⭕ Closed'};
+  return map[s] || s;
+}
+
+function _timeAgo(ts) {
+  if (!ts) return '';
+  var diff = Math.floor((Date.now() - new Date(ts)) / 1000);
+  if (diff < 60) return 'just now';
+  if (diff < 3600) return Math.floor(diff/60) + 'm ago';
+  if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
+  return Math.floor(diff/86400) + 'd ago';
+}
+
+async function doSignOut() {
+  if (!_sb) return;
+  await _sb.auth.signOut();
+  document.getElementById('nav-cta').style.display = '';
+  document.getElementById('nav-user').style.display = 'none';
+  window._currentUser = null;
+  document.getElementById('nav-user').classList.remove('open');
+  goHome();
+}
+
+// run on load
+window.addEventListener('DOMContentLoaded', function() {
+  setTimeout(checkAuthState, 300);
+});
 
 /* ── MAGNETIC BUTTONS ── */
 document.querySelectorAll('.btn-fire, .nav-pill').forEach(function(btn) {
