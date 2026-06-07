@@ -1895,17 +1895,18 @@
           <label class="ind-label">Reel Link</label>
           <div class="link-sources">
             <span class="link-src">📁 Google Drive</span>
-            <span class="link-src"> iCloud</span>
+            <span class="link-src">🍎 iCloud</span>
             <span class="link-src">▶ YouTube</span>
+            <span class="link-src">📸 Instagram</span>
             <span class="link-src">🎬 Vimeo</span>
             <span class="link-src">🎥 Loom</span>
           </div>
-          <input class="ind-input" type="url" placeholder="https://drive.google.com/...">
-          <div class="ind-hint">Make sure your link is set to "Anyone with the link can view." We never host or store your video.</div>
+          <input class="ind-input" id="reel-url" type="url" placeholder="https://drive.google.com/... or youtube.com/...">
+          <div class="ind-hint">Paste any public video link. Make sure it's set to "Anyone with the link can view." We never host your video.</div>
         </div>
         <div class="ind-field">
           <label class="ind-label">Reel Title</label>
-          <input class="ind-input" type="text" placeholder="Building an AI plant care app in 2 weekends">
+          <input class="ind-input" id="reel-title" type="text" placeholder="Building an AI plant care app in 2 weekends">
         </div>
         <div class="ind-field">
           <label class="ind-label">Your Skills <span style="font-weight:400;text-transform:none;letter-spacing:0">(pick up to 6)</span></label>
@@ -1954,7 +1955,4 @@
         <div class="ind-toggle-row">
           <div class="ind-toggle-label">
             <strong>👥 Visible to Peers</strong>
-            <span>Other creators and builders in the community can see your profile, follow you, and collaborate.</span>
-          </div>
-          <div class="toggle-sw on" onclick="this.classList.toggle('on')"></div>
-        </
+            <span>Other creators and builders in the community can see your profile, follow you, and collab
