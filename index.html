@@ -1920,11 +1920,12 @@
     <div style="display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap">
       <input id="disc-search" type="text" placeholder="Search by skill (e.g. React, Figma, Python)…"
         style="flex:1;min-width:200px;background:#111;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 16px;border-radius:8px;font-size:14px;outline:none;"
-        oninput="loadDiscover()" />
+        oninput="clearCommunityFilter()" />
       <label style="display:flex;align-items:center;gap:8px;color:#888;font-size:13px;cursor:pointer">
         <input type="checkbox" id="disc-open" onchange="loadDiscover()" style="accent-color:#c8ff00"> Open to work only
       </label>
     </div>
+    <div id="disc-community-label" style="display:none;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap"></div>
     <div id="discover-feed" class="feed-grid">
       <div class="empty-state" style="grid-column:1/-1">Loading profiles…</div>
     </div>
@@ -2785,16 +2786,22 @@ function showCommunity(tag) {
   if (si) si.value = _communitySkills[tag] || tag;
   var oi = document.getElementById('disc-open');
   if (oi) oi.checked = false;
-  // Show community label above the feed
-  var feed = document.getElementById('discover-feed');
-  if (feed) {
+  // Show community label in the dedicated label element
+  var labelEl = document.getElementById('disc-community-label');
+  if (labelEl) {
     var label = _communityNames[tag] || tag;
-    feed.innerHTML = '<div style="grid-column:1/-1;margin-bottom:8px;display:flex;align-items:center;gap:10px">'
-      +'<span style="background:rgba(200,255,0,0.12);border:1px solid rgba(200,255,0,0.3);color:#c8ff00;padding:4px 14px;border-radius:20px;font-size:12px;font-weight:700">'+label+'</span>'
+    labelEl.innerHTML = '<span style="background:rgba(200,255,0,0.12);border:1px solid rgba(200,255,0,0.3);color:#c8ff00;padding:4px 14px;border-radius:20px;font-size:12px;font-weight:700">'+label+'</span>'
       +'<span style="color:#555;font-size:12px">Members with matching skills</span>'
-      +'<button onclick="showPage(&quot;discover&quot;)" style="background:none;border:none;color:#555;font-size:12px;cursor:pointer;margin-left:auto">✕ Clear</button>'
-      +'</div>';
+      +'<button onclick="clearCommunityFilter()" style="background:none;border:none;color:#555;font-size:13px;cursor:pointer;margin-left:auto">✕ Clear</button>';
+    labelEl.style.display = 'flex';
   }
+  loadDiscover();
+}
+function clearCommunityFilter() {
+  var labelEl = document.getElementById('disc-community-label');
+  if (labelEl) { labelEl.innerHTML = ''; labelEl.style.display = 'none'; }
+  var si = document.getElementById('disc-search');
+  if (si) si.value = '';
   loadDiscover();
 }
 function goHome() {
