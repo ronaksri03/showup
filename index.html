@@ -2329,10 +2329,47 @@
       <div class="ind-step" id="mgr-step-4">
         <div class="ind-success-av">👔</div>
         <div class="ind-step-title" style="font-size:1.5rem">You're in. 🎉</div>
-        <div class="ind-step-sub">Your manager account is live. Start posting projects in Project Lab.</div>
-        <button class="ind-btn-primary" onclick="showPage('lab')">Go to Project Lab →</button>
+        <div class="ind-step-sub">Your manager account is live.</div>
+        <button class="ind-btn-primary" onclick="showMyPage()">View my profile →</button>
         <button class="ind-btn-secondary" onclick="goHome()" style="margin-top:8px">Back to home</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT MANAGER PROFILE MODAL -->
+<div id="edit-manager-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;overflow-y:auto;padding:24px 16px">
+  <div style="max-width:520px;margin:0 auto;background:#111;border:1px solid #2a2a2a;border-radius:16px;padding:32px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+      <div style="font-size:18px;font-weight:700;color:#f0ece4">Edit Manager Profile</div>
+      <button onclick="closeEditManager()" style="background:none;border:none;color:#666;font-size:20px;cursor:pointer">✕</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div>
+        <label style="display:block;color:#888;font-size:12px;margin-bottom:6px">FULL NAME</label>
+        <input id="em-name" type="text" placeholder="Your full name"
+          style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box" />
+      </div>
+      <div>
+        <label style="display:block;color:#888;font-size:12px;margin-bottom:6px">ROLE / TITLE</label>
+        <input id="em-role" type="text" placeholder="e.g. Head of Engineering, Founder"
+          style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box" />
+      </div>
+      <div>
+        <label style="display:block;color:#888;font-size:12px;margin-bottom:6px">COMPANY</label>
+        <input id="em-company" type="text" placeholder="Company or organisation name"
+          style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box" />
+      </div>
+      <div>
+        <label style="display:block;color:#888;font-size:12px;margin-bottom:6px">BIO</label>
+        <textarea id="em-bio" rows="3" placeholder="What kind of talent are you looking for? What does your team build?"
+          style="width:100%;background:#0a0a0a;border:1px solid #2a2a2a;color:#f0ece4;padding:10px 14px;border-radius:8px;font-size:14px;outline:none;resize:vertical;box-sizing:border-box;font-family:inherit"></textarea>
+      </div>
+    </div>
+    <div id="em-err" style="display:none;color:#ff6b6b;font-size:13px;margin-top:16px"></div>
+    <div style="display:flex;gap:10px;margin-top:24px">
+      <button onclick="closeEditManager()" style="flex:1;padding:12px;background:#1a1a1a;border:1px solid #2a2a2a;color:#888;border-radius:8px;cursor:pointer;font-size:14px">Cancel</button>
+      <button id="em-save-btn" onclick="doSaveManager()" style="flex:2;padding:12px;background:#c8ff00;color:#0a0a0a;border:none;border-radius:8px;cursor:pointer;font-size:14px;font-weight:700">Save Profile ✦</button>
     </div>
   </div>
 </div>
@@ -2486,8 +2523,12 @@
   <div class="mypage-header">
     <div class="mypage-av" id="md-avatar">👔</div>
     <div class="mypage-info">
-      <div class="mypage-info-name" id="md-name">—</div>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <div class="mypage-info-name" id="md-name">—</div>
+        <button class="lab-new-btn" onclick="openEditManager()" style="margin:0;padding:6px 14px;font-size:12px">✏️ Edit Profile</button>
+      </div>
       <div class="mypage-info-sub" id="md-sub">—</div>
+      <div id="md-bio" style="color:#888;font-size:13px;margin-top:4px;display:none"></div>
       <div class="mypage-stats">
         <div class="mypage-stat"><div class="mypage-stat-n" id="md-proj-count">0</div><div class="mypage-stat-l">Projects</div></div>
         <div class="mypage-stat"><div class="mypage-stat-n" id="md-open-count">0</div><div class="mypage-stat-l">Open</div></div>
@@ -3002,9 +3043,21 @@ async function loadMyDashboard() {
   if (!_sb || !window._currentUser) return;
   var user = window._currentUser;
   var meta = user.user_metadata || {};
-  var name = meta.name || user.email;
+
+  // fetch full manager row from DB
+  var { data: mgr } = await _sb.from('managers').select('*').eq('id', user.id).single();
+  window._myManager = mgr || {};
+
+  var name    = (mgr && mgr.name)    || meta.name    || user.email;
+  var role    = (mgr && mgr.role)    || meta.role    || '';
+  var company = (mgr && mgr.company) || meta.company || '';
+  var bio     = (mgr && mgr.bio)     || '';
+
+  document.getElementById('md-avatar').textContent = _initials(name);
   document.getElementById('md-name').textContent = name;
-  document.getElementById('md-sub').textContent = (meta.role||'') + (meta.company ? ' · '+meta.company : '');
+  document.getElementById('md-sub').textContent = role + (company ? ' · ' + company : '');
+  var bioEl = document.getElementById('md-bio');
+  if (bio) { bioEl.textContent = bio; bioEl.style.display = 'block'; } else { bioEl.style.display = 'none'; }
 
   var { data: projects } = await _sb.from('manager_projects').select('*').eq('manager_id', user.id).order('created_at', {ascending:false});
   projects = projects || [];
@@ -3237,6 +3290,45 @@ function cycleVis(pill) {
 }
 
 function _capitalize(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
+
+/* ── EDIT MANAGER PROFILE ── */
+function openEditManager() {
+  var m = window._myManager || {};
+  var meta = (window._currentUser || {}).user_metadata || {};
+  document.getElementById('em-name').value    = m.name    || meta.name    || '';
+  document.getElementById('em-role').value    = m.role    || meta.role    || '';
+  document.getElementById('em-company').value = m.company || meta.company || '';
+  document.getElementById('em-bio').value     = m.bio     || '';
+  document.getElementById('em-err').style.display = 'none';
+  document.getElementById('edit-manager-modal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeEditManager() {
+  document.getElementById('edit-manager-modal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+async function doSaveManager() {
+  var btn = document.getElementById('em-save-btn');
+  var errEl = document.getElementById('em-err');
+  errEl.style.display = 'none';
+  if (!_sb || !window._currentUser) { errEl.textContent = 'Not signed in.'; errEl.style.display = 'block'; return; }
+  var name    = document.getElementById('em-name').value.trim();
+  var role    = document.getElementById('em-role').value.trim();
+  var company = document.getElementById('em-company').value.trim();
+  var bio     = document.getElementById('em-bio').value.trim();
+  if (!name) { errEl.textContent = 'Name is required.'; errEl.style.display = 'block'; return; }
+  btn.textContent = 'Saving…'; btn.disabled = true;
+  var res = await _sb.from('managers').upsert({
+    id: window._currentUser.id,
+    name: name, role: role, company: company, bio: bio
+  });
+  btn.textContent = 'Save Profile ❖'; btn.disabled = false;
+  if (res.error) { errEl.textContent = res.error.message; errEl.style.display = 'block'; return; }
+  closeEditManager();
+  loadMyDashboard();
+}
 
 /* ── REEL EDIT / DELETE ── */
 function editReel(id, url, title) {
