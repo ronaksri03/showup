@@ -1769,8 +1769,8 @@
     <div class="nav-avatar" id="nav-avatar-ic">?</div>
     <span class="nav-username" id="nav-username-txt">You</span>
     <div class="nav-dropdown">
-      <button class="nav-dd-item" onclick="event.stopPropagation();showMyPage()">👤 My Profile</button>
-      <button class="nav-dd-item" onclick="event.stopPropagation();showPage('my-dashboard')">📊 My Dashboard</button>
+      <button class="nav-dd-item" id="dd-myprofile" onclick="event.stopPropagation();showMyPage()">👤 My Profile</button>
+      <button class="nav-dd-item" id="dd-mydashboard" onclick="event.stopPropagation();showMyPage()" style="display:none">📊 My Dashboard</button>
       <div class="nav-dd-sep"></div>
       <button class="nav-dd-item danger" onclick="event.stopPropagation();doSignOut()">Sign out</button>
     </div>
