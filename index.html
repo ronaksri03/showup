@@ -3009,8 +3009,17 @@ async function doPostProject() {
   if (!user) { errEl.textContent = 'Please sign in to post a project.'; errEl.style.display = 'block'; return; }
   btn.textContent = 'Posting…'; btn.disabled = true;
   var skills = document.getElementById('proj-skills').value.split(',').map(function(s){return s.trim();}).filter(Boolean);
-  var assignee = _projVisibility === 'assigned' ? document.getElementById('proj-assignee').value.trim().replace(/^@/,'') : null;
-  var { error } = await _sb.from('manager_projects').insert({ manager_id: user.id, title, description: document.getElementById('proj-desc').value.trim(), timeline: document.getElementById('proj-timeline').value.trim(), pay_type: document.getElementById('proj-pay').value, skills_required: skills, visibility: _projVisibility, assigned_to: assignee, status: _projVisibility === 'private' ? 'draft' : 'open', created_at: new Date().toISOString() });
+  var assigneeUsername = _projVisibility === 'assigned' ? document.getElementById('proj-assignee').value.trim().replace(/^@/,'') : null;
+  var assigneeId = null;
+  if (assigneeUsername) {
+    var { data: assigneeProfile, error: lookupErr } = await _sb.from('profiles').select('id').eq('username', assigneeUsername).single();
+    if (lookupErr || !assigneeProfile) {
+      errEl.textContent = 'Username @' + assigneeUsername + ' not found. Check the username and try again.';
+      errEl.style.display = 'block'; btn.textContent = 'Post Project ✦'; btn.disabled = false; return;
+    }
+    assigneeId = assigneeProfile.id;
+  }
+  var { error } = await _sb.from('manager_projects').insert({ manager_id: user.id, title, description: document.getElementById('proj-desc').value.trim(), timeline: document.getElementById('proj-timeline').value.trim(), pay_type: document.getElementById('proj-pay').value, skills_required: skills, visibility: _projVisibility, assigned_to: assigneeId, status: _projVisibility === 'private' ? 'draft' : 'open', created_at: new Date().toISOString() });
   if (error) { errEl.textContent = error.message; errEl.style.display = 'block'; btn.textContent = 'Post Project ✦'; btn.disabled = false; return; }
   closeProjectModal();
   btn.textContent = 'Post Project ✦'; btn.disabled = false;
